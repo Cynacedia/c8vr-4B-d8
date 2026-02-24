@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glitch Effects Test</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050505;
+    color: #f2f2f2;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== Layout scaffolding ===== */
+  header {
+    background: #000;
+    border-bottom: 1px solid #333;
+    padding: 12px 20px;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 2px;
+  }
+  .header-user {
+    font-size: 0.85rem;
+    color: #fff;
+  }
+  .header-user a { color: #fff; text-decoration: none; }
+  .header-nav-bar {
+    background: #111;
+    padding: 6px 0;
+    border-top: 1px solid #333;
+  }
+  .header-nav {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+  }
+  .header-nav a {
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+  .header-nav a:hover { color: #ccc; }
+
+  main {
+    flex: 1;
+    padding: 40px 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .card {
+    background: rgba(8, 8, 8, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+  .card p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #b8b8b8;
+  }
+
+  footer {
+    background: #000;
+    border-top: 1px solid #333;
+    padding: 16px 20px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #fff;
+  }
+  footer a { color: #fff; text-decoration: none; }
+  footer a:hover { color: #ccc; }
+
+
+  /* ==============================================
+     GLITCH EFFECT 1 — Slice-shift
+     Horizontal bands that jitter left/right
+     ============================================== */
+
+  .glitch-slice {
+    position: relative;
+  }
+  .glitch-slice::before,
+  .glitch-slice::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    color: inherit;
+    background: inherit;
+    pointer-events: none;
+  }
+
+  /* Top slice — shifts right */
+  .glitch-slice::before {
+    clip-path: inset(0 0 65% 0);
+    animation: slice-top 4s steps(1) infinite;
+  }
+  /* Bottom slice — shifts left */
+  .glitch-slice::after {
+    clip-path: inset(60% 0 0 0);
+    animation: slice-bottom 4s steps(1) infinite;
+  }
+
+  @keyframes slice-top {
+    0%, 88%  { transform: translateX(0); }
+    89%      { transform: translateX(6px); }
+    90%      { transform: translateX(-3px); }
+    91%      { transform: translateX(8px); }
+    92%      { transform: translateX(0); clip-path: inset(0 0 75% 0); }
+    93%      { transform: translateX(-4px); clip-path: inset(10% 0 55% 0); }
+    94%      { transform: translateX(5px); clip-path: inset(0 0 65% 0); }
+    95%, 100% { transform: translateX(0); }
+  }
+
+  @keyframes slice-bottom {
+    0%, 86%  { transform: translateX(0); }
+    87%      { transform: translateX(-5px); }
+    88%      { transform: translateX(7px); clip-path: inset(50% 0 0 0); }
+    89%      { transform: translateX(-2px); clip-path: inset(70% 0 0 0); }
+    90%      { transform: translateX(4px); clip-path: inset(40% 0 10% 0); }
+    91%      { transform: translateX(-6px); }
+    92%      { transform: translateX(0); clip-path: inset(60% 0 0 0); }
+    93%, 100% { transform: translateX(0); }
+  }
+
+
+  /* ==============================================
+     GLITCH EFFECT 2 — RGB split
+     Chromatic aberration text-shadow jitter
+     ============================================== */
+
+  .glitch-rgb {
+    animation: rgb-split 5s steps(1) infinite;
+  }
+
+  @keyframes rgb-split {
+    0%, 84%  { text-shadow: none; }
+    85%      { text-shadow: -2px 0 #ff0040, 2px 0 #0ff; }
+    86%      { text-shadow: 3px 0 #ff0040, -1px 0 #0ff; }
+    87%      { text-shadow: -1px 1px #ff0040, 1px -1px #0ff; }
+    88%      { text-shadow: 2px 0 #ff0040, -3px 0 #0ff, 0 1px #ff0; }
+    89%      { text-shadow: none; }
+    90%      { text-shadow: -3px 0 #ff0040, 2px 0 #0ff; }
+    91%, 100% { text-shadow: none; }
+  }
+
+
+  /* ==============================================
+     GLITCH EFFECT 3 — Skew stutter
+     Brief skewX + translateX micro-twitches
+     ============================================== */
+
+  .glitch-skew {
+    animation: skew-stutter 6s steps(1) infinite;
+  }
+
+  @keyframes skew-stutter {
+    0%, 90%  { transform: none; }
+    91%      { transform: skewX(-2deg) translateX(3px); }
+    92%      { transform: skewX(1.5deg) translateX(-2px); }
+    93%      { transform: skewX(-1deg) translateX(5px); }
+    94%      { transform: skewX(0.5deg) translateX(-1px); }
+    95%, 100% { transform: none; }
+  }
+
+
+  /* ==============================================
+     GLITCH EFFECT 4 — Scanline tear
+     A horizontal "rip" line that sweeps down
+     ============================================== */
+
+  .glitch-tear {
+    position: relative;
+    overflow: hidden;
+  }
+  .glitch-tear::after {
+    content: "";
+    position: absolute;
+    left: -5%;
+    width: 110%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 0 8px rgba(255, 255, 255, 0.4),
+      0 1px 0 rgba(0, 0, 0, 1),
+      0 -1px 0 rgba(0, 0, 0, 1);
+    opacity: 0;
+    pointer-events: none;
+    animation: tear-sweep 7s steps(1) infinite;
+  }
+
+  @keyframes tear-sweep {
+    0%, 85%  { opacity: 0; top: 0; }
+    86%      { opacity: 1; top: 15%; }
+    87%      { top: 35%; }
+    88%      { top: 50%; transform: translateX(4px); }
+    89%      { top: 62%; transform: translateX(-3px); }
+    90%      { top: 78%; transform: translateX(2px); }
+    91%      { top: 90%; opacity: 0.5; }
+    92%, 100% { opacity: 0; top: 100%; }
+  }
+
+
+  /* ==============================================
+     GLITCH EFFECT 5 — Block corruption
+     Random rectangular blocks flash briefly
+     ============================================== */
+
+  .glitch-blocks {
+    position: relative;
+    overflow: hidden;
+  }
+  .glitch-blocks::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    animation: block-corrupt 8s steps(1) infinite;
+  }
+
+  @keyframes block-corrupt {
+    0%, 89%  { opacity: 0; }
+    90% {
+      opacity: 1;
+      background:
+        linear-gradient(transparent 20%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.08) 22%, transparent 22%),
+        linear-gradient(transparent 55%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0.06) 58%, transparent 58%);
+      transform: translateX(3px);
+    }
+    91% {
+      opacity: 1;
+      background:
+        linear-gradient(transparent 40%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 41%, transparent 41%),
+        linear-gradient(transparent 72%, rgba(255,255,255,0.07) 72%, rgba(255,255,255,0.07) 75%, transparent 75%);
+      transform: translateX(-5px);
+    }
+    92% {
+      opacity: 1;
+      background:
+        linear-gradient(transparent 10%, rgba(255,255,255,0.05) 10%, rgba(255,255,255,0.05) 14%, transparent 14%),
+        linear-gradient(transparent 82%, rgba(255,255,255,0.09) 82%, rgba(255,255,255,0.09) 84%, transparent 84%);
+      transform: translateX(2px);
+    }
+    93%, 100% { opacity: 0; }
+  }
+
+
+  /* ==============================================
+     COMBINED — All effects layered
+     ============================================== */
+
+  .glitch-all {
+    position: relative;
+    overflow: hidden;
+    animation:
+      rgb-split 5s steps(1) infinite,
+      skew-stutter 6s steps(1) infinite;
+  }
+
+  /* Offset the timing so they don't all fire at once */
+  .glitch-all::before {
+    content: "";
+    position: absolute;
+    left: -5%;
+    width: 110%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 0 8px rgba(255, 255, 255, 0.4),
+      0 1px 0 rgba(0, 0, 0, 1),
+      0 -1px 0 rgba(0, 0, 0, 1);
+    opacity: 0;
+    pointer-events: none;
+    animation: tear-sweep 7s steps(1) infinite;
+    z-index: 10;
+  }
+  .glitch-all::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    animation: block-corrupt 8s steps(1) infinite;
+    z-index: 10;
+  }
+
+
+  /* ===== Demo section labels ===== */
+  .demo-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .demo-section {
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px dotted rgba(255,255,255,0.12);
+  }
+  .demo-section:last-child { border-bottom: none; }
+  .demo-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .demo-box {
+    flex: 1;
+    min-width: 200px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="glitch-tear">
+    <div class="header-top">
+      <a class="logo glitch-rgb" href="#">MyOshi</a>
+      <div class="header-user">
+        <span>Welcome, <a href="#">░░░░░</a></span>
+        <a href="#">Settings</a>
+      </div>
+    </div>
+    <div class="header-nav-bar">
+      <nav class="header-nav">
+        <a href="#">Home</a>
+        <a href="#">Browse</a>
+        <a href="#">Bulletins</a>
+        <a href="#">Groups</a>
+        <a href="#">Forums</a>
+        <a href="#">Events</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main>
+
+    <!-- 1: Slice-shift -->
+    <div class="demo-section">
+      <div class="demo-label">Effect 1 — Slice-shift</div>
+      <div class="demo-row">
+        <div class="demo-box glitch-slice" data-text="SIGNAL INTERCEPT — LOG REPORT">
+          <h2>SIGNAL INTERCEPT — LOG REPORT</h2>
+          <p>Horizontal bands clip and jitter left/right. Fires briefly every ~4s.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2: RGB split -->
+    <div class="demo-section">
+      <div class="demo-label">Effect 2 — RGB split</div>
+      <div class="demo-row">
+        <div class="demo-box">
+          <h2 class="glitch-rgb">CHROMATIC ABERRATION</h2>
+          <p class="glitch-rgb">Red/cyan text-shadow offset jitters. Subtle on body text, punchy on headers.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Skew stutter -->
+    <div class="demo-section">
+      <div class="demo-label">Effect 3 — Skew stutter</div>
+      <div class="demo-row">
+        <div class="demo-box glitch-skew">
+          <h2>TRANSMISSION ERROR</h2>
+          <p>Whole block micro-twitches with skewX + translateX. Quick, rare bursts.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Scanline tear -->
+    <div class="demo-section">
+      <div class="demo-label">Effect 4 — Scanline tear</div>
+      <div class="demo-row">
+        <div class="demo-box glitch-tear">
+          <h2>HORIZONTAL RIP</h2>
+          <p>A bright line sweeps down the element, shifting sideways as it goes. VHS tracking error feel.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: Block corruption -->
+    <div class="demo-section">
+      <div class="demo-label">Effect 5 — Block corruption</div>
+      <div class="demo-row">
+        <div class="demo-box glitch-blocks">
+          <h2>DATA CORRUPTION</h2>
+          <p>Rectangular bands flash with slight offset. Digital artifact / broken JPEG vibe.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combined -->
+    <div class="demo-section">
+      <div class="demo-label">Combined — All effects layered</div>
+      <div class="card glitch-all">
+        <h2>FULL COMPOSITE</h2>
+        <p>RGB split + skew stutter + scanline tear + block corruption all layered on one element. The different cycle lengths (4s/5s/6s/7s/8s) keep them from syncing up, so it feels random and organic.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="glitch-blocks">
+    <div>
+      <a href="#">About</a> | <a href="#">FAQ</a> | <a href="#">Terms</a> | <a href="#">Privacy</a> | <a href="#">Safety</a> | <a href="#">Brand</a> | <a href="#">Contact</a>
+    </div>
+    <div style="margin-top:6px; opacity:0.6;">© 2026 myoshi.co</div>
+  </footer>
+
+</body>
+</html>

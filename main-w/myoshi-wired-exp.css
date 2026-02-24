@@ -86,10 +86,26 @@
   color: #ccc !important;
 }
 
-/* Logout button */
+/* Hide logout button */
 .header-user button {
+  display: none !important;
+}
+
+/* Redact username — ░ mask that auto-sizes to name length */
+.header-user span a {
+  position: relative;
+  color: transparent !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+.header-user span a::after {
+  content: "░░░░░░░░░░░░░░░░░░░░";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
   color: #fff !important;
-  background: none !important;
+  pointer-events: none;
 }
 
 /* Notification bell */
@@ -1320,4 +1336,236 @@
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(5),
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(6) {
   display: none !important;
+}
+
+
+/* ============================================
+   Glitch Effects — Keyframes
+   ============================================ */
+
+/* --- RGB split (chromatic aberration) --- */
+@keyframes glitch-rgb-a {
+  0%, 84%  { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  85%      { text-shadow: -2px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  86%      { text-shadow: 3px 0 #ff0040, -1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  87%      { text-shadow: -1px 1px #ff0040, 1px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  88%      { text-shadow: 2px 0 #ff0040, -3px 0 #0ff, 0 1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
+  89%      { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  90%      { text-shadow: -3px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  91%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+}
+@keyframes glitch-rgb-b {
+  0%, 78%  { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  79%      { text-shadow: 2px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  80%      { text-shadow: -1px 0 #ff0040, 3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  81%      { text-shadow: 1px -1px #ff0040, -1px 1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  82%      { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  83%      { text-shadow: -2px 1px #ff0040, 2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  84%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+}
+@keyframes glitch-rgb-c {
+  0%, 91%  { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  92%      { text-shadow: -1px 0 #ff0040, 1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  93%      { text-shadow: 2px 1px #ff0040, -2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  94%      { text-shadow: -3px 0 #ff0040, 3px 0 #0ff, 0 -1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
+  95%      { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  96%      { text-shadow: 1px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  97%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+}
+
+/* --- Skew stutter --- */
+@keyframes glitch-skew-a {
+  0%, 90%  { transform: none; }
+  91%      { transform: skewX(-2deg) translateX(3px); }
+  92%      { transform: skewX(1.5deg) translateX(-2px); }
+  93%      { transform: skewX(-1deg) translateX(5px); }
+  94%      { transform: skewX(0.5deg) translateX(-1px); }
+  95%, 100% { transform: none; }
+}
+@keyframes glitch-skew-b {
+  0%, 82%  { transform: none; }
+  83%      { transform: skewX(1deg) translateX(-4px); }
+  84%      { transform: skewX(-2deg) translateX(2px); }
+  85%      { transform: skewX(0.8deg) translateX(-3px); }
+  86%, 100% { transform: none; }
+}
+@keyframes glitch-skew-c {
+  0%, 94%  { transform: none; }
+  95%      { transform: skewX(-1.5deg) translateX(2px); }
+  96%      { transform: skewX(2deg) translateX(-4px); }
+  97%      { transform: skewX(-0.5deg) translateX(6px); }
+  98%      { transform: skewX(1deg) translateX(-2px); }
+  99%, 100% { transform: none; }
+}
+
+/* --- Scanline tear --- */
+@keyframes glitch-tear-a {
+  0%, 85%  { opacity: 0; top: 0; }
+  86%      { opacity: 1; top: 15%; }
+  87%      { top: 35%; }
+  88%      { top: 50%; transform: translateX(4px); }
+  89%      { top: 62%; transform: translateX(-3px); }
+  90%      { top: 78%; transform: translateX(2px); }
+  91%      { top: 90%; opacity: 0.5; }
+  92%, 100% { opacity: 0; top: 100%; }
+}
+@keyframes glitch-tear-b {
+  0%, 72%  { opacity: 0; top: 100%; }
+  73%      { opacity: 1; top: 85%; }
+  74%      { top: 65%; transform: translateX(-3px); }
+  75%      { top: 48%; transform: translateX(5px); }
+  76%      { top: 30%; transform: translateX(-2px); }
+  77%      { top: 12%; opacity: 0.5; }
+  78%, 100% { opacity: 0; top: 0; }
+}
+
+/* --- Block corruption --- */
+@keyframes glitch-blocks-a {
+  0%, 89%  { opacity: 0; }
+  90% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 20%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.08) 22%, transparent 22%),
+      linear-gradient(transparent 55%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0.06) 58%, transparent 58%);
+    transform: translateX(3px);
+  }
+  91% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 40%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 41%, transparent 41%),
+      linear-gradient(transparent 72%, rgba(255,255,255,0.07) 72%, rgba(255,255,255,0.07) 75%, transparent 75%);
+    transform: translateX(-5px);
+  }
+  92% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 10%, rgba(255,255,255,0.05) 10%, rgba(255,255,255,0.05) 14%, transparent 14%),
+      linear-gradient(transparent 82%, rgba(255,255,255,0.09) 82%, rgba(255,255,255,0.09) 84%, transparent 84%);
+    transform: translateX(2px);
+  }
+  93%, 100% { opacity: 0; }
+}
+@keyframes glitch-blocks-b {
+  0%, 80%  { opacity: 0; }
+  81% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 30%, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 33%, transparent 33%),
+      linear-gradient(transparent 65%, rgba(255,255,255,0.09) 65%, rgba(255,255,255,0.09) 67%, transparent 67%);
+    transform: translateX(-4px);
+  }
+  82% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 48%, rgba(255,255,255,0.06) 48%, rgba(255,255,255,0.06) 50%, transparent 50%);
+    transform: translateX(6px);
+  }
+  83%, 100% { opacity: 0; }
+}
+
+
+/* ============================================
+   Glitch Effects — Applied per zone
+   ============================================ */
+
+/*
+ * Each zone gets a unique combo of effects at different cycle lengths
+ * so nothing syncs up and it feels organic/random.
+ *
+ *   Header:       tear-a 7s  + rgb-a 5s
+ *   Logo:         skew-a 6s  + rgb-b 4.5s
+ *   Nav bar:      skew-b 8s  + blocks-a 11s
+ *   Profile card: rgb-c 6.5s + skew-c 9s
+ *   Blurb cards:  tear-b 9s  + blocks-b 12s
+ *   Comments:     skew-b 7.5s + rgb-a 8.5s
+ *   Footer:       blocks-a 8s + rgb-c 7s
+ */
+
+/* --- Header: scanline tear + RGB --- */
+.header {
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: "";
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
+  opacity: 0;
+  pointer-events: none;
+  animation: glitch-tear-a 7s steps(1) infinite;
+  z-index: 10;
+}
+.header-inner {
+  animation: glitch-rgb-a 5s steps(1) infinite;
+}
+
+/* --- Logo: skew + RGB --- */
+.logo {
+  display: inline-block;
+  animation: glitch-skew-a 6s steps(1) infinite, glitch-rgb-b 4.5s steps(1) infinite;
+}
+
+/* --- Nav bar: skew + block corruption --- */
+.header-nav-bar {
+  position: relative;
+  overflow: hidden;
+  animation: glitch-skew-b 8s steps(1) infinite;
+}
+.header-nav-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: glitch-blocks-a 11s steps(1) infinite;
+  z-index: 10;
+}
+
+/* --- Profile main card: RGB + skew --- */
+.profile-page.profile-custom-css .profile-main-card {
+  animation: glitch-rgb-c 6.5s steps(1) infinite, glitch-skew-c 9s steps(1) infinite;
+}
+
+/* --- Blurb cards: tear + block corruption --- */
+.profile-page.profile-custom-css .profile-right > .card:has(.blurb-content) {
+  position: relative;
+  overflow: hidden;
+}
+.profile-page.profile-custom-css .profile-right > .card:has(.blurb-content)::after {
+  content: "";
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
+  opacity: 0;
+  pointer-events: none;
+  animation: glitch-tear-b 9s steps(1) infinite;
+  z-index: 10;
+}
+
+/* --- Comments: skew + RGB --- */
+.profile-page.profile-custom-css #comments .profile-comment {
+  animation: glitch-skew-b 7.5s steps(1) infinite, glitch-rgb-a 8.5s steps(1) infinite;
+}
+
+/* --- Footer: block corruption + RGB --- */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  animation: glitch-rgb-c 7s steps(1) infinite;
+}
+.site-footer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: glitch-blocks-a 8s steps(1) infinite;
+  z-index: 10;
 }
