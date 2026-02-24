@@ -1070,13 +1070,43 @@
 }
 
 /* ===== Comments ===== */
+.profile-page.profile-custom-css #comments {
+  display: flex;
+  flex-direction: column;
+}
 /* Disable hover lift on the comments container card itself */
 .profile-page.profile-custom-css #comments:hover {
   transform: none;
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.65));
 }
+/* Comments header: repurpose as bottom guestbook link */
 .profile-page.profile-custom-css #comments .card-header {
+  display: flex !important;
+  order: 99;
+  justify-content: center !important;
+  background: none !important;
+  border: none !important;
+  padding: 10px 0 4px 0 !important;
+  margin: 0;
+}
+.profile-page.profile-custom-css #comments .card-header > span {
   display: none !important;
+}
+.profile-page.profile-custom-css #comments .card-header > a {
+  font-size: 0 !important;
+  letter-spacing: 0.5px;
+  opacity: 0.5;
+  color: var(--ink-muted) !important;
+  text-decoration: none;
+  font-style: italic;
+  transition: opacity 0.2s ease;
+}
+.profile-page.profile-custom-css #comments .card-header > a::before {
+  content: "\00AB\00A0..Dive into the Sea..\00A0\00BB";
+  font-size: 0.7rem;
+}
+.profile-page.profile-custom-css #comments .card-header > a:hover {
+  opacity: 0.85;
 }
 .profile-page.profile-custom-css #comments .card-body {
   padding: 12px !important;
@@ -1469,15 +1499,15 @@
   93% {
     opacity: 1;
     background:
-      linear-gradient(transparent 15%, rgba(255,255,255,0.18) 15%, rgba(255,255,255,0.18) 22%, transparent 22%),
-      linear-gradient(transparent 48%, rgba(255,255,255,0.14) 48%, rgba(255,255,255,0.14) 56%, transparent 56%);
+      linear-gradient(transparent 15%, rgba(255,255,255,0.08) 15%, rgba(255,255,255,0.08) 22%, transparent 22%),
+      linear-gradient(transparent 48%, rgba(255,255,255,0.06) 48%, rgba(255,255,255,0.06) 56%, transparent 56%);
     transform: translateX(4px);
   }
   96% {
     opacity: 1;
     background:
-      linear-gradient(transparent 35%, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.2) 40%, transparent 40%),
-      linear-gradient(transparent 68%, rgba(255,255,255,0.15) 68%, rgba(255,255,255,0.15) 76%, transparent 76%);
+      linear-gradient(transparent 35%, rgba(255,255,255,0.09) 35%, rgba(255,255,255,0.09) 40%, transparent 40%),
+      linear-gradient(transparent 68%, rgba(255,255,255,0.07) 68%, rgba(255,255,255,0.07) 76%, transparent 76%);
     transform: translateX(-6px);
   }
   99%, 100% { opacity: 0; }
@@ -1487,14 +1517,14 @@
   95% {
     opacity: 1;
     background:
-      linear-gradient(transparent 25%, rgba(255,255,255,0.16) 25%, rgba(255,255,255,0.16) 34%, transparent 34%),
-      linear-gradient(transparent 58%, rgba(255,255,255,0.2) 58%, rgba(255,255,255,0.2) 64%, transparent 64%);
+      linear-gradient(transparent 25%, rgba(255,255,255,0.07) 25%, rgba(255,255,255,0.07) 34%, transparent 34%),
+      linear-gradient(transparent 58%, rgba(255,255,255,0.09) 58%, rgba(255,255,255,0.09) 64%, transparent 64%);
     transform: translateX(-5px);
   }
   98% {
     opacity: 1;
     background:
-      linear-gradient(transparent 42%, rgba(255,255,255,0.14) 42%, rgba(255,255,255,0.14) 48%, transparent 48%);
+      linear-gradient(transparent 42%, rgba(255,255,255,0.06) 42%, rgba(255,255,255,0.06) 48%, transparent 48%);
     transform: translateX(7px);
   }
   100% { opacity: 0; }
@@ -1504,16 +1534,16 @@
   93% {
     opacity: 1;
     background:
-      linear-gradient(transparent 10%, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 18%, transparent 18%),
-      linear-gradient(transparent 38%, rgba(255,255,255,0.15) 38%, rgba(255,255,255,0.15) 44%, transparent 44%),
-      linear-gradient(transparent 72%, rgba(255,255,255,0.18) 72%, rgba(255,255,255,0.18) 80%, transparent 80%);
+      linear-gradient(transparent 10%, rgba(255,255,255,0.09) 10%, rgba(255,255,255,0.09) 18%, transparent 18%),
+      linear-gradient(transparent 38%, rgba(255,255,255,0.07) 38%, rgba(255,255,255,0.07) 44%, transparent 44%),
+      linear-gradient(transparent 72%, rgba(255,255,255,0.08) 72%, rgba(255,255,255,0.08) 80%, transparent 80%);
     transform: translateX(6px);
   }
   96% {
     opacity: 1;
     background:
-      linear-gradient(transparent 28%, rgba(255,255,255,0.22) 28%, rgba(255,255,255,0.22) 33%, transparent 33%),
-      linear-gradient(transparent 55%, rgba(255,255,255,0.12) 55%, rgba(255,255,255,0.12) 62%, transparent 62%);
+      linear-gradient(transparent 28%, rgba(255,255,255,0.1) 28%, rgba(255,255,255,0.1) 33%, transparent 33%),
+      linear-gradient(transparent 55%, rgba(255,255,255,0.05) 55%, rgba(255,255,255,0.05) 62%, transparent 62%);
     transform: translateX(-4px);
   }
   99%, 100% { opacity: 0; }
@@ -1523,16 +1553,16 @@
   92% {
     opacity: 1;
     background:
-      linear-gradient(transparent 8%, rgba(255,255,255,0.25) 8%, rgba(255,255,255,0.25) 15%, transparent 15%),
-      linear-gradient(transparent 44%, rgba(255,255,255,0.18) 44%, rgba(255,255,255,0.18) 52%, transparent 52%),
-      linear-gradient(transparent 80%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.15) 88%, transparent 88%);
+      linear-gradient(transparent 8%, rgba(255,255,255,0.1) 8%, rgba(255,255,255,0.1) 15%, transparent 15%),
+      linear-gradient(transparent 44%, rgba(255,255,255,0.08) 44%, rgba(255,255,255,0.08) 52%, transparent 52%),
+      linear-gradient(transparent 80%, rgba(255,255,255,0.06) 80%, rgba(255,255,255,0.06) 88%, transparent 88%);
     transform: translateX(-5px);
   }
   95% {
     opacity: 1;
     background:
-      linear-gradient(transparent 20%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.2) 28%, transparent 28%),
-      linear-gradient(transparent 62%, rgba(255,255,255,0.22) 62%, rgba(255,255,255,0.22) 68%, transparent 68%);
+      linear-gradient(transparent 20%, rgba(255,255,255,0.09) 20%, rgba(255,255,255,0.09) 28%, transparent 28%),
+      linear-gradient(transparent 62%, rgba(255,255,255,0.1) 62%, rgba(255,255,255,0.1) 68%, transparent 68%);
     transform: translateX(8px);
   }
   98%, 100% { opacity: 0; }
