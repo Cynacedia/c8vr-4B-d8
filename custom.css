@@ -1,0 +1,974 @@
+/* ============================================
+   MyOshi Custom CSS — CrillyLeann Profile
+   ============================================ */
+
+/* --- Base Theme + Corner Styling --- */
+
+/* Page background — transparent so any MyOshi background image shows */
+.profile-page {
+  background: transparent;
+}
+
+/* All cards: dark navy glass with asymmetric corners
+   - TR and BL: rounded (35px border-radius)
+   - TL and BR: chamfered/cut (via CSS mask) */
+.profile-page .card {
+  position: relative;
+  background: rgba(15, 35, 74, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(7, 41, 95, 0.8);
+  border-radius: 0 35px;
+  padding: 0;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  /* Cut corners via mask — diagonal cut on TL and BR */
+  -webkit-mask-image:
+    linear-gradient(135deg, transparent 14px, #000 14.5px),
+    linear-gradient(315deg, transparent 14px, #000 14.5px);
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(135deg, transparent 14px, #000 14.5px),
+    linear-gradient(315deg, transparent 14px, #000 14.5px);
+  mask-composite: intersect;
+  /* drop-shadow instead of box-shadow (mask clips box-shadow) */
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+}
+
+/* Diagonal border lines along cut corners (TL + BR).
+   The mask clips the actual border at the chamfer, so we draw
+   the diagonal line via gradients on ::after. The parent mask
+   clips the ::after too, leaving just the visible edge. */
+.profile-page .card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background:
+    linear-gradient(135deg,
+      transparent 10.5px,
+      rgba(7, 41, 95, 0.8) 11px,
+      rgba(7, 41, 95, 0.8) 13px,
+      transparent 13.5px
+    ),
+    linear-gradient(315deg,
+      transparent 10.5px,
+      rgba(7, 41, 95, 0.8) 11px,
+      rgba(7, 41, 95, 0.8) 13px,
+      transparent 13.5px
+    );
+}
+
+/* Card body padding (card itself has 0 padding so header spans full width) */
+.profile-page .card .card-body {
+  padding: 20px;
+  color: #d8e4f8;
+}
+
+/* Card headers — slightly lighter navy, matching corners */
+.profile-page .card .card-header {
+  background: rgba(20, 45, 90, 0.7);
+  border-bottom: 1px solid rgba(7, 41, 95, 0.8);
+  color: #e0ecff;
+}
+
+/* Starred headers: subtle gold accent */
+.profile-page .card .card-header.starred::before {
+  color: #f0d060;
+}
+
+/* Hearted headers: subtle pink accent */
+.profile-page .card .card-header.hearted::before {
+  color: #f06090;
+}
+
+/* Links */
+.profile-page .card .card-body a {
+  color: #90c8ff;
+  transition: color 0.2s ease;
+}
+
+.profile-page .card .card-body a:hover {
+  color: #b8e0ff;
+}
+
+/* Stats table text */
+.profile-page .stats-table td {
+  color: #d8e4f8;
+}
+
+.profile-page .stats-table td:first-child {
+  color: #a8b8d8;
+}
+
+/* Profile info text */
+.profile-page .profile-display-name {
+  color: #f0f4ff;
+}
+
+.profile-page .profile-username {
+  color: #a8b8d8;
+}
+
+.profile-page .profile-tagline {
+  color: #c0d0e8;
+}
+
+.profile-page .profile-mood .mood-text {
+  color: #c0d0e8;
+}
+
+.profile-page .profile-online-status {
+  color: #98a8c8;
+}
+
+.profile-page .profile-url-box code {
+  color: #90c8ff;
+  background: rgba(10, 25, 55, 0.5);
+  border-radius: 3px;
+  padding: 2px 8px;
+}
+
+/* Oshi mark */
+.profile-page .profile-oshi-mark {
+  color: #f0d060;
+}
+
+/* Social links */
+.profile-page .social-link-item {
+  background: rgba(10, 25, 55, 0.4);
+  border: 1px solid rgba(7, 41, 95, 0.6);
+  border-radius: 3px 15px;
+  transition: all 0.3s ease;
+}
+
+.profile-page .social-link-item:hover {
+  background: rgba(20, 40, 80, 0.6);
+  border-color: rgba(30, 60, 120, 0.8);
+}
+
+.profile-page .social-link-platform {
+  color: #a8b8d8;
+}
+
+.profile-page .social-link-name {
+  color: #d8e4f8;
+}
+
+/* Friends grid */
+.profile-page .friend-name {
+  color: #d8e4f8;
+}
+
+/* Breadcrumb / top bar */
+.profile-page .profile-breadcrumb {
+  color: #98a8c8;
+}
+
+.profile-page .profile-breadcrumb a {
+  color: #90c8ff;
+}
+
+/* Blurb titles */
+.profile-page .blurb-title,
+.profile-page .interest-title {
+  color: #a8b8d8;
+}
+
+.profile-page .blurb-content,
+.profile-page .interest-content {
+  color: #d8e4f8;
+}
+
+/* Section links row */
+.profile-page .section-links a {
+  color: #90c8ff;
+}
+
+/* Card hover lift effect */
+.profile-page .card:hover {
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.5));
+  border-color: rgba(15, 55, 115, 0.9);
+}
+
+/* Top accent bar (magenta/pink from sketch) */
+.profile-page .profile-top-bar {
+  border-top: 3px solid #c040a0;
+  margin-bottom: 16px;
+  padding-top: 8px;
+}
+
+
+
+/* --- Collab Schedule grid fix + theming --- */
+
+/* table-layout: fixed forces columns to respect declared widths
+   even when header text ("12a", "6p") is wider than the 4px cells */
+.profile-page .profile-left > .card:nth-child(5) table {
+  table-layout: fixed !important;
+}
+
+/* Let header text overflow visually without affecting column width */
+.profile-page .profile-left > .card:nth-child(5) table th {
+  overflow: visible !important;
+  white-space: nowrap !important;
+  color: #a8b8d8;
+}
+
+/* Day labels (MO, TU, etc.) */
+.profile-page .profile-left > .card:nth-child(5) table td[style*="font-weight:bold"] {
+  color: #a8b8d8 !important;
+}
+
+/* Empty time slots: dark themed instead of light --vs-bg-muted */
+.profile-page .profile-left > .card:nth-child(5) table td[style*="vs-bg-muted"] {
+  background: rgba(10, 25, 55, 0.4) !important;
+  border-color: rgba(7, 41, 95, 0.5) !important;
+}
+
+/* Filled time slots: brighter themed blue instead of --vs-blue */
+.profile-page .profile-left > .card:nth-child(5) table td[style*="vs-blue"] {
+  background: rgba(60, 120, 200, 0.7) !important;
+  border-color: rgba(7, 41, 95, 0.5) !important;
+}
+
+/* "Looking for collabs" status text */
+.profile-page .profile-left > .card:nth-child(5) span[style*="vs-text-medium"] {
+  color: #c0d0e8 !important;
+}
+
+/* Category tags (GAMING, VRCHAT, etc.) */
+.profile-page .profile-left > .card:nth-child(5) span[style*="vs-bg-muted"][style*="border-radius"] {
+  background: rgba(10, 25, 55, 0.5) !important;
+  color: #a8b8d8 !important;
+  border: 1px solid rgba(7, 41, 95, 0.5);
+}
+
+
+
+/* --- Diamond Avatar + Yellow Border --- */
+/* Diamond shape via clip-path */
+.profile-page .profile-avatar {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  width: 120px !important;
+  height: 120px !important;
+  margin: 25px auto 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Card body needs relative positioning for the border pseudo-element */
+.profile-page .profile-main-card .card-body {
+  overflow: visible;
+  padding-top: 10px;
+  position: relative;
+}
+
+/* Yellow diamond border behind the avatar.
+   Avatar: 120x120, margin-top 25px, card-body padding-top 10px.
+   Avatar center = 10 + 25 + 60 = 95px from card-body padding-box top.
+   Border: 124x124 (avatar + 2px each side), center at same point.
+   top = 95 - 62 = 33px */
+.profile-page .profile-main-card .card-body::before {
+  content: '';
+  position: absolute;
+  top: 33px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 124px;
+  height: 124px;
+  background: linear-gradient(135deg, #f0d060, #e8c040, #f0d060);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  z-index: 0;
+  filter: drop-shadow(0 0 8px rgba(240, 208, 96, 0.35));
+}
+
+
+
+/* --- Layout Rearrangement via CSS Grid --- */
+/*
+  Target layout rows:
+  1: Profile card  |  Collab Schedule        (2 cols)
+  2: Top 8 friends                           (full width, compact)
+  3: Lore | Blurbs | Interests               (3 cols)  ← SWAPPED
+  4: Photos | Groups | Links                 (3 cols)  ← SWAPPED
+  5: Details | Avatar Info                   (2 cols, smaller)
+  6: Comments                                (full width)
+
+  IMPORTANT: .profile-right has a .section-links between
+  Blurbs (2nd child) and Interests (4th child), so:
+    Lore     = .profile-right > .card:nth-child(1)
+    Blurbs   = .profile-right > .card:nth-child(2)
+    .section-links = nth-child(3), NOT a .card
+    Interests = .profile-right > .card:nth-child(4)
+    Comments  = .profile-right > .card:nth-child(5) / #comments
+*/
+
+/* Flatten the two-column wrappers so all cards join the parent grid */
+.profile-page .profile-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.profile-page .profile-left,
+.profile-page .profile-right {
+  display: contents;
+}
+
+/* --- Row 1: Profile card (1 col) + Collab Schedule (2 cols) --- */
+.profile-page .profile-main-card {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* Collab Schedule = .profile-left > 5th child */
+.profile-page .profile-left > .card:nth-child(5) {
+  grid-column: 2 / 4;
+  grid-row: 1;
+}
+
+/* --- Row 2: Top 8 friends (full width) --- */
+.profile-page .profile-left > .card:nth-child(2) {
+  grid-column: 1 / 4;
+  grid-row: 2;
+}
+
+/* --- Row 3: Lore | Blurbs | Interests --- */
+.profile-page .profile-right > .card:nth-child(1) {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.profile-page .profile-right > .card:nth-child(2) {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+/* Interests = 4th child (section-links is 3rd) */
+.profile-page .profile-right > .card:nth-child(4) {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+/* Section-links — hide or tuck into the grid */
+.profile-page .profile-right > .section-links {
+  grid-column: 1 / 4;
+  grid-row: 3;
+  align-self: end;
+  display: none; /* hide for now since it floats awkwardly */
+}
+
+/* --- Row 4: Photos | Groups | Links --- */
+.profile-page .profile-left > .card:nth-child(3) {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.profile-page .profile-left > .card:nth-child(4) {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.profile-page .profile-left > .card:nth-child(7) {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+/* --- Row 5: Details | Avatar Info --- */
+.profile-page .profile-left > .card:nth-child(6) {
+  grid-column: 1 / 3;
+  grid-row: 5;
+}
+
+.profile-page .profile-left > .card:nth-child(8) {
+  grid-column: 3;
+  grid-row: 5;
+}
+
+/* --- Row 6: Comments (full width) --- */
+/* Comments = 5th child in .profile-right (after section-links at 3rd) */
+.profile-page .profile-right > .card:nth-child(5),
+.profile-page #comments {
+  grid-column: 1 / 4;
+  grid-row: 6;
+}
+
+
+
+
+/* --- Top 8 Friends — Redesigned --- */
+
+/* No diagonal border on Top 8 (concave corners) or Comments (no border) */
+.profile-page .profile-left > .card:nth-child(2)::after,
+.profile-page #comments::after {
+  content: none !important;
+}
+
+/* The Top 8 card: concave corners, compact strip, no header.
+   Border via inset box-shadow (mask clips it to follow concave corners). */
+.profile-page .profile-left > .card:nth-child(2) {
+  border-radius: 0 !important;
+  border: none !important;
+  background: rgba(15, 35, 74, 0.35) !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  /* Reset the default card cut-corner mask */
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  /* Concave corners via 4-quadrant radial-gradient mask */
+  -webkit-mask:
+    radial-gradient(20px at 0 0, transparent 98%, #000) top left,
+    radial-gradient(20px at 100% 0, transparent 98%, #000) top right,
+    radial-gradient(20px at 0 100%, transparent 98%, #000) bottom left,
+    radial-gradient(20px at 100% 100%, transparent 98%, #000) bottom right !important;
+  -webkit-mask-size: 51% 51% !important;
+  -webkit-mask-repeat: no-repeat !important;
+  mask:
+    radial-gradient(20px at 0 0, transparent 98%, #000) top left,
+    radial-gradient(20px at 100% 0, transparent 98%, #000) top right,
+    radial-gradient(20px at 0 100%, transparent 98%, #000) bottom left,
+    radial-gradient(20px at 100% 100%, transparent 98%, #000) bottom right !important;
+  mask-size: 51% 51% !important;
+  mask-repeat: no-repeat !important;
+  /* Border via single drop-shadow — follows the mask shape including concave corners.
+     Single shadow avoids compounding (chained shadows each shadow the previous result,
+     creating a thick opaque fill that bleeds through semi-transparent background).
+     A tight 1.5px blur creates a crisp ~2px outline. */
+  filter:
+    drop-shadow(0 0 1.5px rgba(7, 41, 95, 1))
+    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* Hide the Top 8 card header — force it */
+.profile-page .profile-left > .card:nth-child(2) .card-header {
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* Card body: tight padding so card hugs the avatars */
+.profile-page .profile-left > .card:nth-child(2) .card-body {
+  padding: 6px 20px !important;
+}
+
+/* Friends grid: horizontal row, centered */
+.profile-page .profile-left > .card:nth-child(2) .friends-grid {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  flex-wrap: nowrap;
+  padding: 0;
+}
+
+/* Friend items: diamond avatar only, no card styling */
+.profile-page .friends-grid .friend-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 4px 14px;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  overflow: visible;
+  min-width: auto;
+  flex: 0 0 auto;
+}
+
+.profile-page .friends-grid .friend-item:hover {
+  background: none !important;
+  border-color: transparent !important;
+  transform: scale(1.15);
+}
+
+/* ::before = yellow diamond border behind avatar */
+.profile-page .friends-grid .friend-item::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  /* Avatar is 72x72, border diamond is 76x76 (72 + 2px each side).
+     Avatar top offset = 4px (friend-item padding-top).
+     Avatar center = 4 + 36 = 40px. Border top = 40 - 38 = 2px. */
+  top: 2px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 76px !important;
+  height: 76px !important;
+  background: linear-gradient(135deg, #f0d060, #e8c040, #f0d060) !important;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%) !important;
+  z-index: 0 !important;
+}
+
+/* ::after still disabled (not needed) */
+.profile-page .friends-grid .friend-item::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Friend avatars: diamond shape */
+.profile-page .friends-grid .friend-avatar {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 0 !important;
+  border: none !important;
+  width: 72px !important;
+  height: 72px !important;
+  position: relative;
+  z-index: 1;
+  object-fit: cover !important;
+}
+
+/* Hide friend names — just show the diamond avatar */
+.profile-page .friends-grid .friend-name {
+  display: none !important;
+}
+
+
+/* --- Photos + Groups + Links Side by Side --- */
+
+/* All 3 row-4 cards: fixed height, scrollable content */
+.profile-page .profile-left > .card:nth-child(3),
+.profile-page .profile-left > .card:nth-child(4),
+.profile-page .profile-left > .card:nth-child(7) {
+  max-height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page .profile-left > .card:nth-child(3) .card-body,
+.profile-page .profile-left > .card:nth-child(4) .card-body,
+.profile-page .profile-left > .card:nth-child(7) .card-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Thin dark scrollbar that blends with the theme */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(40, 60, 100, 0.5) transparent;
+}
+
+/* Webkit scrollbar styling */
+.profile-page .profile-left > .card:nth-child(3) .card-body::-webkit-scrollbar,
+.profile-page .profile-left > .card:nth-child(4) .card-body::-webkit-scrollbar,
+.profile-page .profile-left > .card:nth-child(7) .card-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.profile-page .profile-left > .card:nth-child(3) .card-body::-webkit-scrollbar-track,
+.profile-page .profile-left > .card:nth-child(4) .card-body::-webkit-scrollbar-track,
+.profile-page .profile-left > .card:nth-child(7) .card-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.profile-page .profile-left > .card:nth-child(3) .card-body::-webkit-scrollbar-thumb,
+.profile-page .profile-left > .card:nth-child(4) .card-body::-webkit-scrollbar-thumb,
+.profile-page .profile-left > .card:nth-child(7) .card-body::-webkit-scrollbar-thumb {
+  background: rgba(40, 60, 100, 0.5);
+  border-radius: 2px;
+}
+
+/* Groups grid: keep 2x2 layout, fits nicely in fixed-height card */
+.profile-page .profile-left > .card:nth-child(4) .card-body [style*="grid-template-columns"] {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+
+/* --- Lore, Blurbs, Interests in a Row --- */
+
+/* Equal height for the 3 content cards */
+.profile-page .profile-right > .card:nth-child(1),
+.profile-page .profile-right > .card:nth-child(2),
+.profile-page .profile-right > .card:nth-child(4) {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page .profile-right > .card:nth-child(1) .card-body,
+.profile-page .profile-right > .card:nth-child(2) .card-body,
+.profile-page .profile-right > .card:nth-child(4) .card-body {
+  flex: 1;
+}
+
+
+/* --- Comments Section — Speech Bubbles --- */
+/*
+  DOM structure:
+  #comments .card-body
+    .add-comment          ← form (textarea + Post button)
+    .profile-comment      ← each posted comment
+      a > img.comment-avatar
+      .comment-content
+        .comment-meta > a.comment-author-name + span.comment-time
+        .comment-body
+        div[style*="soft-pink"]  ← reply (owner response)
+        .comment-actions         ← Delete link
+*/
+
+/* The #comments card: just the form window, transparent below the form */
+.profile-page #comments {
+  background: none !important;
+  border: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
+}
+
+/* The card header: style it as part of the form card */
+.profile-page #comments .card-header {
+  background: rgba(20, 45, 90, 0.7);
+  border: 2px solid rgba(7, 41, 95, 0.8);
+  border-bottom: 1px solid rgba(7, 41, 95, 0.8);
+  border-radius: 0 35px 0 0;
+  -webkit-mask-image:
+    linear-gradient(135deg, transparent 14px, #000 14.5px);
+  mask-image:
+    linear-gradient(135deg, transparent 14px, #000 14.5px);
+}
+
+/* The card body: no padding, let children handle their own */
+.profile-page #comments .card-body {
+  padding: 0 !important;
+  background: none !important;
+}
+
+/* === COMMENT FORM (.add-comment) === */
+/* This is the "card" — the input window */
+/* Corners: TL=0 (header handles), TR=0 (header handles), BR=cut, BL=round */
+.profile-page #comments .add-comment {
+  background: rgba(15, 35, 74, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(7, 41, 95, 0.8);
+  border-top: none;
+  border-radius: 0 0 0 35px;
+  -webkit-mask-image:
+    linear-gradient(315deg, transparent 14px, #000 14.5px);
+  mask-image:
+    linear-gradient(315deg, transparent 14px, #000 14.5px);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.3));
+}
+
+/* Post Comment button */
+.profile-page #comments .add-comment .action-btn {
+  border-radius: 4px 12px;
+}
+
+/* === EACH COMMENT — Speech Bubble (reply chain style) === */
+/* Kill alternating white/striped backgrounds on comment rows (but NOT .add-comment) */
+.profile-page #comments .card-body > .profile-comment {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+/* The .profile-comment is a flex row: avatar on left, comment-content on right */
+.profile-page .profile-comment {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 0 8px;
+}
+
+/* Commenter avatar: circle on the left */
+.profile-page .profile-comment > a > .comment-avatar {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(100, 140, 200, 0.5) !important;
+  flex-shrink: 0;
+}
+
+/* .comment-content: transparent flex column (NOT the bubble itself) */
+.profile-page .profile-comment .comment-content {
+  position: relative;
+  background: none;
+  border: none;
+  filter: none;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Remove any pseudo-elements from comment-content (bubble moved to meta/body) */
+.profile-page .profile-comment .comment-content::before,
+.profile-page .profile-comment .comment-content::after {
+  content: none;
+}
+
+/* === The actual speech bubble: comment-meta + comment-body === */
+/* Meta is the top of the bubble */
+.profile-page .comment-meta {
+  position: relative;
+  background: rgba(15, 35, 74, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(7, 41, 95, 0.8);
+  border-bottom: none;
+  border-radius: 4px 20px 0 0;
+  padding: 10px 16px 2px;
+  margin-bottom: 0;
+}
+
+/* Bubble tail on the meta (points left toward avatar) */
+.profile-page .comment-meta::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 10px 6px 0;
+  border-color: transparent rgba(7, 41, 95, 0.8) transparent transparent;
+}
+
+.profile-page .comment-meta::after {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 13px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 8px 5px 0;
+  border-color: transparent rgba(15, 35, 74, 0.6) transparent transparent;
+}
+
+.profile-page .comment-author-name {
+  color: #90c8ff !important;
+  font-weight: 600;
+}
+
+.profile-page .comment-time {
+  color: #8898c0 !important;
+  font-size: 10px;
+}
+
+/* Body is the bottom of the bubble */
+.profile-page .comment-body {
+  background: rgba(15, 35, 74, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(7, 41, 95, 0.8);
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  padding: 2px 16px 10px;
+  color: #d8e4f8;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+}
+
+/* Override the lexical editor's inline color: var(--vs-text-dark) */
+.profile-page .comment-body [data-lexical-editor] {
+  color: #d8e4f8 !important;
+}
+.profile-page .comment-body [data-lexical-text] {
+  color: #d8e4f8 !important;
+}
+
+/* === REPLY — Separate bubble below, right-aligned === */
+/*
+  Reply DOM:
+  div[style*="soft-pink"]                     ← reply wrapper (our bubble)
+    div (flex row: header)                    ← avatar + name + time
+      a > img.user-avatar                    ← avatar (pull outside)
+      a (name)
+      span (time)
+    div (font-size: 11px)                    ← reply text content
+*/
+.profile-page .comment-content > div[style*="soft-pink"] {
+  background: rgba(25, 50, 100, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 2px solid rgba(40, 70, 130, 0.6) !important;
+  border-left: 2px solid rgba(40, 70, 130, 0.6) !important;
+  border-radius: 20px 20px 4px 20px !important;
+  margin-left: auto !important;
+  margin-right: 46px !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+  padding: 10px 14px !important;
+  max-width: 75%;
+  position: relative;
+  overflow: visible !important;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* Reply bubble tail — pointing right toward avatar */
+.profile-page .comment-content > div[style*="soft-pink"]::before {
+  content: '';
+  position: absolute;
+  right: -10px;
+  top: 14px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 10px;
+  border-color: transparent transparent transparent rgba(40, 70, 130, 0.6);
+}
+
+/* Reply avatar: absolute position outside the bubble on the right */
+.profile-page .comment-content > div[style*="soft-pink"] .user-avatar {
+  position: absolute !important;
+  right: -44px !important;
+  top: 4px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(100, 140, 200, 0.4) !important;
+  object-fit: cover !important;
+}
+
+/* Collapse the <a> that wrapped the avatar (now empty in flow since img is absolute) */
+.profile-page .comment-content > div[style*="soft-pink"] > div:first-child > a:first-child {
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  flex-shrink: 0 !important;
+}
+
+/* Reply name link */
+.profile-page .comment-content > div[style*="soft-pink"] a {
+  color: #90c8ff !important;
+}
+
+/* Reply time */
+.profile-page .comment-content > div[style*="soft-pink"] span {
+  color: #8898c0 !important;
+}
+
+/* Reply body text */
+.profile-page .comment-content > div[style*="soft-pink"] .emote-editor-paragraph {
+  color: #d8e4f8 !important;
+}
+.profile-page .comment-content > div[style*="soft-pink"] [data-lexical-text] {
+  color: #d8e4f8 !important;
+}
+
+/* === COMMENT ACTIONS (Delete link) === */
+.profile-page .comment-actions {
+  margin-top: 6px;
+  padding-top: 4px;
+  text-align: right;
+}
+
+.profile-page .comment-actions a {
+  color: #c0d8f0 !important;
+  font-size: 11px;
+  opacity: 0.85;
+  transition: all 0.2s ease;
+}
+
+/* Delete link uses inline style color: var(--vs-error) */
+.profile-page .comment-actions a[style*="vs-error"] {
+  color: #e07080 !important;
+}
+
+/* Reply link */
+.profile-page .comment-actions a[href*="reply"] {
+  color: #90c8ff !important;
+}
+
+.profile-page .comment-actions a:hover {
+  opacity: 1;
+}
+
+/* Empty state styling */
+.profile-page #comments .card-body > div[style*="text-align:center"] {
+  color: #98a8c8;
+  font-style: italic;
+  padding: 30px;
+}
+
+/* ============================================
+   Site Header — white on black
+   ============================================ */
+
+/* Top bar backgrounds */
+.header,
+.header-top,
+.header-inner {
+  background: #000 !important;
+  color: #fff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* Nav bar strip */
+.header-nav-bar {
+  background: #111 !important;
+  border-color: #333 !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* Logo */
+.logo,
+.header-top .logo,
+.header-inner .logo {
+  color: #fff !important;
+}
+
+/* Welcome text */
+.header-user,
+.header-user span {
+  color: #fff !important;
+}
+
+/* All links in the top bar */
+.header-top a,
+.header-inner a,
+.header-user a {
+  color: #fff !important;
+}
+
+.header-top a:hover,
+.header-inner a:hover,
+.header-user a:hover {
+  color: #ccc !important;
+}
+
+/* Logout button */
+.header-user button {
+  color: #fff !important;
+  background: none !important;
+}
+
+/* Notification bell */
+.notification-dropdown-trigger {
+  color: #fff !important;
+  background: none !important;
+}
+
+/* Nav links */
+.header-nav a {
+  color: #fff !important;
+}
+
+.header-nav a:hover {
+  color: #ccc !important;
+}
+
+/* "New!" tags */
+.header-nav .new-tag,
+.new-tag {
+  color: #fff !important;
+  background: #333 !important;
+  border-color: #555 !important;
+}
