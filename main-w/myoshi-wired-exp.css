@@ -1562,31 +1562,31 @@
   box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 6s steps(1) infinite;
+  animation: glitch-tear-down 4.5s steps(1) infinite;
   z-index: 10;
 }
-/* RGB reacts just after tear finishes (same 6s cycle, 85% delay) */
+/* RGB reacts just after tear finishes (same cycle, 85% delay) */
 .header-inner {
-  animation: glitch-rgb-a 6s steps(1) infinite;
-  animation-delay: 5.1s;
+  animation: glitch-rgb-a 4.5s steps(1) infinite;
+  animation-delay: 3.825s;
 }
 /* Logo: skew reacts to same tear */
 .logo {
   display: inline-block;
-  animation: glitch-skew-a 6s steps(1) infinite;
-  animation-delay: 5.1s;
+  animation: glitch-skew-a 4.5s steps(1) infinite;
+  animation-delay: 3.825s;
 }
 
 /* --- Nav links: independent slice-shift per word --- */
 .header-nav a {
   display: inline-block;
 }
-.header-nav a:nth-child(6n+1) { animation: glitch-slice-r 3.2s steps(1) infinite; }
-.header-nav a:nth-child(6n+2) { animation: glitch-slice-l 4.7s steps(1) infinite; }
-.header-nav a:nth-child(6n+3) { animation: glitch-slice-s 2.9s steps(1) infinite; }
-.header-nav a:nth-child(6n+4) { animation: glitch-slice-r 5.3s steps(1) infinite; }
-.header-nav a:nth-child(6n+5) { animation: glitch-slice-l 3.8s steps(1) infinite; }
-.header-nav a:nth-child(6n+6) { animation: glitch-slice-s 4.1s steps(1) infinite; }
+.header-nav a:nth-child(6n+1) { animation: glitch-slice-r 6.4s steps(1) infinite; }
+.header-nav a:nth-child(6n+2) { animation: glitch-slice-l 8.3s steps(1) infinite; }
+.header-nav a:nth-child(6n+3) { animation: glitch-slice-s 5.7s steps(1) infinite; }
+.header-nav a:nth-child(6n+4) { animation: glitch-slice-r 9.1s steps(1) infinite; }
+.header-nav a:nth-child(6n+5) { animation: glitch-slice-l 7.2s steps(1) infinite; }
+.header-nav a:nth-child(6n+6) { animation: glitch-slice-s 8.6s steps(1) infinite; }
 
 /* --- Nav bar: frequent block corruption --- */
 .header-nav-bar {
@@ -1607,10 +1607,10 @@
 .profile-page.profile-custom-css .profile-main-card {
   position: relative;
   overflow: hidden;
-  animation: glitch-rgb-b 8s steps(1) infinite, glitch-skew-b 8s steps(1) infinite;
-  animation-delay: 6.8s, 6.8s;
+  animation: glitch-rgb-b 12s steps(1) infinite, glitch-skew-b 12s steps(1) infinite;
+  animation-delay: 10.2s, 10.2s;
 }
-/* Tear on the profile card */
+/* Tear on the profile card — frequent */
 .profile-page.profile-custom-css .profile-main-card > .card-body::after {
   content: "";
   position: absolute;
@@ -1621,12 +1621,21 @@
   box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 8s steps(1) infinite;
+  animation: glitch-tear-down 5s steps(1) infinite;
   z-index: 10;
 }
-/* Frequent block corruption on profile card */
-.profile-page.profile-custom-css .profile-main-card::after {
+/* Block corruption on profile card — via card-body, not ::after (structural) */
+.profile-page.profile-custom-css .profile-main-card > .card-body {
+  overflow: hidden;
+}
+.profile-page.profile-custom-css .profile-main-card > .card-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
   animation: glitch-blocks-b 2.5s steps(1) infinite;
+  z-index: 10;
 }
 
 /* --- Card headers: slice-shift per header --- */
@@ -1634,10 +1643,10 @@
   display: inline-block;
 }
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(1) .card-header {
-  animation: glitch-slice-r 4.3s steps(1) infinite;
+  animation: glitch-slice-r 8.5s steps(1) infinite;
 }
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(2) .card-header {
-  animation: glitch-slice-l 5.7s steps(1) infinite;
+  animation: glitch-slice-l 11s steps(1) infinite;
 }
 
 /* --- Blurb cards: tear (alternating direction) → RGB reaction --- */
@@ -1645,10 +1654,10 @@
   position: relative;
   overflow: hidden;
 }
-/* Odd blurb cards: tear down, 7s cycle */
+/* Odd blurb cards: frequent tear, slow RGB */
 .profile-page.profile-custom-css .profile-right > .card:nth-child(odd) {
-  animation: glitch-rgb-a 7s steps(1) infinite;
-  animation-delay: 5.95s;
+  animation: glitch-rgb-a 11s steps(1) infinite;
+  animation-delay: 9.35s;
 }
 .profile-page.profile-custom-css .profile-right > .card:nth-child(odd)::after {
   content: "";
@@ -1660,13 +1669,13 @@
   box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 7s steps(1) infinite;
+  animation: glitch-tear-down 4.5s steps(1) infinite;
   z-index: 10;
 }
-/* Even blurb cards: tear down, 9s cycle */
+/* Even blurb cards: frequent tear, slow RGB */
 .profile-page.profile-custom-css .profile-right > .card:nth-child(even) {
-  animation: glitch-rgb-b 9s steps(1) infinite;
-  animation-delay: 7.65s;
+  animation: glitch-rgb-b 13s steps(1) infinite;
+  animation-delay: 11.05s;
 }
 .profile-page.profile-custom-css .profile-right > .card:nth-child(even)::after {
   content: "";
@@ -1678,69 +1687,112 @@
   box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 9s steps(1) infinite;
+  animation: glitch-tear-down 6s steps(1) infinite;
   z-index: 10;
 }
-/* Frequent block corruption on blurbs (staggered variants, short cycles) */
-.profile-page.profile-custom-css .profile-right > .card:nth-child(odd)::before {
-  animation: glitch-blocks-c 2.1s steps(1) infinite;
+/* Block corruption on blurbs — via card-body, not ::before (structural) */
+.profile-page.profile-custom-css .profile-right > .card > .card-body {
+  position: relative;
+  overflow: hidden;
 }
-.profile-page.profile-custom-css .profile-right > .card:nth-child(even)::before {
+.profile-page.profile-custom-css .profile-right > .card:nth-child(odd) > .card-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: glitch-blocks-c 2.1s steps(1) infinite;
+  z-index: 10;
+}
+.profile-page.profile-custom-css .profile-right > .card:nth-child(even) > .card-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
   animation: glitch-blocks-d 2.7s steps(1) infinite;
+  z-index: 10;
 }
 
 /* --- Blurb links: slice-shift on inline links --- */
 .profile-page.profile-custom-css .blurb-content a:nth-child(3n+1) {
   display: inline-block;
-  animation: glitch-slice-r 3.6s steps(1) infinite;
+  animation: glitch-slice-r 7.2s steps(1) infinite;
 }
 .profile-page.profile-custom-css .blurb-content a:nth-child(3n+2) {
   display: inline-block;
-  animation: glitch-slice-l 4.9s steps(1) infinite;
+  animation: glitch-slice-l 9.1s steps(1) infinite;
 }
 .profile-page.profile-custom-css .blurb-content a:nth-child(3n+3) {
   display: inline-block;
-  animation: glitch-slice-s 2.7s steps(1) infinite;
+  animation: glitch-slice-s 5.8s steps(1) infinite;
+}
+
+/* --- Blurb .g spans: slice-shift on individual words/phrases --- */
+.profile-page.profile-custom-css .blurb-content .g {
+  display: inline-block;
+}
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+1) { animation: glitch-slice-r 6.6s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+2) { animation: glitch-slice-l 9.3s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+3) { animation: glitch-slice-s 5.5s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+4) { animation: glitch-slice-r 8.7s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+5) { animation: glitch-slice-l 7.1s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+6) { animation: glitch-slice-s 10.2s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+7) { animation: glitch-slice-r 5.8s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+8) { animation: glitch-slice-l 8.1s steps(1) infinite; }
+
+/* --- Blurb status table rows: slice-shift --- */
+.profile-page.profile-custom-css .blurb-content .log-report-status tr {
+  display: block;
+}
+.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(1) { animation: glitch-slice-r 7.8s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(2) { animation: glitch-slice-l 9.6s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(3) { animation: glitch-slice-s 8.3s steps(1) infinite; }
+
+/* --- Blurb blockquote + designation lines: slice-shift --- */
+.profile-page.profile-custom-css .blurb-content blockquote {
+  display: block;
+  animation: glitch-slice-r 11.5s steps(1) infinite;
 }
 
 /* --- Comments: odd/even stagger with different combos --- */
-/* Odd comments: skew + RGB + block corruption variant A */
+/* Odd comments: skew + RGB, slow cycle */
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) {
-  animation: glitch-skew-a 5s steps(1) infinite, glitch-rgb-a 5s steps(1) infinite;
-  animation-delay: 4.25s, 4.25s;
+  animation: glitch-skew-a 10s steps(1) infinite, glitch-rgb-a 10s steps(1) infinite;
+  animation-delay: 8.5s, 8.5s;
 }
-/* Even comments: different timing + block corruption variant B */
+/* Even comments: different timing */
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) {
-  animation: glitch-skew-b 7s steps(1) infinite, glitch-rgb-b 7s steps(1) infinite;
-  animation-delay: 5.95s, 5.95s;
+  animation: glitch-skew-b 13s steps(1) infinite, glitch-rgb-b 13s steps(1) infinite;
+  animation-delay: 11.05s, 11.05s;
 }
 /* Comment author names: slice-shift */
 .profile-page.profile-custom-css #comments .comment-author-name {
   display: inline-block;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) .comment-author-name {
-  animation: glitch-slice-r 3.4s steps(1) infinite;
+  animation: glitch-slice-r 7.2s steps(1) infinite;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) .comment-author-name {
-  animation: glitch-slice-l 5.1s steps(1) infinite;
+  animation: glitch-slice-l 9.8s steps(1) infinite;
 }
 /* Comment action links: slice-shift */
 .profile-page.profile-custom-css #comments .comment-actions a {
   display: inline-block;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) .comment-actions a:first-child {
-  animation: glitch-slice-s 4.2s steps(1) infinite;
+  animation: glitch-slice-s 8.9s steps(1) infinite;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) .comment-actions a:first-child {
-  animation: glitch-slice-r 3.7s steps(1) infinite;
+  animation: glitch-slice-r 7.5s steps(1) infinite;
 }
 
 /* --- Footer: tear → RGB reaction + frequent corruption --- */
 .site-footer {
   position: relative;
   overflow: hidden;
-  animation: glitch-rgb-a 5s steps(1) infinite;
-  animation-delay: 4.25s;
+  animation: glitch-rgb-a 12s steps(1) infinite;
+  animation-delay: 10.2s;
 }
 .site-footer::before {
   content: "";
@@ -1768,10 +1820,10 @@
 .site-footer .footer-links a {
   display: inline-block;
 }
-.site-footer .footer-links a:nth-child(7n+1) { animation: glitch-slice-r 3.1s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+2) { animation: glitch-slice-l 5.3s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+3) { animation: glitch-slice-s 2.6s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+4) { animation: glitch-slice-r 4.4s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+5) { animation: glitch-slice-l 3.7s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+6) { animation: glitch-slice-s 5.9s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+7) { animation: glitch-slice-r 2.8s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+1) { animation: glitch-slice-r 7.3s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+2) { animation: glitch-slice-l 10.1s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+3) { animation: glitch-slice-s 6.2s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+4) { animation: glitch-slice-r 8.7s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+5) { animation: glitch-slice-l 7.9s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+6) { animation: glitch-slice-s 11.4s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+7) { animation: glitch-slice-r 6.8s steps(1) infinite; }
