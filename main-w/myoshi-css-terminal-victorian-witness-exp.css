@@ -39,6 +39,113 @@
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
 }
 
+
+/* ============================================
+   Site Header — white on black
+   ============================================ */
+
+/* Top bar backgrounds */
+.header,
+.header-top,
+.header-inner {
+  background: #000 !important;
+  color: #fff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* Nav bar strip */
+.header-nav-bar {
+  background: #111 !important;
+  border-color: #333 !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* Logo */
+.logo,
+.header-top .logo,
+.header-inner .logo {
+  color: #fff !important;
+}
+
+/* Welcome text */
+.header-user,
+.header-user span {
+  color: #fff !important;
+}
+
+/* All links in the top bar */
+.header-top a,
+.header-inner a,
+.header-user a {
+  color: #fff !important;
+}
+
+.header-top a:hover,
+.header-inner a:hover,
+.header-user a:hover {
+  color: #ccc !important;
+}
+
+/* Logout button */
+.header-user button {
+  color: #fff !important;
+  background: none !important;
+}
+
+/* Notification bell */
+.notification-dropdown-trigger {
+  color: #fff !important;
+  background: none !important;
+}
+
+/* Nav links */
+.header-nav a {
+  color: #fff !important;
+}
+
+.header-nav a:hover {
+  color: #ccc !important;
+}
+
+/* "New!" tags */
+.header-nav .new-tag,
+.new-tag {
+  color: #fff !important;
+  background: #333 !important;
+  border-color: #555 !important;
+}
+
+
+/* ============================================
+   Site Footer — white on black
+   ============================================ */
+
+.site-footer {
+  background: #000 !important;
+  color: #fff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  border-top: 1px solid #333 !important;
+}
+
+.site-footer .footer-links {
+  color: #fff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+.site-footer .footer-links a {
+  color: #fff !important;
+}
+
+.site-footer .footer-links a:hover {
+  color: #ccc !important;
+}
+
+.site-footer .copyright {
+  color: #fff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+
 /* Static + soft fog overlay (rotated 180) */
 .profile-page.profile-custom-css::before {
   content: "";
