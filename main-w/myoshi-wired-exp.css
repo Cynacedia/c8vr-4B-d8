@@ -288,6 +288,11 @@
   position: relative;
   z-index: 1;
 }
+/* Ensure card-body doesn't obscure the chamfer inner fill (::before at z:-1) */
+.profile-page.profile-custom-css .card > .card-body,
+.profile-page.profile-custom-css .card > .card-header {
+  background: transparent !important;
+}
 /* Prevent doubled texture on nested cards (fill border still applies) */
 .profile-page.profile-custom-css .card .card::after {
   content: none;
@@ -1189,7 +1194,7 @@
   content: "";
   position: absolute;
   inset: var(--border-w);
-  background: rgba(8, 8, 8, 0.7);
+  background: var(--card);
   -webkit-clip-path: var(--chamfer-shape);
   clip-path: var(--chamfer-shape);
   z-index: -1;
@@ -1198,7 +1203,8 @@
 .profile-page.profile-custom-css #comments .add-comment button[title="Insert emote"] {
   background: transparent !important;
   filter: none;
-  padding: 4px;
+  margin: 0;
+  padding: 2px 4px;
 }
 .profile-page.profile-custom-css #comments .add-comment button[title="Insert emote"] span[role="img"] {
   font-size: 0 !important;
@@ -1567,33 +1573,33 @@
   box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 4.5s steps(1) infinite;
+  animation: glitch-tear-down 14s steps(1) infinite;
   z-index: 10;
 }
 /* RGB reacts just after tear finishes (same cycle, 85% delay) */
 .header-inner {
-  animation: glitch-rgb-a 4.5s steps(1) infinite;
-  animation-delay: 3.825s;
+  animation: glitch-rgb-a 14s steps(1) infinite;
+  animation-delay: 11.9s;
 }
 /* Logo: skew reacts to same tear */
 .logo {
   display: inline-block;
-  animation: glitch-skew-a 4.5s steps(1) infinite;
-  animation-delay: 3.825s;
+  animation: glitch-skew-a 14s steps(1) infinite;
+  animation-delay: 11.9s;
 }
 
 /* --- Nav links: independent slice-shift per word --- */
 .header-nav a {
   display: inline-block;
 }
-.header-nav a:nth-child(6n+1) { animation: glitch-slice-r 6.4s steps(1) infinite; }
-.header-nav a:nth-child(6n+2) { animation: glitch-slice-l 8.3s steps(1) infinite; }
-.header-nav a:nth-child(6n+3) { animation: glitch-slice-s 5.7s steps(1) infinite; }
-.header-nav a:nth-child(6n+4) { animation: glitch-slice-r 9.1s steps(1) infinite; }
-.header-nav a:nth-child(6n+5) { animation: glitch-slice-l 7.2s steps(1) infinite; }
-.header-nav a:nth-child(6n+6) { animation: glitch-slice-s 8.6s steps(1) infinite; }
+.header-nav a:nth-child(6n+1) { animation: glitch-slice-r 17s steps(1) infinite; }
+.header-nav a:nth-child(6n+2) { animation: glitch-slice-l 22s steps(1) infinite; }
+.header-nav a:nth-child(6n+3) { animation: glitch-slice-s 15s steps(1) infinite; }
+.header-nav a:nth-child(6n+4) { animation: glitch-slice-r 24s steps(1) infinite; }
+.header-nav a:nth-child(6n+5) { animation: glitch-slice-l 19s steps(1) infinite; }
+.header-nav a:nth-child(6n+6) { animation: glitch-slice-s 23s steps(1) infinite; }
 
-/* --- Nav bar: frequent block corruption --- */
+/* --- Nav bar: block corruption --- */
 .header-nav-bar {
   position: relative;
   overflow: hidden;
@@ -1604,7 +1610,7 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  animation: glitch-blocks-d 2.3s steps(1) infinite;
+  animation: glitch-blocks-d 6s steps(1) infinite;
   z-index: 10;
 }
 
@@ -1612,10 +1618,10 @@
 .profile-page.profile-custom-css .profile-main-card {
   position: relative;
   overflow: hidden;
-  animation: glitch-rgb-b 12s steps(1) infinite, glitch-skew-b 12s steps(1) infinite;
-  animation-delay: 10.2s, 10.2s;
+  animation: glitch-rgb-b 32s steps(1) infinite, glitch-skew-b 32s steps(1) infinite;
+  animation-delay: 27.2s, 27.2s;
 }
-/* Tear on the profile card — frequent (uses ::after, leaving ::before for avatar hex) */
+/* Tear on the profile card (uses ::after, leaving ::before for avatar hex) */
 .profile-page.profile-custom-css .profile-main-card > .card-body {
   overflow: hidden;
 }
@@ -1629,7 +1635,7 @@
   box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 5s steps(1) infinite;
+  animation: glitch-tear-down 15s steps(1) infinite;
   z-index: 10;
 }
 
@@ -1638,26 +1644,26 @@
   display: inline-block;
 }
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(1) .card-header {
-  animation: glitch-slice-r 8.5s steps(1) infinite;
+  animation: glitch-slice-r 22s steps(1) infinite;
 }
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(2) .card-header {
-  animation: glitch-slice-l 11s steps(1) infinite;
+  animation: glitch-slice-l 29s steps(1) infinite;
 }
 
-/* --- Blurb cards: tear (alternating direction) → RGB reaction --- */
+/* --- Blurb cards: tear → RGB reaction --- */
 .profile-page.profile-custom-css .profile-right > .card {
   position: relative;
   overflow: hidden;
 }
-/* Odd blurb cards: frequent tear, slow RGB */
+/* Odd blurb cards: tear, slow RGB */
 .profile-page.profile-custom-css .profile-right > .card:nth-child(odd) {
-  animation: glitch-rgb-a 11s steps(1) infinite;
-  animation-delay: 9.35s;
+  animation: glitch-rgb-a 28s steps(1) infinite;
+  animation-delay: 23.8s;
 }
-/* Even blurb cards: frequent tear, slow RGB */
+/* Even blurb cards: tear, slow RGB */
 .profile-page.profile-custom-css .profile-right > .card:nth-child(even) {
-  animation: glitch-rgb-b 13s steps(1) infinite;
-  animation-delay: 11.05s;
+  animation: glitch-rgb-b 34s steps(1) infinite;
+  animation-delay: 28.9s;
 }
 /* Blurb tears + block corruption — all on card-body to avoid overriding structural ::before/::after */
 .profile-page.profile-custom-css .profile-right > .card > .card-body {
@@ -1674,7 +1680,7 @@
   box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 4.5s steps(1) infinite;
+  animation: glitch-tear-down 13s steps(1) infinite;
   z-index: 10;
 }
 .profile-page.profile-custom-css .profile-right > .card:nth-child(even) > .card-body::after {
@@ -1687,7 +1693,7 @@
   box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 6s steps(1) infinite;
+  animation: glitch-tear-down 17s steps(1) infinite;
   z-index: 10;
 }
 .profile-page.profile-custom-css .profile-right > .card:nth-child(odd) > .card-body::before {
@@ -1696,7 +1702,7 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  animation: glitch-blocks-c 2.1s steps(1) infinite;
+  animation: glitch-blocks-c 5.5s steps(1) infinite;
   z-index: 10;
 }
 .profile-page.profile-custom-css .profile-right > .card:nth-child(even) > .card-body::before {
@@ -1705,89 +1711,89 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  animation: glitch-blocks-d 2.7s steps(1) infinite;
+  animation: glitch-blocks-d 7s steps(1) infinite;
   z-index: 10;
 }
 
 /* --- Blurb links: slice-shift on inline links --- */
 .profile-page.profile-custom-css .blurb-content a:nth-child(3n+1) {
   display: inline-block;
-  animation: glitch-slice-r 7.2s steps(1) infinite;
+  animation: glitch-slice-r 19s steps(1) infinite;
 }
 .profile-page.profile-custom-css .blurb-content a:nth-child(3n+2) {
   display: inline-block;
-  animation: glitch-slice-l 9.1s steps(1) infinite;
+  animation: glitch-slice-l 24s steps(1) infinite;
 }
 .profile-page.profile-custom-css .blurb-content a:nth-child(3n+3) {
   display: inline-block;
-  animation: glitch-slice-s 5.8s steps(1) infinite;
+  animation: glitch-slice-s 16s steps(1) infinite;
 }
 
 /* --- Blurb .g spans: slice-shift on individual words/phrases --- */
 .profile-page.profile-custom-css .blurb-content .g {
   display: inline-block;
 }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+1) { animation: glitch-slice-r 6.6s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+2) { animation: glitch-slice-l 9.3s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+3) { animation: glitch-slice-s 5.5s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+4) { animation: glitch-slice-r 8.7s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+5) { animation: glitch-slice-l 7.1s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+6) { animation: glitch-slice-s 10.2s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+7) { animation: glitch-slice-r 5.8s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+8) { animation: glitch-slice-l 8.1s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+1) { animation: glitch-slice-r 18s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+2) { animation: glitch-slice-l 25s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+3) { animation: glitch-slice-s 15s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+4) { animation: glitch-slice-r 23s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+5) { animation: glitch-slice-l 19s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+6) { animation: glitch-slice-s 27s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+7) { animation: glitch-slice-r 16s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .g:nth-child(8n+8) { animation: glitch-slice-l 21s steps(1) infinite; }
 
 /* --- Blurb status table rows: slice-shift --- */
 .profile-page.profile-custom-css .blurb-content .log-report-status tr {
   display: block;
 }
-.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(1) { animation: glitch-slice-r 7.8s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(2) { animation: glitch-slice-l 9.6s steps(1) infinite; }
-.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(3) { animation: glitch-slice-s 8.3s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(1) { animation: glitch-slice-r 21s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(2) { animation: glitch-slice-l 26s steps(1) infinite; }
+.profile-page.profile-custom-css .blurb-content .log-report-status tr:nth-child(3) { animation: glitch-slice-s 22s steps(1) infinite; }
 
 /* --- Blurb blockquote + designation lines: slice-shift --- */
 .profile-page.profile-custom-css .blurb-content blockquote {
   display: block;
-  animation: glitch-slice-r 11.5s steps(1) infinite;
+  animation: glitch-slice-r 30s steps(1) infinite;
 }
 
 /* --- Comments: odd/even stagger with different combos --- */
 /* Odd comments: skew + RGB, slow cycle */
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) {
-  animation: glitch-skew-a 10s steps(1) infinite, glitch-rgb-a 10s steps(1) infinite;
-  animation-delay: 8.5s, 8.5s;
+  animation: glitch-skew-a 26s steps(1) infinite, glitch-rgb-a 26s steps(1) infinite;
+  animation-delay: 22.1s, 22.1s;
 }
 /* Even comments: different timing */
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) {
-  animation: glitch-skew-b 13s steps(1) infinite, glitch-rgb-b 13s steps(1) infinite;
-  animation-delay: 11.05s, 11.05s;
+  animation: glitch-skew-b 34s steps(1) infinite, glitch-rgb-b 34s steps(1) infinite;
+  animation-delay: 28.9s, 28.9s;
 }
 /* Comment author names: slice-shift */
 .profile-page.profile-custom-css #comments .comment-author-name {
   display: inline-block;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) .comment-author-name {
-  animation: glitch-slice-r 7.2s steps(1) infinite;
+  animation: glitch-slice-r 19s steps(1) infinite;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) .comment-author-name {
-  animation: glitch-slice-l 9.8s steps(1) infinite;
+  animation: glitch-slice-l 25s steps(1) infinite;
 }
 /* Comment action links: slice-shift */
 .profile-page.profile-custom-css #comments .comment-actions a {
   display: inline-block;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) .comment-actions a:first-child {
-  animation: glitch-slice-s 8.9s steps(1) infinite;
+  animation: glitch-slice-s 23s steps(1) infinite;
 }
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) .comment-actions a:first-child {
-  animation: glitch-slice-r 7.5s steps(1) infinite;
+  animation: glitch-slice-r 20s steps(1) infinite;
 }
 
-/* --- Footer: tear → RGB reaction + frequent corruption --- */
+/* --- Footer: tear → RGB reaction + corruption --- */
 .site-footer {
   position: relative;
   overflow: hidden;
-  animation: glitch-rgb-a 12s steps(1) infinite;
-  animation-delay: 10.2s;
+  animation: glitch-rgb-a 30s steps(1) infinite;
+  animation-delay: 25.5s;
 }
 .site-footer::before {
   content: "";
@@ -1799,7 +1805,7 @@
   box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-down 5s steps(1) infinite;
+  animation: glitch-tear-down 14s steps(1) infinite;
   z-index: 10;
 }
 .site-footer::after {
@@ -1808,17 +1814,17 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  animation: glitch-blocks-c 1.9s steps(1) infinite;
+  animation: glitch-blocks-c 5s steps(1) infinite;
   z-index: 10;
 }
 /* Footer links: slice-shift per word */
 .site-footer .footer-links a {
   display: inline-block;
 }
-.site-footer .footer-links a:nth-child(7n+1) { animation: glitch-slice-r 7.3s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+2) { animation: glitch-slice-l 10.1s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+3) { animation: glitch-slice-s 6.2s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+4) { animation: glitch-slice-r 8.7s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+5) { animation: glitch-slice-l 7.9s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+6) { animation: glitch-slice-s 11.4s steps(1) infinite; }
-.site-footer .footer-links a:nth-child(7n+7) { animation: glitch-slice-r 6.8s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+1) { animation: glitch-slice-r 19s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+2) { animation: glitch-slice-l 26s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+3) { animation: glitch-slice-s 17s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+4) { animation: glitch-slice-r 23s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+5) { animation: glitch-slice-l 21s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+6) { animation: glitch-slice-s 29s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+7) { animation: glitch-slice-r 18s steps(1) infinite; }
