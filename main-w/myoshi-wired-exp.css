@@ -1390,119 +1390,125 @@
  */
 
 /* --- Scanline tear (sweeps down) --- */
+/*
+ * KEYFRAME BURST WINDOWS — tuned for long cycles (13-34s).
+ * Bursts occupy ~2-4% of the cycle so the actual motion stays
+ * ~0.3-0.6s regardless of how long the idle gap is.
+ */
 @keyframes glitch-tear-down {
-  0%, 75%  { opacity: 0; top: 0; }
-  76%      { opacity: 1; top: 8%; }
-  78%      { top: 30%; transform: translateX(4px); }
-  80%      { top: 52%; transform: translateX(-3px); }
-  82%      { top: 70%; transform: translateX(2px); }
-  84%      { top: 88%; opacity: 0.4; }
-  86%, 100% { opacity: 0; top: 100%; }
+  0%, 95%    { opacity: 0; top: 0; }
+  95.5%      { opacity: 1; top: 10%; }
+  96%        { top: 30%; transform: translateX(4px); }
+  96.5%      { top: 52%; transform: translateX(-3px); }
+  97%        { top: 72%; transform: translateX(2px); }
+  97.5%      { top: 88%; opacity: 0.4; }
+  98%, 100%  { opacity: 0; top: 100%; }
 }
 /* --- RGB split: bursts at the START of timeline, pair with delay --- */
 @keyframes glitch-rgb-a {
-  0%, 6%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  7%       { text-shadow: -2px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  9%       { text-shadow: 3px 0 #ff0040, -1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  11%      { text-shadow: -1px 1px #ff0040, 1px -1px #0ff, 0 1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
-  13%      { text-shadow: 2px 0 #ff0040, -3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  15%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  0%, 0.8%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  1%         { text-shadow: -2px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  1.5%       { text-shadow: 3px 0 #ff0040, -1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  2%         { text-shadow: -1px 1px #ff0040, 1px -1px #0ff, 0 1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
+  2.5%       { text-shadow: 2px 0 #ff0040, -3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  3%, 100%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
 }
 @keyframes glitch-rgb-b {
-  0%, 4%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  5%       { text-shadow: 2px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  7%       { text-shadow: -1px 0 #ff0040, 3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  9%       { text-shadow: 1px -1px #ff0040, -1px 1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  11%      { text-shadow: -2px 1px #ff0040, 2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  13%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  0%, 0.5%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  0.8%       { text-shadow: 2px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  1.3%       { text-shadow: -1px 0 #ff0040, 3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  1.8%       { text-shadow: 1px -1px #ff0040, -1px 1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  2.3%       { text-shadow: -2px 1px #ff0040, 2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  2.8%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
 }
 
 /* --- Skew stutter: short sharp snaps, pair with delay --- */
 @keyframes glitch-skew-a {
-  0%, 5%   { transform: none; }
-  5.5%     { transform: skewX(-2deg) translateX(4px); }
-  6%       { transform: skewX(1.5deg) translateX(-3px); }
-  6.5%     { transform: skewX(-0.5deg) translateX(2px); }
-  7%, 100% { transform: none; }
+  0%, 1%     { transform: none; }
+  1.3%       { transform: skewX(-2deg) translateX(4px); }
+  1.6%       { transform: skewX(1.5deg) translateX(-3px); }
+  1.9%       { transform: skewX(-0.5deg) translateX(2px); }
+  2.2%, 100% { transform: none; }
 }
 @keyframes glitch-skew-b {
-  0%, 4%   { transform: none; }
-  4.5%     { transform: skewX(1.5deg) translateX(-5px); }
-  5%       { transform: skewX(-2deg) translateX(3px); }
-  5.5%     { transform: skewX(0.5deg) translateX(-2px); }
-  6%, 100% { transform: none; }
+  0%, 0.8%   { transform: none; }
+  1.1%       { transform: skewX(1.5deg) translateX(-5px); }
+  1.4%       { transform: skewX(-2deg) translateX(3px); }
+  1.7%       { transform: skewX(0.5deg) translateX(-2px); }
+  2%, 100%   { transform: none; }
 }
 
 /* --- Slice-shift: inline word jitter (3 variants) --- */
 @keyframes glitch-slice-r {
-  0%, 70%  { transform: none; clip-path: none; }
-  71%      { transform: translateX(4px); clip-path: inset(0 0 50% 0); }
-  73%      { transform: translateX(-3px); clip-path: inset(40% 0 0 0); }
-  75%      { transform: translateX(6px); clip-path: inset(10% 0 60% 0); }
-  77%      { transform: translateX(-2px); clip-path: inset(55% 0 10% 0); }
-  79%, 100% { transform: none; clip-path: none; }
+  0%, 95%    { transform: none; clip-path: none; }
+  95.5%      { transform: translateX(4px); clip-path: inset(0 0 50% 0); }
+  96.2%      { transform: translateX(-3px); clip-path: inset(40% 0 0 0); }
+  96.9%      { transform: translateX(6px); clip-path: inset(10% 0 60% 0); }
+  97.6%      { transform: translateX(-2px); clip-path: inset(55% 0 10% 0); }
+  98.3%, 100% { transform: none; clip-path: none; }
 }
 @keyframes glitch-slice-l {
-  0%, 65%  { transform: none; clip-path: none; }
-  66%      { transform: translateX(-5px); clip-path: inset(0 0 55% 0); }
-  68%      { transform: translateX(3px); clip-path: inset(45% 0 0 0); }
-  70%      { transform: translateX(-4px); clip-path: inset(15% 0 50% 0); }
-  72%      { transform: translateX(2px); clip-path: inset(60% 0 5% 0); }
-  74%, 100% { transform: none; clip-path: none; }
+  0%, 94%    { transform: none; clip-path: none; }
+  94.5%      { transform: translateX(-5px); clip-path: inset(0 0 55% 0); }
+  95.2%      { transform: translateX(3px); clip-path: inset(45% 0 0 0); }
+  95.9%      { transform: translateX(-4px); clip-path: inset(15% 0 50% 0); }
+  96.6%      { transform: translateX(2px); clip-path: inset(60% 0 5% 0); }
+  97.3%, 100% { transform: none; clip-path: none; }
 }
 @keyframes glitch-slice-s {
-  0%, 80%  { transform: none; clip-path: none; }
-  81%      { transform: translateX(3px); clip-path: inset(0 0 60% 0); }
-  83%      { transform: translateX(-2px); clip-path: inset(50% 0 0 0); }
-  85%, 100% { transform: none; clip-path: none; }
+  0%, 96%    { transform: none; clip-path: none; }
+  96.5%      { transform: translateX(3px); clip-path: inset(0 0 60% 0); }
+  97.5%      { transform: translateX(-2px); clip-path: inset(50% 0 0 0); }
+  98.5%, 100% { transform: none; clip-path: none; }
 }
 
-/* --- Block corruption: frequent, thick bands, high visibility (4 variants) --- */
+/* --- Block corruption: thick bands, high visibility (4 variants) --- */
+/* Block cycles are shorter (5-7s), so wider % windows are fine */
 @keyframes glitch-blocks-a {
-  0%, 50%  { opacity: 0; }
-  52% {
+  0%, 82%  { opacity: 0; }
+  84% {
     opacity: 1;
     background:
       linear-gradient(transparent 15%, rgba(255,255,255,0.18) 15%, rgba(255,255,255,0.18) 22%, transparent 22%),
       linear-gradient(transparent 48%, rgba(255,255,255,0.14) 48%, rgba(255,255,255,0.14) 56%, transparent 56%);
     transform: translateX(4px);
   }
-  56% {
+  88% {
     opacity: 1;
     background:
       linear-gradient(transparent 35%, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.2) 40%, transparent 40%),
       linear-gradient(transparent 68%, rgba(255,255,255,0.15) 68%, rgba(255,255,255,0.15) 76%, transparent 76%);
     transform: translateX(-6px);
   }
-  60% {
+  92% {
     opacity: 1;
     background:
       linear-gradient(transparent 5%, rgba(255,255,255,0.12) 5%, rgba(255,255,255,0.12) 14%, transparent 14%),
       linear-gradient(transparent 78%, rgba(255,255,255,0.18) 78%, rgba(255,255,255,0.18) 86%, transparent 86%);
     transform: translateX(3px);
   }
-  64%, 100% { opacity: 0; }
+  96%, 100% { opacity: 0; }
 }
 @keyframes glitch-blocks-b {
-  0%, 45%  { opacity: 0; }
-  48% {
+  0%, 80%  { opacity: 0; }
+  83% {
     opacity: 1;
     background:
       linear-gradient(transparent 25%, rgba(255,255,255,0.16) 25%, rgba(255,255,255,0.16) 34%, transparent 34%),
       linear-gradient(transparent 58%, rgba(255,255,255,0.2) 58%, rgba(255,255,255,0.2) 64%, transparent 64%);
     transform: translateX(-5px);
   }
-  52% {
+  87% {
     opacity: 1;
     background:
       linear-gradient(transparent 42%, rgba(255,255,255,0.14) 42%, rgba(255,255,255,0.14) 48%, transparent 48%);
     transform: translateX(7px);
   }
-  56%, 100% { opacity: 0; }
+  91%, 100% { opacity: 0; }
 }
 @keyframes glitch-blocks-c {
-  0%, 40%  { opacity: 0; }
-  43% {
+  0%, 78%  { opacity: 0; }
+  81% {
     opacity: 1;
     background:
       linear-gradient(transparent 10%, rgba(255,255,255,0.2) 10%, rgba(255,255,255,0.2) 18%, transparent 18%),
@@ -1510,18 +1516,18 @@
       linear-gradient(transparent 72%, rgba(255,255,255,0.18) 72%, rgba(255,255,255,0.18) 80%, transparent 80%);
     transform: translateX(6px);
   }
-  47% {
+  85% {
     opacity: 1;
     background:
       linear-gradient(transparent 28%, rgba(255,255,255,0.22) 28%, rgba(255,255,255,0.22) 33%, transparent 33%),
       linear-gradient(transparent 55%, rgba(255,255,255,0.12) 55%, rgba(255,255,255,0.12) 62%, transparent 62%);
     transform: translateX(-4px);
   }
-  51%, 100% { opacity: 0; }
+  89%, 100% { opacity: 0; }
 }
 @keyframes glitch-blocks-d {
-  0%, 35%  { opacity: 0; }
-  38% {
+  0%, 76%  { opacity: 0; }
+  79% {
     opacity: 1;
     background:
       linear-gradient(transparent 8%, rgba(255,255,255,0.25) 8%, rgba(255,255,255,0.25) 15%, transparent 15%),
@@ -1529,14 +1535,14 @@
       linear-gradient(transparent 80%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.15) 88%, transparent 88%);
     transform: translateX(-5px);
   }
-  42% {
+  83% {
     opacity: 1;
     background:
       linear-gradient(transparent 20%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.2) 28%, transparent 28%),
       linear-gradient(transparent 62%, rgba(255,255,255,0.22) 62%, rgba(255,255,255,0.22) 68%, transparent 68%);
     transform: translateX(8px);
   }
-  46%, 100% { opacity: 0; }
+  87%, 100% { opacity: 0; }
 }
 
 
@@ -1546,8 +1552,8 @@
 
 /*
  * TEAR → RGB/SKEW sync:
- *   Tear and RGB/skew share the same duration. Tear fires ~75%.
- *   RGB/skew fire ~5-7%. Delaying RGB/skew by 85% of the duration
+ *   Tear and RGB/skew share the same duration. Tear fires ~96%.
+ *   RGB/skew fire ~1-3%. Delaying RGB/skew by 97% of the duration
  *   makes their burst start right as the tear finishes.
  *
  * SLICE-SHIFT:
@@ -1576,16 +1582,16 @@
   animation: glitch-tear-down 14s steps(1) infinite;
   z-index: 10;
 }
-/* RGB reacts just after tear finishes (same cycle, 85% delay) */
+/* RGB reacts just after tear finishes (97% delay) */
 .header-inner {
   animation: glitch-rgb-a 14s steps(1) infinite;
-  animation-delay: 11.9s;
+  animation-delay: 13.58s;
 }
 /* Logo: skew reacts to same tear */
 .logo {
   display: inline-block;
   animation: glitch-skew-a 14s steps(1) infinite;
-  animation-delay: 11.9s;
+  animation-delay: 13.58s;
 }
 
 /* --- Nav links: independent slice-shift per word --- */
@@ -1619,7 +1625,7 @@
   position: relative;
   overflow: hidden;
   animation: glitch-rgb-b 32s steps(1) infinite, glitch-skew-b 32s steps(1) infinite;
-  animation-delay: 27.2s, 27.2s;
+  animation-delay: 31.04s, 31.04s;
 }
 /* Tear on the profile card (uses ::after, leaving ::before for avatar hex) */
 .profile-page.profile-custom-css .profile-main-card > .card-body {
@@ -1658,12 +1664,12 @@
 /* Odd blurb cards: tear, slow RGB */
 .profile-page.profile-custom-css .profile-right > .card:nth-child(odd) {
   animation: glitch-rgb-a 28s steps(1) infinite;
-  animation-delay: 23.8s;
+  animation-delay: 27.16s;
 }
 /* Even blurb cards: tear, slow RGB */
 .profile-page.profile-custom-css .profile-right > .card:nth-child(even) {
   animation: glitch-rgb-b 34s steps(1) infinite;
-  animation-delay: 28.9s;
+  animation-delay: 32.98s;
 }
 /* Blurb tears + block corruption — all on card-body to avoid overriding structural ::before/::after */
 .profile-page.profile-custom-css .profile-right > .card > .card-body {
@@ -1760,12 +1766,12 @@
 /* Odd comments: skew + RGB, slow cycle */
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) {
   animation: glitch-skew-a 26s steps(1) infinite, glitch-rgb-a 26s steps(1) infinite;
-  animation-delay: 22.1s, 22.1s;
+  animation-delay: 25.22s, 25.22s;
 }
 /* Even comments: different timing */
 .profile-page.profile-custom-css #comments .profile-comment:nth-child(even) {
   animation: glitch-skew-b 34s steps(1) infinite, glitch-rgb-b 34s steps(1) infinite;
-  animation-delay: 28.9s, 28.9s;
+  animation-delay: 32.98s, 32.98s;
 }
 /* Comment author names: slice-shift */
 .profile-page.profile-custom-css #comments .comment-author-name {
@@ -1793,7 +1799,7 @@
   position: relative;
   overflow: hidden;
   animation: glitch-rgb-a 30s steps(1) infinite;
-  animation-delay: 25.5s;
+  animation-delay: 29.1s;
 }
 .site-footer::before {
   content: "";
