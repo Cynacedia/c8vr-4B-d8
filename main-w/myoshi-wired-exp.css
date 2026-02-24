@@ -1343,145 +1343,180 @@
    Glitch Effects — Keyframes
    ============================================ */
 
-/* --- RGB split (chromatic aberration) --- */
+/*
+ * DESIGN:
+ *  - Scanline tears sweep across containers on their own cycle.
+ *  - RGB split + skew fire JUST AFTER a tear ends (same duration,
+ *    delayed ~85%), so the tear looks like it caused the aberration.
+ *  - Slice-shift targets individual inline elements (nav links,
+ *    card headers, footer links) via nth-child so random words
+ *    glitch independently at different rates.
+ *  - Block corruption fires frequently (~3-4s cycles) with short bursts.
+ */
+
+/* --- Scanline tear (sweeps down) --- */
+@keyframes glitch-tear-down {
+  0%, 75%  { opacity: 0; top: 0; }
+  76%      { opacity: 1; top: 8%; }
+  78%      { top: 30%; transform: translateX(4px); }
+  80%      { top: 52%; transform: translateX(-3px); }
+  82%      { top: 70%; transform: translateX(2px); }
+  84%      { top: 88%; opacity: 0.4; }
+  86%, 100% { opacity: 0; top: 100%; }
+}
+/* --- Scanline tear (sweeps up) --- */
+@keyframes glitch-tear-up {
+  0%, 70%  { opacity: 0; top: 100%; }
+  72%      { opacity: 1; top: 82%; }
+  74%      { top: 60%; transform: translateX(-4px); }
+  76%      { top: 40%; transform: translateX(5px); }
+  78%      { top: 18%; transform: translateX(-2px); }
+  80%      { top: 5%; opacity: 0.4; }
+  82%, 100% { opacity: 0; top: 0; }
+}
+
+/* --- RGB split: bursts at the START of timeline, pair with delay --- */
 @keyframes glitch-rgb-a {
-  0%, 84%  { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  85%      { text-shadow: -2px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  86%      { text-shadow: 3px 0 #ff0040, -1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  87%      { text-shadow: -1px 1px #ff0040, 1px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  88%      { text-shadow: 2px 0 #ff0040, -3px 0 #0ff, 0 1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
-  89%      { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  90%      { text-shadow: -3px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  91%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  0%, 6%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  7%       { text-shadow: -2px 0 #ff0040, 2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  9%       { text-shadow: 3px 0 #ff0040, -1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  11%      { text-shadow: -1px 1px #ff0040, 1px -1px #0ff, 0 1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
+  13%      { text-shadow: 2px 0 #ff0040, -3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  15%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
 }
 @keyframes glitch-rgb-b {
-  0%, 78%  { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  79%      { text-shadow: 2px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  80%      { text-shadow: -1px 0 #ff0040, 3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  81%      { text-shadow: 1px -1px #ff0040, -1px 1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  82%      { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  83%      { text-shadow: -2px 1px #ff0040, 2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  84%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-}
-@keyframes glitch-rgb-c {
-  0%, 91%  { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  92%      { text-shadow: -1px 0 #ff0040, 1px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  93%      { text-shadow: 2px 1px #ff0040, -2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  94%      { text-shadow: -3px 0 #ff0040, 3px 0 #0ff, 0 -1px #ff0, 0 0 4px rgba(255,255,255,0.15); }
-  95%      { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
-  96%      { text-shadow: 1px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
-  97%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  0%, 4%   { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
+  5%       { text-shadow: 2px 0 #ff0040, -2px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  7%       { text-shadow: -1px 0 #ff0040, 3px 0 #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  9%       { text-shadow: 1px -1px #ff0040, -1px 1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  11%      { text-shadow: -2px 1px #ff0040, 2px -1px #0ff, 0 0 4px rgba(255,255,255,0.15); }
+  13%, 100% { text-shadow: 0 0 4px rgba(255,255,255,0.15); }
 }
 
-/* --- Skew stutter --- */
+/* --- Skew stutter: also bursts early, pair with delay --- */
 @keyframes glitch-skew-a {
-  0%, 90%  { transform: none; }
-  91%      { transform: skewX(-2deg) translateX(3px); }
-  92%      { transform: skewX(1.5deg) translateX(-2px); }
-  93%      { transform: skewX(-1deg) translateX(5px); }
-  94%      { transform: skewX(0.5deg) translateX(-1px); }
-  95%, 100% { transform: none; }
+  0%, 5%   { transform: none; }
+  6%       { transform: skewX(-2deg) translateX(3px); }
+  8%       { transform: skewX(1.5deg) translateX(-2px); }
+  10%      { transform: skewX(-1deg) translateX(5px); }
+  12%      { transform: skewX(0.5deg) translateX(-1px); }
+  14%, 100% { transform: none; }
 }
 @keyframes glitch-skew-b {
-  0%, 82%  { transform: none; }
-  83%      { transform: skewX(1deg) translateX(-4px); }
-  84%      { transform: skewX(-2deg) translateX(2px); }
-  85%      { transform: skewX(0.8deg) translateX(-3px); }
-  86%, 100% { transform: none; }
-}
-@keyframes glitch-skew-c {
-  0%, 94%  { transform: none; }
-  95%      { transform: skewX(-1.5deg) translateX(2px); }
-  96%      { transform: skewX(2deg) translateX(-4px); }
-  97%      { transform: skewX(-0.5deg) translateX(6px); }
-  98%      { transform: skewX(1deg) translateX(-2px); }
-  99%, 100% { transform: none; }
+  0%, 4%   { transform: none; }
+  5%       { transform: skewX(1deg) translateX(-4px); }
+  7%       { transform: skewX(-2deg) translateX(2px); }
+  9%       { transform: skewX(0.8deg) translateX(-3px); }
+  11%, 100% { transform: none; }
 }
 
-/* --- Scanline tear --- */
-@keyframes glitch-tear-a {
-  0%, 85%  { opacity: 0; top: 0; }
-  86%      { opacity: 1; top: 15%; }
-  87%      { top: 35%; }
-  88%      { top: 50%; transform: translateX(4px); }
-  89%      { top: 62%; transform: translateX(-3px); }
-  90%      { top: 78%; transform: translateX(2px); }
-  91%      { top: 90%; opacity: 0.5; }
-  92%, 100% { opacity: 0; top: 100%; }
+/* --- Slice-shift: inline word jitter (3 variants) --- */
+@keyframes glitch-slice-r {
+  0%, 70%  { transform: none; clip-path: none; }
+  71%      { transform: translateX(4px); clip-path: inset(0 0 50% 0); }
+  73%      { transform: translateX(-3px); clip-path: inset(40% 0 0 0); }
+  75%      { transform: translateX(6px); clip-path: inset(10% 0 60% 0); }
+  77%      { transform: translateX(-2px); clip-path: inset(55% 0 10% 0); }
+  79%, 100% { transform: none; clip-path: none; }
 }
-@keyframes glitch-tear-b {
-  0%, 72%  { opacity: 0; top: 100%; }
-  73%      { opacity: 1; top: 85%; }
-  74%      { top: 65%; transform: translateX(-3px); }
-  75%      { top: 48%; transform: translateX(5px); }
-  76%      { top: 30%; transform: translateX(-2px); }
-  77%      { top: 12%; opacity: 0.5; }
-  78%, 100% { opacity: 0; top: 0; }
+@keyframes glitch-slice-l {
+  0%, 65%  { transform: none; clip-path: none; }
+  66%      { transform: translateX(-5px); clip-path: inset(0 0 55% 0); }
+  68%      { transform: translateX(3px); clip-path: inset(45% 0 0 0); }
+  70%      { transform: translateX(-4px); clip-path: inset(15% 0 50% 0); }
+  72%      { transform: translateX(2px); clip-path: inset(60% 0 5% 0); }
+  74%, 100% { transform: none; clip-path: none; }
+}
+@keyframes glitch-slice-s {
+  0%, 80%  { transform: none; clip-path: none; }
+  81%      { transform: translateX(3px); clip-path: inset(0 0 60% 0); }
+  83%      { transform: translateX(-2px); clip-path: inset(50% 0 0 0); }
+  85%, 100% { transform: none; clip-path: none; }
 }
 
-/* --- Block corruption --- */
+/* --- Block corruption: frequent (3 variants) --- */
 @keyframes glitch-blocks-a {
-  0%, 89%  { opacity: 0; }
-  90% {
+  0%, 68%  { opacity: 0; }
+  70% {
     opacity: 1;
     background:
-      linear-gradient(transparent 20%, rgba(255,255,255,0.08) 20%, rgba(255,255,255,0.08) 22%, transparent 22%),
-      linear-gradient(transparent 55%, rgba(255,255,255,0.06) 55%, rgba(255,255,255,0.06) 58%, transparent 58%);
+      linear-gradient(transparent 18%, rgba(255,255,255,0.08) 18%, rgba(255,255,255,0.08) 20%, transparent 20%),
+      linear-gradient(transparent 52%, rgba(255,255,255,0.06) 52%, rgba(255,255,255,0.06) 55%, transparent 55%);
     transform: translateX(3px);
   }
-  91% {
+  73% {
     opacity: 1;
     background:
-      linear-gradient(transparent 40%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 41%, transparent 41%),
-      linear-gradient(transparent 72%, rgba(255,255,255,0.07) 72%, rgba(255,255,255,0.07) 75%, transparent 75%);
+      linear-gradient(transparent 38%, rgba(255,255,255,0.1) 38%, rgba(255,255,255,0.1) 40%, transparent 40%),
+      linear-gradient(transparent 70%, rgba(255,255,255,0.07) 70%, rgba(255,255,255,0.07) 73%, transparent 73%);
     transform: translateX(-5px);
   }
-  92% {
+  76% {
     opacity: 1;
     background:
-      linear-gradient(transparent 10%, rgba(255,255,255,0.05) 10%, rgba(255,255,255,0.05) 14%, transparent 14%),
-      linear-gradient(transparent 82%, rgba(255,255,255,0.09) 82%, rgba(255,255,255,0.09) 84%, transparent 84%);
+      linear-gradient(transparent 8%, rgba(255,255,255,0.05) 8%, rgba(255,255,255,0.05) 12%, transparent 12%),
+      linear-gradient(transparent 80%, rgba(255,255,255,0.09) 80%, rgba(255,255,255,0.09) 83%, transparent 83%);
     transform: translateX(2px);
   }
-  93%, 100% { opacity: 0; }
+  79%, 100% { opacity: 0; }
 }
 @keyframes glitch-blocks-b {
-  0%, 80%  { opacity: 0; }
-  81% {
+  0%, 60%  { opacity: 0; }
+  62% {
     opacity: 1;
     background:
-      linear-gradient(transparent 30%, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 33%, transparent 33%),
-      linear-gradient(transparent 65%, rgba(255,255,255,0.09) 65%, rgba(255,255,255,0.09) 67%, transparent 67%);
+      linear-gradient(transparent 28%, rgba(255,255,255,0.07) 28%, rgba(255,255,255,0.07) 31%, transparent 31%),
+      linear-gradient(transparent 62%, rgba(255,255,255,0.09) 62%, rgba(255,255,255,0.09) 64%, transparent 64%);
     transform: translateX(-4px);
   }
-  82% {
+  65% {
     opacity: 1;
     background:
-      linear-gradient(transparent 48%, rgba(255,255,255,0.06) 48%, rgba(255,255,255,0.06) 50%, transparent 50%);
+      linear-gradient(transparent 45%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.06) 47%, transparent 47%);
     transform: translateX(6px);
   }
-  83%, 100% { opacity: 0; }
+  68%, 100% { opacity: 0; }
+}
+@keyframes glitch-blocks-c {
+  0%, 55%  { opacity: 0; }
+  57% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 15%, rgba(255,255,255,0.08) 15%, rgba(255,255,255,0.08) 18%, transparent 18%),
+      linear-gradient(transparent 42%, rgba(255,255,255,0.06) 42%, rgba(255,255,255,0.06) 44%, transparent 44%),
+      linear-gradient(transparent 75%, rgba(255,255,255,0.07) 75%, rgba(255,255,255,0.07) 78%, transparent 78%);
+    transform: translateX(5px);
+  }
+  60% {
+    opacity: 1;
+    background:
+      linear-gradient(transparent 33%, rgba(255,255,255,0.09) 33%, rgba(255,255,255,0.09) 35%, transparent 35%),
+      linear-gradient(transparent 58%, rgba(255,255,255,0.05) 58%, rgba(255,255,255,0.05) 61%, transparent 61%);
+    transform: translateX(-3px);
+  }
+  63%, 100% { opacity: 0; }
 }
 
 
 /* ============================================
-   Glitch Effects — Applied per zone
+   Glitch Effects — Applied per element
    ============================================ */
 
 /*
- * Each zone gets a unique combo of effects at different cycle lengths
- * so nothing syncs up and it feels organic/random.
+ * TEAR → RGB/SKEW sync:
+ *   Tear and RGB/skew share the same duration. Tear fires ~75%.
+ *   RGB/skew fire ~5-7%. Delaying RGB/skew by 85% of the duration
+ *   makes their burst start right as the tear finishes.
  *
- *   Header:       tear-a 7s  + rgb-a 5s
- *   Logo:         skew-a 6s  + rgb-b 4.5s
- *   Nav bar:      skew-b 8s  + blocks-a 11s
- *   Profile card: rgb-c 6.5s + skew-c 9s
- *   Blurb cards:  tear-b 9s  + blocks-b 12s
- *   Comments:     skew-b 7.5s + rgb-a 8.5s
- *   Footer:       blocks-a 8s + rgb-c 7s
+ * SLICE-SHIFT:
+ *   nth-child gives each nav link / footer link / card header its
+ *   own keyframe variant + duration so they fire independently.
+ *
+ * BLOCK CORRUPTION:
+ *   Short 3-4s cycles on containers, different variant per element.
  */
 
-/* --- Header: scanline tear + RGB --- */
+/* --- Header: tear sweeps down → RGB + skew react after --- */
 .header {
   position: relative;
   overflow: hidden;
@@ -1496,24 +1531,36 @@
   box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-a 7s steps(1) infinite;
+  animation: glitch-tear-down 6s steps(1) infinite;
   z-index: 10;
 }
+/* RGB reacts just after tear finishes (same 6s cycle, 85% delay) */
 .header-inner {
-  animation: glitch-rgb-a 5s steps(1) infinite;
+  animation: glitch-rgb-a 6s steps(1) infinite;
+  animation-delay: 5.1s;
 }
-
-/* --- Logo: skew + RGB --- */
+/* Logo: skew reacts to same tear */
 .logo {
   display: inline-block;
-  animation: glitch-skew-a 6s steps(1) infinite, glitch-rgb-b 4.5s steps(1) infinite;
+  animation: glitch-skew-a 6s steps(1) infinite;
+  animation-delay: 5.1s;
 }
 
-/* --- Nav bar: skew + block corruption --- */
+/* --- Nav links: independent slice-shift per word --- */
+.header-nav a {
+  display: inline-block;
+}
+.header-nav a:nth-child(6n+1) { animation: glitch-slice-r 3.2s steps(1) infinite; }
+.header-nav a:nth-child(6n+2) { animation: glitch-slice-l 4.7s steps(1) infinite; }
+.header-nav a:nth-child(6n+3) { animation: glitch-slice-s 2.9s steps(1) infinite; }
+.header-nav a:nth-child(6n+4) { animation: glitch-slice-r 5.3s steps(1) infinite; }
+.header-nav a:nth-child(6n+5) { animation: glitch-slice-l 3.8s steps(1) infinite; }
+.header-nav a:nth-child(6n+6) { animation: glitch-slice-s 4.1s steps(1) infinite; }
+
+/* --- Nav bar: frequent block corruption --- */
 .header-nav-bar {
   position: relative;
   overflow: hidden;
-  animation: glitch-skew-b 8s steps(1) infinite;
 }
 .header-nav-bar::after {
   content: "";
@@ -1521,21 +1568,142 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  animation: glitch-blocks-a 11s steps(1) infinite;
+  animation: glitch-blocks-a 3.5s steps(1) infinite;
   z-index: 10;
 }
 
-/* --- Profile main card: RGB + skew --- */
+/* --- Profile main card: tear → RGB + skew reaction --- */
 .profile-page.profile-custom-css .profile-main-card {
-  animation: glitch-rgb-c 6.5s steps(1) infinite, glitch-skew-c 9s steps(1) infinite;
+  position: relative;
+  overflow: hidden;
+  animation: glitch-rgb-b 8s steps(1) infinite, glitch-skew-b 8s steps(1) infinite;
+  animation-delay: 6.8s, 6.8s;
+}
+/* Tear on the profile card */
+.profile-page.profile-custom-css .profile-main-card > .card-body::after {
+  content: "";
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
+  opacity: 0;
+  pointer-events: none;
+  animation: glitch-tear-down 8s steps(1) infinite;
+  z-index: 10;
+}
+/* Frequent block corruption on profile card */
+.profile-page.profile-custom-css .profile-main-card::after {
+  animation: glitch-blocks-b 3.8s steps(1) infinite;
 }
 
-/* --- Blurb cards: tear + block corruption --- */
-.profile-page.profile-custom-css .profile-right > .card:has(.blurb-content) {
+/* --- Card headers: slice-shift per header --- */
+.profile-page.profile-custom-css .card-header {
+  display: inline-block;
+}
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(1) .card-header {
+  animation: glitch-slice-r 4.3s steps(1) infinite;
+}
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(2) .card-header {
+  animation: glitch-slice-l 5.7s steps(1) infinite;
+}
+
+/* --- Blurb cards: tear (alternating direction) → RGB reaction --- */
+.profile-page.profile-custom-css .profile-right > .card {
   position: relative;
   overflow: hidden;
 }
-.profile-page.profile-custom-css .profile-right > .card:has(.blurb-content)::after {
+/* Odd blurb cards: tear sweeps up, 7s cycle */
+.profile-page.profile-custom-css .profile-right > .card:nth-child(odd) {
+  animation: glitch-rgb-a 7s steps(1) infinite;
+  animation-delay: 5.95s;
+}
+.profile-page.profile-custom-css .profile-right > .card:nth-child(odd)::after {
+  content: "";
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
+  opacity: 0;
+  pointer-events: none;
+  animation: glitch-tear-up 7s steps(1) infinite;
+  z-index: 10;
+}
+/* Even blurb cards: tear sweeps down, 9s cycle */
+.profile-page.profile-custom-css .profile-right > .card:nth-child(even) {
+  animation: glitch-rgb-b 9s steps(1) infinite;
+  animation-delay: 7.65s;
+}
+.profile-page.profile-custom-css .profile-right > .card:nth-child(even)::after {
+  content: "";
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 6px rgba(255,255,255,0.3), 0 1px 0 #000, 0 -1px 0 #000;
+  opacity: 0;
+  pointer-events: none;
+  animation: glitch-tear-down 9s steps(1) infinite;
+  z-index: 10;
+}
+/* Frequent block corruption on blurbs (staggered variants) */
+.profile-page.profile-custom-css .profile-right > .card:nth-child(odd)::before {
+  animation: glitch-blocks-c 3.3s steps(1) infinite;
+}
+.profile-page.profile-custom-css .profile-right > .card:nth-child(even)::before {
+  animation: glitch-blocks-a 4.1s steps(1) infinite;
+}
+
+/* --- Blurb links: slice-shift on inline links --- */
+.profile-page.profile-custom-css .blurb-content a:nth-child(3n+1) {
+  display: inline-block;
+  animation: glitch-slice-r 3.6s steps(1) infinite;
+}
+.profile-page.profile-custom-css .blurb-content a:nth-child(3n+2) {
+  display: inline-block;
+  animation: glitch-slice-l 4.9s steps(1) infinite;
+}
+.profile-page.profile-custom-css .blurb-content a:nth-child(3n+3) {
+  display: inline-block;
+  animation: glitch-slice-s 2.7s steps(1) infinite;
+}
+
+/* --- Comments: independent per-comment stagger --- */
+.profile-page.profile-custom-css #comments .profile-comment:nth-child(3n+1) {
+  animation: glitch-skew-a 7s steps(1) infinite;
+  animation-delay: 5.95s;
+}
+.profile-page.profile-custom-css #comments .profile-comment:nth-child(3n+2) {
+  animation: glitch-skew-b 5.5s steps(1) infinite;
+  animation-delay: 4.675s;
+}
+.profile-page.profile-custom-css #comments .profile-comment:nth-child(3n+3) {
+  animation: glitch-rgb-a 6s steps(1) infinite;
+  animation-delay: 5.1s;
+}
+/* Comment author names: slice-shift */
+.profile-page.profile-custom-css #comments .comment-author-name {
+  display: inline-block;
+}
+.profile-page.profile-custom-css #comments .profile-comment:nth-child(odd) .comment-author-name {
+  animation: glitch-slice-r 3.4s steps(1) infinite;
+}
+.profile-page.profile-custom-css #comments .profile-comment:nth-child(even) .comment-author-name {
+  animation: glitch-slice-l 5.1s steps(1) infinite;
+}
+
+/* --- Footer: tear → RGB reaction + frequent corruption --- */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  animation: glitch-rgb-a 5s steps(1) infinite;
+  animation-delay: 4.25s;
+}
+.site-footer::before {
   content: "";
   position: absolute;
   left: -5%;
@@ -1545,20 +1713,8 @@
   box-shadow: 0 0 8px rgba(255,255,255,0.4), 0 1px 0 #000, 0 -1px 0 #000;
   opacity: 0;
   pointer-events: none;
-  animation: glitch-tear-b 9s steps(1) infinite;
+  animation: glitch-tear-up 5s steps(1) infinite;
   z-index: 10;
-}
-
-/* --- Comments: skew + RGB --- */
-.profile-page.profile-custom-css #comments .profile-comment {
-  animation: glitch-skew-b 7.5s steps(1) infinite, glitch-rgb-a 8.5s steps(1) infinite;
-}
-
-/* --- Footer: block corruption + RGB --- */
-.site-footer {
-  position: relative;
-  overflow: hidden;
-  animation: glitch-rgb-c 7s steps(1) infinite;
 }
 .site-footer::after {
   content: "";
@@ -1566,6 +1722,17 @@
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  animation: glitch-blocks-a 8s steps(1) infinite;
+  animation: glitch-blocks-b 2.9s steps(1) infinite;
   z-index: 10;
 }
+/* Footer links: slice-shift per word */
+.site-footer .footer-links a {
+  display: inline-block;
+}
+.site-footer .footer-links a:nth-child(7n+1) { animation: glitch-slice-r 3.1s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+2) { animation: glitch-slice-l 5.3s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+3) { animation: glitch-slice-s 2.6s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+4) { animation: glitch-slice-r 4.4s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+5) { animation: glitch-slice-l 3.7s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+6) { animation: glitch-slice-s 5.9s steps(1) infinite; }
+.site-footer .footer-links a:nth-child(7n+7) { animation: glitch-slice-r 2.8s steps(1) infinite; }
