@@ -1,0 +1,8 @@
+# Reference files - not part of the active project
+/myoshi-about.html
+/myoshi-blurb-safe-tags.html
+/myoshi-css-template.css
+/myoshi-css-terminal-victorian-witness.css
+
+# Claude Code local settings
+.claude/

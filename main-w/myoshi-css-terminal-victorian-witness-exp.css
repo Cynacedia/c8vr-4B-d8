@@ -1,0 +1,1216 @@
+/* ===== Page Base ===== */
+.profile-page.profile-custom-css {
+  --ink: #f2f2f2;
+  --ink-muted: #b8b8b8;
+  --accent: #ffffff;
+  --accent-2: #d6d6d6;
+  --bg: #050505;
+  --static-image: url("https://i.imgur.com/PiQqhGH.gif");
+  --static-size: 240px 240px;
+  --avatar-size: 100px;
+  --avatar-border: 2px;
+  --avatar-offset: 7.75px;
+  --hex: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+  --card: rgba(8, 8, 8, 0.72);
+  --card-border: rgba(255, 255, 255, 0.18);
+  --glow: rgba(255, 255, 255, 0.25);
+  --border-w: 1px;
+  --chamfer-lg: 18px;
+  --chamfer-md: 12px;
+  --chamfer-sm: 8px;
+  --chamfer: var(--chamfer-md);
+  --chamfer-shape: polygon(
+    var(--chamfer) 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer)),
+    0 var(--chamfer)
+  );
+
+  color: var(--ink);
+  font-family: "Courier New", "Consolas", "Lucida Console", monospace;
+  letter-spacing: 0.4px;
+  background-color: var(--bg) !important;
+  position: relative;
+  isolation: isolate;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+}
+
+/* Static + soft fog overlay (rotated 180) */
+.profile-page.profile-custom-css::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    var(--static-image),
+    radial-gradient(60% 45% at 20% 15%, rgba(255, 255, 255, 0.08), transparent 60%),
+    radial-gradient(50% 40% at 80% 20%, rgba(255, 255, 255, 0.06), transparent 65%),
+    radial-gradient(50% 50% at 50% 85%, rgba(255, 255, 255, 0.05), transparent 70%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65));
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: var(--static-size), auto, auto, auto, auto;
+  background-position: center;
+  background-attachment: fixed;
+  filter: contrast(1.05);
+  transform: rotate(180deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scanlines + analog drift */
+.profile-page.profile-custom-css::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+  animation: vt-drift 8s linear infinite;
+}
+
+@keyframes vt-drift {
+  0% {
+    transform: translateY(0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.75;
+  }
+}
+
+.profile-page.profile-custom-css .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Links ===== */
+.profile-page.profile-custom-css a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.profile-page.profile-custom-css a:hover {
+  color: var(--accent-2);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+/* ===== Cards ===== */
+/*
+ * Chamfer border technique: clip-path clips box-shadow/border,
+ * so the element bg IS the border color. ::before fills the interior
+ * (with backdrop-blur), ::after overlays the static texture.
+ * Both pseudos use z-index:-1 so content stays on top.
+ */
+.profile-page.profile-custom-css .card {
+  background: var(--card-border);
+  border: none;
+  border-radius: 0;
+  padding: 12px;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.65));
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+/* Inner fill — creates the visible border gap */
+.profile-page.profile-custom-css .card::before {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background: var(--card);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  z-index: -1;
+}
+/* Static texture overlay */
+.profile-page.profile-custom-css .card::after {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background-image: var(--static-image);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.14;
+  filter: blur(1.2px) contrast(1.1);
+  transform: rotate(180deg);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  pointer-events: none;
+  z-index: -1;
+}
+.profile-page.profile-custom-css .card > * {
+  position: relative;
+  z-index: 1;
+}
+/* Prevent doubled texture on nested cards (fill border still applies) */
+.profile-page.profile-custom-css .card .card::after {
+  content: none;
+}
+.profile-page.profile-custom-css .card:hover {
+  transform: translateY(-1px);
+  filter:
+    drop-shadow(0 14px 30px rgba(0, 0, 0, 0.75))
+    drop-shadow(0 0 12px var(--glow));
+}
+
+/* ===== Chamfered corners ===== */
+.profile-page.profile-custom-css .card,
+.profile-page.profile-custom-css .friends-grid .friend-item,
+.profile-page.profile-custom-css .section-links,
+.profile-page.profile-custom-css .profile-url-box code,
+.profile-page.profile-custom-css .profile-breadcrumb,
+.profile-page.profile-custom-css .profile-contact-links .contact-link,
+.profile-page.profile-custom-css .profile-contact-links .boop-link,
+.profile-page.profile-custom-css #comments .profile-comment,
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"],
+.profile-page.profile-custom-css #comments .add-comment,
+.profile-page.profile-custom-css #comments .add-comment textarea,
+.profile-page.profile-custom-css #comments .add-comment button,
+.profile-page.profile-custom-css #comments .add-comment .action-btn,
+.profile-page.profile-custom-css .user-avatar:not(.profile-avatar),
+.profile-page.profile-custom-css .friend-avatar,
+.profile-page.profile-custom-css .comment-avatar,
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"] img {
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+}
+
+.profile-page.profile-custom-css .card,
+.profile-page.profile-custom-css #comments .profile-comment,
+.profile-page.profile-custom-css #comments .add-comment {
+  --chamfer: var(--chamfer-lg);
+}
+
+.profile-page.profile-custom-css .friends-grid .friend-item,
+.profile-page.profile-custom-css .section-links {
+  --chamfer: var(--chamfer-md);
+}
+
+.profile-page.profile-custom-css .profile-url-box code,
+.profile-page.profile-custom-css .profile-breadcrumb,
+.profile-page.profile-custom-css .profile-contact-links .contact-link,
+.profile-page.profile-custom-css .profile-contact-links .boop-link,
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"],
+.profile-page.profile-custom-css #comments .add-comment textarea,
+.profile-page.profile-custom-css #comments .add-comment button,
+.profile-page.profile-custom-css #comments .add-comment .action-btn,
+.profile-page.profile-custom-css .user-avatar:not(.profile-avatar),
+.profile-page.profile-custom-css .friend-avatar,
+.profile-page.profile-custom-css .comment-avatar,
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"] img {
+  --chamfer: var(--chamfer-sm);
+}
+
+/* Remove default header gradients */
+.profile-page.profile-custom-css .card-header,
+.profile-page.profile-custom-css .card-header::before,
+.profile-page.profile-custom-css .card-header::after {
+  background-image: none !important;
+  background: none !important;
+}
+
+/* Card headers */
+.profile-page.profile-custom-css .card-header {
+  text-align: center;
+  border: none;
+  font-weight: 700;
+  font-size: 1.05em;
+  color: var(--accent);
+  letter-spacing: 1px;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+}
+/* Hide the redundant name in the main profile card header */
+.profile-page.profile-custom-css .profile-main-card .card-header span {
+  display: none !important;
+}
+
+/* ===== Profile bits ===== */
+.profile-page.profile-custom-css .profile-display-name {
+  font-size: 1.35rem;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #ffffff;
+  animation: vt-name-flicker 2.8s steps(1) infinite;
+  -webkit-mask-image: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 1) 0 60%,
+    rgba(0, 0, 0, 0.35) 60% 80%,
+    rgba(0, 0, 0, 1) 80% 100%
+  );
+  mask-image: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 1) 0 60%,
+    rgba(0, 0, 0, 0.35) 60% 80%,
+    rgba(0, 0, 0, 1) 80% 100%
+  );
+  -webkit-mask-size: 1ch 100%;
+  mask-size: 1ch 100%;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  animation: vt-name-flicker 2.8s steps(1) infinite, vt-name-mask 1.6s steps(8) infinite;
+}
+.profile-page.profile-custom-css .profile-username {
+  color: var(--ink-muted);
+}
+.profile-page.profile-custom-css .profile-online-status {
+  color: #dcdcdc;
+}
+.profile-page.profile-custom-css .profile-url-box {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.profile-page.profile-custom-css .profile-url-box code {
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--ink);
+  border: none;
+  border-radius: 0;
+  display: inline-block;
+  padding: 6px 14px;
+  font-weight: 700;
+  position: relative;
+  isolation: isolate;
+}
+.profile-page.profile-custom-css .profile-url-box code::after {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  z-index: -1;
+}
+.profile-page.profile-custom-css .profile-main-card .card-body {
+  position: relative;
+}
+.profile-page.profile-custom-css .profile-main-card .card-body::before {
+  content: "";
+  position: absolute;
+  top: var(--avatar-offset);
+  left: 50%;
+  width: calc(var(--avatar-size) + (var(--avatar-border) * 2));
+  height: calc(var(--avatar-size) + (var(--avatar-border) * 2));
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 0;
+  -webkit-clip-path: var(--hex);
+  clip-path: var(--hex);
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.18),
+    0 0 28px rgba(255, 255, 255, 0.08),
+    0 10px 16px rgba(0, 0, 0, 0.45);
+  filter: blur(0.2px);
+  pointer-events: none;
+  z-index: 0;
+}
+.profile-page.profile-custom-css .profile-main-card .card-body > * {
+  position: relative;
+  z-index: 1;
+}
+.profile-page.profile-custom-css .profile-avatar {
+  box-sizing: border-box;
+  border: none;
+  border-radius: 0;
+  -webkit-clip-path: var(--hex);
+  clip-path: var(--hex);
+  aspect-ratio: 1 / 1;
+  width: var(--avatar-size) !important;
+  height: var(--avatar-size) !important;
+  display: block !important;
+  margin: 0 auto 8px;
+  position: relative;
+  z-index: 1;
+}
+
+/* All avatars → hexagonal */
+.profile-page.profile-custom-css .user-avatar:not(.profile-avatar),
+.profile-page.profile-custom-css .friend-avatar,
+.profile-page.profile-custom-css .comment-avatar {
+  border-radius: 0 !important;
+  -webkit-clip-path: var(--hex) !important;
+  clip-path: var(--hex) !important;
+}
+.profile-page.profile-custom-css .profile-breadcrumb {
+  background: var(--card-border);
+  border: none;
+  border-radius: 0;
+  padding: 6px 12px;
+  display: inline-block;
+  position: relative;
+  isolation: isolate;
+}
+.profile-page.profile-custom-css .profile-breadcrumb::after {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background: rgba(5, 5, 5, 0.8);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  z-index: -1;
+}
+
+/* ===== Top bar ===== */
+/* Remove the white profile top bar entirely */
+.profile-page.profile-custom-css .profile-top-bar {
+  display: none !important;
+}
+/* If you want it visible but transparent, use this instead:
+.profile-page.profile-custom-css .profile-top-bar {
+  display: block !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+*/
+
+@keyframes vt-name-flicker {
+  0% {
+    opacity: 1;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
+  }
+  91% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.7;
+  }
+  93% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 0.8;
+  }
+  96% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes vt-name-mask {
+  0% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+  100% {
+    -webkit-mask-position: 1ch 0;
+    mask-position: 1ch 0;
+  }
+}
+
+/* ===== Friends ===== */
+.profile-page.profile-custom-css .friends-grid .friend-item {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 6px 8px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  text-decoration: none !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profile-page.profile-custom-css .friends-grid .friend-item:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+  text-decoration: none !important;
+}
+/* Hex border frame behind friend avatar */
+.profile-page.profile-custom-css .friends-grid .friend-item::before {
+  content: "";
+  display: block;
+  width: calc(48px + var(--avatar-border) * 2);
+  height: calc(48px + var(--avatar-border) * 2);
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-clip-path: var(--hex);
+  clip-path: var(--hex);
+  position: absolute;
+  top: calc(6px - var(--avatar-border));
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+.profile-page.profile-custom-css .friends-grid .friend-avatar,
+.profile-page.profile-custom-css .friends-grid .user-avatar {
+  width: 48px !important;
+  height: 48px !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-clip-path: var(--hex) !important;
+  clip-path: var(--hex) !important;
+  position: relative;
+  z-index: 1;
+}
+.profile-page.profile-custom-css .friend-name {
+  color: var(--ink);
+  font-size: 0.85em;
+  text-align: center;
+  text-decoration: none !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Centered single-column layout ===== */
+.profile-page.profile-custom-css .profile-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 20px !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+.profile-page.profile-custom-css .profile-left {
+  width: 100% !important;
+  max-width: 420px !important;
+  flex: none !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+.profile-page.profile-custom-css .profile-right {
+  width: 100% !important;
+  max-width: 660px !important;
+  flex: none !important;
+  position: relative !important;
+  --si-header-h: 92px;     /* height of Signal Intercept header card — adjust if text reflows */
+}
+
+/* ▸ Signal Intercept — split header (centered) + body (left-aligned) ▸ */
+/*
+ * ::before = header card  (centered: ▓ bars, title, ref, ▓ bars)
+ * ::after  = body card    (left-aligned: URSE-01 report text)
+ *
+ * Each card is a single element using the gradient border trick:
+ *   background: card-color (padding-box), border-color (border-box)
+ *   border: transparent → gap between boxes = visible border
+ *
+ * Header has chamfer on top corners only (straight bottom edge).
+ * Body has chamfer on bottom corners only (straight top edge).
+ * They butt flush at the seam (header border-bottom: 0, body border-top: 0).
+ * --si-header-h on .profile-right controls the body's top offset.
+ */
+/* Header card — centered */
+.profile-page.profile-custom-css .profile-right::before {
+  content:
+    "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"
+    "\A\ASIGNAL  INTERCEPT  — LOG REPORT —"
+    "\A\AREF: ████-0x7F-████"
+    "\A\A▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓";
+  white-space: pre-line;
+  text-align: center;
+  color: rgba(200, 200, 200, 0.45);
+  position: absolute;
+  top: 0;
+  left: calc(100% + 16px);
+  width: 300px;
+  --chamfer: var(--chamfer-sm);
+  background: rgba(8, 8, 8, 0.5);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  /* chamfer top corners only, straight bottom */
+  -webkit-clip-path: polygon(
+    var(--chamfer) 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% 100%,
+    0 100%,
+    0 var(--chamfer)
+  );
+  clip-path: polygon(
+    var(--chamfer) 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% 100%,
+    0 100%,
+    0 var(--chamfer)
+  );
+  padding: 12px 14px;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  z-index: 10;
+  pointer-events: none;
+  /* drop-shadow border follows clip-path (incl. chamfer diagonals) + card shadow */
+  filter:
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.35))
+    drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
+}
+/* Body card — left-aligned */
+.profile-page.profile-custom-css .profile-right::after {
+  content:
+    "░░░░░░ was first identified indirectly through anomalous fluctuations within ambient electromagnetic monitoring arrays operating between 33 Hz and 261 kHz. The fluctuations presented as structured interference rather than stochastic noise, displaying patterned amplitude inconsistent with known environmental sources. Subsequent cross-referencing with visual-spectrum recording devices revealed intermittent visuals temporally aligned with the signal disturbances."
+    "\A\A░░░░░░ demonstrates inconsistent visibility across imaging systems. Notably, some devices record no anomaly despite synchronous signal fluctuation detection. This suggests compression algorithms may inadvertently remove or suppress the entity's signature."
+    "\A\APreliminary assessment suggests a nonmalignant disposition. The entity exhibits proximity-seeking behavior without escalation. Observers report a neutral-to-curious affective impression, though this may represent anthropomorphic projection."
+    "\A\AIn conclusion, ░░░░░░ presents as a transient, shadow entity with mutable morphology and inconsistent detectability across recording media. No evidence of hostile behavior has been documented. The phenomenon remains poorly characterized and warrants controlled, multi-spectrum study under varied conditions."
+    "\A\A Further observation is required to determine ontological classification.";
+  white-space: pre-line;
+  text-align: left;
+  color: rgba(200, 200, 200, 0.45);
+  position: absolute;
+  top: var(--si-header-h);
+  left: calc(100% + 16px);
+  width: 300px;
+  --chamfer: var(--chamfer-sm);
+  background: rgba(8, 8, 8, 0.5);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  /* chamfer bottom corners only, straight top */
+  -webkit-clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer))
+  );
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer))
+  );
+  padding: 12px 14px;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  z-index: 10;
+  pointer-events: none;
+  filter:
+    drop-shadow(0 0 1px rgba(255, 255, 255, 0.35));
+}
+
+/* ===== Top Friends: hex satellites flanking main card ===== */
+/* Neutralize the Top Friends card chrome */
+.profile-page.profile-custom-css .profile-left .card:has(.friends-grid),
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(2) {
+  all: unset !important;
+  display: block !important;
+  position: static !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  pointer-events: none;
+}
+.profile-page.profile-custom-css .profile-left .card:has(.friends-grid)::before,
+.profile-page.profile-custom-css .profile-left .card:has(.friends-grid)::after,
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(2)::before,
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(2)::after {
+  content: none !important;
+}
+.profile-page.profile-custom-css .profile-left .card:has(.friends-grid) .card-header,
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(2) .card-header {
+  display: none !important;
+}
+.profile-page.profile-custom-css .profile-left .card:has(.friends-grid) .card-body,
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(2) .card-body {
+  all: unset !important;
+  display: block !important;
+  overflow: visible !important;
+}
+
+/* Friends grid = absolute overlay with CSS Grid: left col | spacer | right col */
+.profile-page.profile-custom-css .profile-left .friends-grid {
+  position: absolute !important;
+  top: 24px;
+  left: -80px;
+  right: -80px;
+  display: grid !important;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: repeat(4, auto);
+  row-gap: 12px;
+  z-index: 3;
+  pointer-events: none;
+}
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-name {
+  display: none !important;
+}
+
+/* Left column: friends 1–4 */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(-n+4) {
+  grid-column: 1;
+}
+/* Right column: friends 5–8 */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(n+5) {
+  grid-column: 3;
+  justify-self: end;
+}
+/* Pair rows so left & right sit on the same line */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(1),
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(5) { grid-row: 1; }
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(2),
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(6) { grid-row: 2; }
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(3),
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(7) { grid-row: 3; }
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(4),
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(8) { grid-row: 4; }
+
+/* Each friend = dark hex "card" with border */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item {
+  padding: 0;
+  width: 64px;
+  height: 64px;
+  justify-content: center;
+  align-items: center;
+  background: transparent !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+  pointer-events: auto;
+  transition: filter 0.2s ease;
+}
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:hover {
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 8px var(--glow));
+}
+/* Outer hex = border color */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(52px + var(--avatar-border) * 2 + 8px);
+  height: calc(52px + var(--avatar-border) * 2 + 8px);
+  background: var(--card-border);
+  -webkit-clip-path: var(--hex);
+  clip-path: var(--hex);
+  z-index: -2;
+}
+/* Inner hex = dark card fill */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(52px + var(--avatar-border) * 2 + 8px - var(--border-w) * 2);
+  height: calc(52px + var(--avatar-border) * 2 + 8px - var(--border-w) * 2);
+  background: var(--card);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  -webkit-clip-path: var(--hex);
+  clip-path: var(--hex);
+  z-index: -1;
+}
+/* Avatar */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-avatar,
+.profile-page.profile-custom-css .profile-left .friends-grid .user-avatar {
+  width: 52px !important;
+  height: 52px !important;
+  -webkit-clip-path: var(--hex) !important;
+  clip-path: var(--hex) !important;
+  position: relative;
+  z-index: 1;
+  filter: grayscale(1) drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.35));
+}
+
+/* Honeycomb stagger — left column */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(-n+4):nth-child(odd) {
+  transform: translateX(-8px);
+}
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(-n+4):nth-child(even) {
+  transform: translateX(8px);
+}
+/* Honeycomb stagger — right column (mirrored) */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(n+5):nth-child(odd) {
+  transform: translateX(8px);
+}
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item:nth-child(n+5):nth-child(even) {
+  transform: translateX(-8px);
+}
+
+@media (max-width: 700px) {
+  .profile-page.profile-custom-css .profile-left {
+    max-width: 100% !important;
+  }
+  .profile-page.profile-custom-css .profile-left .friends-grid {
+    position: static !important;
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    left: auto;
+    right: auto;
+    margin: 10px 0 0;
+  }
+  .profile-page.profile-custom-css .profile-left .card:has(.friends-grid),
+  .profile-page.profile-custom-css .profile-left .card:nth-of-type(2) {
+    height: auto !important;
+    margin-top: 6px !important;
+  }
+  .profile-page.profile-custom-css .profile-left .friends-grid .friend-item {
+    transform: none !important;
+  }
+}
+
+/* ===== Stats ===== */
+.profile-page.profile-custom-css .stats-table td {
+  padding: 6px 8px;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.18);
+}
+
+/* ===== Blurbs ===== */
+/* Hide card headers in right column (blurbs + profile song) */
+.profile-page.profile-custom-css .profile-right > .card > .card-header {
+  display: none !important;
+}
+/* Allow breakout positioning for status bubble (stays inside card bounds) */
+.profile-page.profile-custom-css .profile-right .card:has(.blurb-content) {
+  overflow: visible !important;
+}
+.profile-page.profile-custom-css .profile-right .card:has(.blurb-content) > .card-body {
+  overflow: visible !important;
+}
+.profile-page.profile-custom-css .blurb-section {
+  overflow: visible !important;
+}
+.profile-page.profile-custom-css .blurb-section .blurb-content {
+  color: var(--ink) !important;
+  text-align: center;
+  overflow: visible !important;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.35),
+    0 0 6px rgba(255, 255, 255, 0.15),
+    1px 0 0 rgba(255, 255, 255, 0.2),
+    -1px 0 0 rgba(255, 255, 255, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.2),
+    0 -1px 0 rgba(255, 255, 255, 0.2);
+}
+.profile-page.profile-custom-css .blurb-section .blurb-content * {
+  color: var(--ink) !important;
+  text-align: center;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.35),
+    0 0 6px rgba(255, 255, 255, 0.15),
+    1px 0 0 rgba(255, 255, 255, 0.2),
+    -1px 0 0 rgba(255, 255, 255, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.2),
+    0 -1px 0 rgba(255, 255, 255, 0.2);
+}
+/* Log Report wrapper — positioning context for breakout panels */
+.profile-page.profile-custom-css .blurb-content .log-report {
+  position: relative;
+}
+
+/* ▸ Log Report header — now lives on repurposed .section-links (see below) ▸ */
+/* .log-report-header in HTML is hidden; CSS-only version uses section-links card */
+.profile-page.profile-custom-css .blurb-content .log-report-header {
+  display: none !important;
+}
+
+/* ▸ Status readout — bubble on top-left of blurb section ▸ */
+.profile-page.profile-custom-css .blurb-content .log-report-status {
+  position: absolute !important;
+  top: -18px;
+  left: -6px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 8px 12px;
+  z-index: 10;
+}
+.profile-page.profile-custom-css .blurb-content .log-report-status td {
+  text-align: left !important;
+}
+.profile-page.profile-custom-css .blurb-section .blurb-content ul,
+.profile-page.profile-custom-css .blurb-section .blurb-content ol {
+  list-style-position: inside;
+  padding: 0;
+  margin: 0.5em 0;
+}
+/* Blurb ticker — seamless scrolling text */
+@keyframes blurb-ticker-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes blurb-ticker-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+/* Blurb glyph drift — bouncing diamonds with irregular pacing */
+/* Each pattern has slight reversals mid-path for stutter effect */
+@keyframes blurb-drift-a {
+  0%   { transform: translateX(-110px); }
+  18%  { transform: translateX(-25px); }
+  32%  { transform: translateX(-45px); }
+  55%  { transform: translateX(20px); }
+  72%  { transform: translateX(65px); }
+  86%  { transform: translateX(40px); }
+  100% { transform: translateX(110px); }
+}
+@keyframes blurb-drift-b {
+  0%   { transform: translateX(-55px); }
+  22%  { transform: translateX(-5px); }
+  38%  { transform: translateX(-28px); }
+  58%  { transform: translateX(18px); }
+  78%  { transform: translateX(45px); }
+  100% { transform: translateX(55px); }
+}
+@keyframes blurb-drift-c {
+  0%   { transform: translateX(-85px); }
+  28%  { transform: translateX(-55px); }
+  48%  { transform: translateX(8px); }
+  65%  { transform: translateX(-10px); }
+  82%  { transform: translateX(50px); }
+  100% { transform: translateX(85px); }
+}
+@keyframes blurb-drift-d {
+  0%   { transform: translateX(-40px); }
+  20%  { transform: translateX(10px); }
+  42%  { transform: translateX(-18px); }
+  68%  { transform: translateX(28px); }
+  85%  { transform: translateX(12px); }
+  100% { transform: translateX(40px); }
+}
+
+/* ===== Section links — hidden ===== */
+.profile-page.profile-custom-css .section-links {
+  display: none !important;
+}
+
+/* ===== Profile contact buttons ===== */
+.profile-page.profile-custom-css .profile-contact-links .contact-link,
+.profile-page.profile-custom-css .profile-contact-links .boop-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  color: var(--ink) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 6px 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s ease, filter 0.2s ease, background 0.2s ease;
+  position: relative;
+}
+.profile-page.profile-custom-css .profile-contact-links .contact-link::after,
+.profile-page.profile-custom-css .profile-contact-links .boop-link::after {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background: rgba(0, 0, 0, 0.9);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  z-index: -1;
+}
+.profile-page.profile-custom-css .profile-contact-links .contact-link:hover,
+.profile-page.profile-custom-css .profile-contact-links .boop-link:hover {
+  background: rgba(255, 255, 255, 0.55) !important;
+  filter:
+    drop-shadow(0 10px 22px rgba(0, 0, 0, 0.7))
+    drop-shadow(0 0 10px var(--glow));
+  transform: translateY(-1px);
+}
+.profile-page.profile-custom-css .profile-contact-links .contact-link:hover::after,
+.profile-page.profile-custom-css .profile-contact-links .boop-link:hover::after {
+  background: rgba(10, 10, 10, 0.95);
+}
+
+/* ===== Comments ===== */
+.profile-page.profile-custom-css #comments .card-header {
+  display: none !important;
+}
+.profile-page.profile-custom-css #comments .card-body {
+  padding: 12px !important;
+}
+.profile-page.profile-custom-css #comments .profile-comment {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 0;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
+  position: relative;
+}
+.profile-page.profile-custom-css #comments .profile-comment::after {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background: rgba(8, 8, 8, 0.7);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  z-index: -1;
+}
+.profile-page.profile-custom-css #comments .profile-comment > * {
+  position: relative;
+  z-index: 1;
+}
+/* Comment avatar wrapper <a> = hex border frame */
+.profile-page.profile-custom-css #comments .profile-comment > a:first-child {
+  display: block;
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: var(--avatar-border);
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-clip-path: var(--hex);
+  clip-path: var(--hex);
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.12))
+    drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+}
+.profile-page.profile-custom-css #comments .comment-avatar,
+.profile-page.profile-custom-css #comments .profile-comment .user-avatar {
+  border-radius: 0 !important;
+  border: none !important;
+  -webkit-clip-path: var(--hex) !important;
+  clip-path: var(--hex) !important;
+  display: block !important;
+}
+.profile-page.profile-custom-css #comments .comment-content {
+  flex: 1;
+}
+.profile-page.profile-custom-css #comments .comment-meta {
+  font-size: 0.85em;
+  color: rgba(200, 200, 200, 0.9);
+}
+.profile-page.profile-custom-css #comments .comment-author-name {
+  color: var(--accent);
+  font-weight: 700;
+}
+.profile-page.profile-custom-css #comments .comment-time {
+  color: rgba(200, 200, 200, 0.8);
+}
+.profile-page.profile-custom-css #comments .comment-body {
+  color: var(--ink);
+  line-height: 1.5;
+}
+/* Override platform inline color on comment text */
+.profile-page.profile-custom-css #comments .comment-body * {
+  color: var(--ink) !important;
+}
+
+/* Reply block: no class, target the inline-styled div after comment body */
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"] {
+  margin-left: 12px !important;
+  margin-top: 10px !important;
+  padding: 10px 12px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-left: 2px solid rgba(255, 255, 255, 0.45) !important;
+  border-radius: 0 !important;
+}
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"] a {
+  color: var(--accent-2) !important;
+  font-weight: 700;
+}
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"] span {
+  color: rgba(200, 200, 200, 0.8) !important;
+  font-size: 0.8em !important;
+}
+.profile-page.profile-custom-css #comments .comment-content > div[style*="margin-top"] img {
+  border-radius: 0 !important;
+  border: none !important;
+  -webkit-clip-path: var(--hex) !important;
+  clip-path: var(--hex) !important;
+  filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.4));
+}
+
+/* ===== Comment posting box ===== */
+.profile-page.profile-custom-css #comments .add-comment {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 0;
+  padding: 14px;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.6));
+  position: relative;
+}
+.profile-page.profile-custom-css #comments .add-comment::after {
+  content: "";
+  position: absolute;
+  inset: var(--border-w);
+  background: rgba(8, 8, 8, 0.7);
+  -webkit-clip-path: var(--chamfer-shape);
+  clip-path: var(--chamfer-shape);
+  z-index: -1;
+}
+.profile-page.profile-custom-css #comments .add-comment > * {
+  position: relative;
+  z-index: 1;
+}
+.profile-page.profile-custom-css #comments .add-comment textarea,
+.profile-page.profile-custom-css #comments .add-comment [contenteditable] {
+  width: 100%;
+  min-height: 110px;
+  background: rgba(0, 0, 0, 0.85) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+  padding: 10px 12px;
+  outline: none;
+}
+/* Override the inline background on the Lexical editor wrapper div */
+.profile-page.profile-custom-css #comments .add-comment .card-body > div > div,
+.profile-page.profile-custom-css #comments .add-comment > div > div {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+.profile-page.profile-custom-css #comments .add-comment textarea::placeholder {
+  color: rgba(200, 200, 200, 0.7);
+}
+.profile-page.profile-custom-css #comments .add-comment textarea:focus,
+.profile-page.profile-custom-css #comments .add-comment [contenteditable]:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.profile-page.profile-custom-css #comments .add-comment button,
+.profile-page.profile-custom-css #comments .add-comment .action-btn {
+  margin-top: 8px;
+  background: linear-gradient(90deg, #ffffff, #cfcfcf) !important;
+  color: #060606 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 8px 16px;
+  font-weight: 700;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.profile-page.profile-custom-css #comments .add-comment button:hover,
+.profile-page.profile-custom-css #comments .add-comment .action-btn:hover {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.7));
+}
+
+/* ===== Witness overrides ===== */
+/* Hide message button only */
+.profile-page.profile-custom-css .profile-contact-links .contact-link[href*="message" i],
+.profile-page.profile-custom-css .profile-contact-links .contact-link[href*="messages" i],
+.profile-page.profile-custom-css .profile-contact-links .contact-link[href*="mail" i],
+.profile-page.profile-custom-css .profile-contact-links .contact-link[aria-label*="message" i],
+.profile-page.profile-custom-css .profile-contact-links button[aria-label*="message" i] {
+  display: none !important;
+}
+
+/* Friend button relabel → ± (works for both Add Friend and Unfriend) */
+.profile-page.profile-custom-css .profile-contact-links .contact-link:not(.boop-link):not([href*="message"]) {
+  display: inline-block !important;
+  text-align: center !important;
+  font-size: 0 !important;
+  color: transparent !important;
+  text-decoration: none !important;
+  letter-spacing: 0 !important;
+}
+.profile-page.profile-custom-css .profile-contact-links .contact-link:not(.boop-link):not([href*="message"])::before {
+  content: "±";
+  display: inline-block;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Boop -> Witness */
+.profile-page.profile-custom-css .profile-contact-links .boop-link {
+  font-size: 0 !important;
+  color: transparent !important;
+  text-decoration: none !important;
+  letter-spacing: 0 !important;
+}
+.profile-page.profile-custom-css .profile-contact-links .boop-link > * {
+  display: none !important;
+}
+.profile-page.profile-custom-css .profile-contact-links .boop-link::before {
+  content: "👁️ Observe";
+  display: inline-block;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  color: var(--ink);
+}
+/* If booped state is exposed, show "You've observed x" */
+.profile-page.profile-custom-css .profile-contact-links .boop-link[aria-pressed="true"]::before,
+.profile-page.profile-custom-css .profile-contact-links .boop-link[aria-checked="true"]::before,
+.profile-page.profile-custom-css .profile-contact-links .boop-link.is-booped::before,
+.profile-page.profile-custom-css .profile-contact-links .boop-link.booped::before,
+.profile-page.profile-custom-css .profile-contact-links .boop-link[data-booped="true"]::before {
+  content: "You've observed";
+}
+.profile-page.profile-custom-css .profile-contact-links .boop-link:is([aria-pressed="true"], [aria-checked="true"], .is-booped, .booped, [data-booped="true"])[data-count]::before {
+  content: "You've observed " attr(data-count) "x";
+}
+.profile-page.profile-custom-css .profile-contact-links .boop-link:is([aria-pressed="true"], [aria-checked="true"], .is-booped, .booped, [data-booped="true"])[data-boop-count]::before {
+  content: "You've observed " attr(data-boop-count) "x";
+}
+.profile-page.profile-custom-css .profile-contact-links .boop-link:is([aria-pressed="true"], [aria-checked="true"], .is-booped, .booped, [data-booped="true"])[data-boops]::before {
+  content: "You've observed " attr(data-boops) "x";
+}
+
+/* Boop stats -> Witnesses / You've observed */
+.profile-page.profile-custom-css .profile-boop-stats {
+  display: none !important;
+}
+.profile-page.profile-custom-css .profile-boop-stats > span {
+  font-size: 0;
+}
+.profile-page.profile-custom-css .profile-boop-stats > span:not(.viewer-boops)::before {
+  content: "Witnesses";
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+.profile-page.profile-custom-css .profile-boop-stats > span:not(.viewer-boops)[data-count]::before {
+  content: attr(data-count) " witnesses";
+}
+.profile-page.profile-custom-css .profile-boop-stats > span:not(.viewer-boops)[data-boop-count]::before {
+  content: attr(data-boop-count) " witnesses";
+}
+.profile-page.profile-custom-css .profile-boop-stats > span:not(.viewer-boops)[data-boops]::before {
+  content: attr(data-boops) " witnesses";
+}
+.profile-page.profile-custom-css .profile-boop-stats .viewer-boops::before {
+  content: "You've observed";
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+.profile-page.profile-custom-css .profile-boop-stats .viewer-boops[data-count]::before {
+  content: "You've observed " attr(data-count) "x";
+}
+.profile-page.profile-custom-css .profile-boop-stats .viewer-boops[data-boop-count]::before {
+  content: "You've observed " attr(data-boop-count) "x";
+}
+.profile-page.profile-custom-css .profile-boop-stats .viewer-boops[data-boops]::before {
+  content: "You've observed " attr(data-boops) "x";
+}
+
+/* Hide Details, Groups, Photos panels (left column) */
+.profile-page.profile-custom-css .profile-left .card:has(.stats-table),
+.profile-page.profile-custom-css .profile-left .card:has(a[href*="/photos"]),
+.profile-page.profile-custom-css .profile-left .card:has(.card-header.hearted:not(:has(a))) {
+  display: none !important;
+}
+/* Fallback if :has() is stripped/unsupported: hide 3rd+ cards in left column */
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(3),
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(4),
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(5),
+.profile-page.profile-custom-css .profile-left .card:nth-of-type(6) {
+  display: none !important;
+}
