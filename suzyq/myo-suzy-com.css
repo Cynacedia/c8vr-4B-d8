@@ -387,8 +387,8 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
-  width: 160px;
-  height: 80px;
+  width: 220px;
+  height: 110px;
   text-indent: -9999px;
   overflow: hidden;
   display: block;
@@ -478,7 +478,7 @@
   font-size: 0 !important;
   text-indent: -9999px;
   /* Position: upper right, near 3 o'clock on the hex */
-  bottom: -12%;
+  bottom: -12.5%;
   right: 115px;
 }
 
