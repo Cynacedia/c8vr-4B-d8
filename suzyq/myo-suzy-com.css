@@ -7,13 +7,7 @@
 /* --- Fonts --- */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
-/* --- Holographic Keyframes --- */
-@keyframes holographic {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
+/* --- Keyframes --- */
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 8px rgba(255, 107, 157, 0.4), 0 0 20px rgba(255, 107, 157, 0.1); }
   50%      { box-shadow: 0 0 12px rgba(255, 107, 157, 0.6), 0 0 30px rgba(200, 109, 215, 0.2); }
@@ -59,78 +53,98 @@
 
 
 /* ============================================
-   Card Base Styling — Frosted Purple Glass
+   Card Base Styling — Cyber Panel with Clip-Path
    ============================================ */
+
+/*
+  Technique: The card background IS the border color.
+  clip-path cuts the outer shape, padding creates the gap,
+  and card-body/card-header fill the interior with dark glass.
+  The "border" is just the card background showing through.
+
+  Shape: Angled cuts at TL + BR corners, with a small
+  decorative step/notch near top-right — like a data chip
+  or sci-fi HUD panel. Distinct from Acalepsia's folder-tab.
+
+  clip-path points (clockwise from top-left):
+    TL: diagonal cut (0,14 → 14,0)
+    Top edge to notch near right: straight across
+    Notch: small 6px step down at ~75% across
+    TR: square corner
+    Right side down
+    BR: diagonal cut mirroring TL
+    Bottom edge
+    BL: square corner, back up
+*/
 
 .profile-page .card {
   position: relative;
-  background: rgba(40, 18, 75, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(200, 109, 215, 0.25);
-  border-radius: 16px;
-  padding: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
-}
-
-/* Holographic border shimmer via pseudo-element */
-.profile-page .card::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 17px;
-  padding: 1px;
+  /* The holographic gradient — this IS the visible "border" */
   background: linear-gradient(
     135deg,
-    #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #ffd700, #ff6b9d,
-    #c86dd7, #6dc8ff, #72ffd5, #ffd700, #ff6b9d
+    rgba(255, 107, 157, 0.7),
+    rgba(200, 109, 215, 0.6),
+    rgba(109, 200, 255, 0.5),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 107, 157, 0.7)
   );
-  background-size: 400% 400%;
-  animation: holographic 8s ease infinite;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
+  /* Padding = border thickness */
+  padding: 2px;
+  padding-top: 0;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  transition: all 0.25s ease;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
+
+  /* The cyber panel shape */
+  clip-path: polygon(
+    0 14px,                          /* TL: start below cut */
+    14px 0,                          /* TL: diagonal cut corner */
+    calc(75% - 6px) 0,               /* top edge → notch start */
+    75% 6px,                         /* notch: step down */
+    100% 6px,                        /* notch across to right edge */
+    100% calc(100% - 14px),          /* right side down to BR cut */
+    calc(100% - 14px) 100%,          /* BR: diagonal cut corner */
+    0 100%                           /* bottom-left: square */
+  );
 }
 
-.profile-page .card:hover::before {
-  opacity: 0.85;
-}
-
+/* Hover: brighter glow, slight lift */
 .profile-page .card:hover {
-  filter: drop-shadow(0 6px 24px rgba(200, 109, 215, 0.2));
+  filter:
+    drop-shadow(0 0 12px rgba(255, 107, 157, 0.25))
+    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 157, 0.85),
+    rgba(200, 109, 215, 0.75),
+    rgba(109, 200, 255, 0.65),
+    rgba(200, 109, 215, 0.75),
+    rgba(255, 107, 157, 0.85)
+  );
 }
 
-/* Card body */
+/* Card body — the dark glass interior */
 .profile-page .card .card-body {
   padding: 20px;
   color: #e8daf5;
-  position: relative;
-  z-index: 1;
+  background: rgba(18, 8, 35, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-/* Card headers */
+/* Card headers — sits inside the clip-path, slightly lighter glass */
 .profile-page .card .card-header {
-  background: rgba(55, 25, 95, 0.7);
-  border-bottom: 1px solid rgba(200, 109, 215, 0.2);
+  background: rgba(35, 15, 65, 0.92);
+  border-bottom: 1px solid rgba(200, 109, 215, 0.15);
   color: #f5e6ff;
   font-family: 'Orbitron', sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  position: relative;
-  z-index: 1;
+  padding-top: 14px;
 }
 
 /* Starred header accent */
@@ -186,10 +200,11 @@
 /* Holographic ring behind avatar */
 .profile-page .profile-main-card .card-body {
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   padding-top: 10px;
 }
 
+/* The avatar ring — static gradient that looks pearlescent, not cycling */
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
@@ -201,11 +216,8 @@
   border-radius: 50%;
   background: linear-gradient(
     135deg,
-    #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #ffd700, #ff6b9d,
-    #c86dd7, #6dc8ff
+    #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #c86dd7, #ff6b9d
   );
-  background-size: 300% 300%;
-  animation: holographic 4s ease infinite;
   z-index: 1;
   filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.3));
 }
@@ -269,8 +281,8 @@
     135deg,
     #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #ffd700, #ff6b9d
   ) !important;
-  background-size: 300% 300% !important;
-  animation: holographic 4s ease infinite, pulse-glow 3s ease infinite !important;
+  background-size: 100% 100% !important;
+  animation: pulse-glow 3s ease infinite !important;
   color: #fff !important;
   font-family: 'Orbitron', sans-serif !important;
   font-size: 11px !important;
@@ -307,8 +319,8 @@
 }
 
 .profile-page .boop-link:hover {
-  animation: holographic 4s ease infinite, boop-bounce 0.5s ease 1 !important;
-  filter: brightness(1.1);
+  animation: boop-bounce 0.5s ease 1, pulse-glow 3s ease infinite !important;
+  filter: brightness(1.15);
 }
 
 /* Other contact links */
@@ -544,10 +556,10 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #ffd700, #ff6b9d
+    rgba(255, 107, 157, 0.6),
+    rgba(200, 109, 215, 0.5),
+    rgba(109, 200, 255, 0.4)
   );
-  background-size: 300% 300%;
-  animation: holographic 6s ease infinite;
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
@@ -679,31 +691,33 @@
    Comments Section
    ============================================ */
 
-/* Comment card: transparent wrapper */
+/* Comment card: transparent wrapper — opt out of the clip-path shape */
 .profile-page #comments {
   background: transparent !important;
-  border: none !important;
+  clip-path: none !important;
+  padding: 0 !important;
+  filter: none !important;
 }
 
-.profile-page #comments::before {
-  content: none !important;
-}
-
-/* Comment card header */
+/* Comment card header — standalone shape */
 .profile-page #comments .card-header {
-  background: rgba(55, 25, 95, 0.7);
+  background: rgba(35, 15, 65, 0.92);
   border: 1px solid rgba(200, 109, 215, 0.25);
-  border-radius: 16px 16px 0 0;
+  border-radius: 0;
+  clip-path: polygon(
+    0 14px, 14px 0, calc(75% - 6px) 0, 75% 6px, 100% 6px,
+    100% 100%, 0 100%
+  );
+  padding-top: 18px;
 }
 
 /* Comment form */
 .profile-page #comments .add-comment {
-  background: rgba(40, 18, 75, 0.55);
+  background: rgba(18, 8, 35, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(200, 109, 215, 0.25);
   border-top: none;
-  border-radius: 0 0 16px 16px;
   padding: 16px 20px;
   margin-bottom: 24px;
 }
