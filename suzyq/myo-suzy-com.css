@@ -186,33 +186,71 @@
 
 
 /* ============================================
-   Profile Main Card
+   Profile Main Card — Large Hexagon
    ============================================ */
 
-/* Avatar — hexagon with holographic ring */
+/*
+  The entire profile card is a large pointy-top hexagon.
+  Outer card = hex clip + gradient border bg.
+  Inner card-body = hex clip + dark glass bg.
+  Padding gap between them = the visible holographic border.
+*/
+
+/* Override the default cyber-panel shape for the main card */
+.profile-page .profile-main-card {
+  /* Thicker border for the big hex */
+  padding: 3px !important;
+  padding-top: 3px !important;
+  /* Pointy-top hexagon */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  /* No shimmer animation on the hex — let it be bold and still */
+  animation: none !important;
+  /* A bit more glow */
+  filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.15))
+          drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+/* Hover: still does the tilt but toned down for a big element */
+.profile-page .profile-main-card:hover {
+  transform: perspective(1000px) rotateY(-1deg) scale(1.01);
+}
+
+/* Hide the card-header — name is already in the body */
+.profile-page .profile-main-card .card-header {
+  display: none !important;
+}
+
+/* Card body — inner hexagon, dark glass */
+.profile-page .profile-main-card .card-body {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  position: relative;
+  overflow: visible;
+  /* Extra padding so content stays inside the usable hex area.
+     Top/bottom 25% of the hex are the narrow points. */
+  padding: 60px 40px 50px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 420px;
+}
+
+/* Avatar — hexagon, positioned in the upper area */
 .profile-page .profile-avatar {
   width: 110px !important;
   height: 110px !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   border-radius: 0 !important;
-  margin: 16px auto;
+  margin: 0 auto 8px;
   position: relative;
   z-index: 2;
   object-fit: cover !important;
 }
 
-/* Holographic ring behind avatar */
-.profile-page .profile-main-card .card-body {
-  position: relative;
-  overflow: hidden;
-  padding-top: 10px;
-}
-
-/* The avatar ring — hexagon, static pearlescent gradient */
+/* Avatar ring — hexagonal border behind avatar */
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
-  top: 22px;
+  top: 56px;
   left: 50%;
   transform: translateX(-50%);
   width: 118px;
@@ -266,50 +304,127 @@
 .profile-page .profile-online-status {
   color: #a890c8;
   font-size: 11px;
+  margin-top: 4px;
 }
 
-/* URL box */
-.profile-page .profile-url-box code {
-  color: #ff8ec4;
-  background: rgba(25, 10, 50, 0.5);
-  border-radius: 8px;
-  padding: 3px 10px;
-  font-family: 'Rajdhani', sans-serif;
-  border: 1px solid rgba(200, 109, 215, 0.2);
+/* URL box — hide inside hex to save space, or make compact */
+.profile-page .profile-url-box {
+  display: none;
 }
 
 
 /* ============================================
-   Boop Button — Cute Holographic Treatment
+   Contact Links — Hex Layout at Bottom
+   ============================================ */
+
+/*
+  Layout from wireframe:
+  - "Unfriend"/"Add Friend" = centered pill button
+  - Boop + Send Message = small hex buttons at bottom-right
+  The contact-links div sits at the bottom of the hex card body.
+*/
+
+.profile-page .profile-contact-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  position: relative;
+  width: 100%;
+}
+
+/* Default contact link — the "Unfriend" / "Add Friend" pill */
+.profile-page .contact-link {
+  color: #d0b8e8 !important;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  background: rgba(55, 25, 95, 0.4);
+  border: 1px solid rgba(200, 109, 215, 0.25);
+  border-radius: 50px;
+  padding: 5px 16px;
+  text-decoration: none;
+}
+
+.profile-page .contact-link:hover {
+  color: #ff8ec4 !important;
+  border-color: rgba(255, 107, 157, 0.4);
+  background: rgba(75, 35, 120, 0.5);
+}
+
+/* Send Message link — small hexagonal icon button */
+.profile-page .contact-link[href*="messages"] {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 0 !important;
+  border: none !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 157, 0.6),
+    rgba(200, 109, 215, 0.5),
+    rgba(255, 255, 255, 0.4)
+  ) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 0 !important;
+  text-indent: -9999px;
+  position: relative;
+}
+
+/* Mail icon via ::after */
+.profile-page .contact-link[href*="messages"]::after {
+  content: '\2709';
+  font-size: 14px;
+  text-indent: 0;
+  color: #fff;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ============================================
+   Boop Button — Hexagonal
    ============================================ */
 
 .profile-page .boop-link {
-  display: inline-block !important;
-  /* On-theme gradient: pink → purple → pink, soft and readable */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  /* Hexagonal shape */
+  width: 80px !important;
+  height: 80px !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  border-radius: 0 !important;
+  /* On-theme gradient */
   background: linear-gradient(
     135deg,
     #c0407a, #8a3aaf, #c0407a
   ) !important;
-  background-size: 100% 100% !important;
   animation: pulse-glow 3s ease infinite !important;
   color: #fff !important;
   font-family: 'Orbitron', sans-serif !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
   font-weight: 600 !important;
-  letter-spacing: 1px !important;
+  letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
-  padding: 8px 24px !important;
-  border-radius: 50px !important;
-  border: 1px solid rgba(255, 142, 196, 0.4) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+  padding: 0 !important;
+  border: none !important;
   text-decoration: none !important;
   position: relative !important;
   overflow: hidden !important;
   transition: all 0.3s ease !important;
-  margin-top: 8px !important;
+  margin: 0 !important;
 }
 
-/* Shimmer sweep across the boop button */
+/* Shimmer sweep still works inside the hex */
 .profile-page .boop-link::after {
   content: '';
   position: absolute;
@@ -331,27 +446,13 @@
 .profile-page .boop-link:hover {
   animation: boop-bounce 0.5s ease 1, pulse-glow 3s ease infinite !important;
   filter: brightness(1.2);
-  border-color: rgba(255, 142, 196, 0.7) !important;
 }
 
-/* Other contact links */
-.profile-page .profile-contact-links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.profile-page .contact-link {
-  color: #d0b8e8 !important;
+/* Boop stats — compact inside the hex */
+.profile-page .profile-boop-stats {
+  font-size: 10px;
+  color: #a890c8;
   font-family: 'Rajdhani', sans-serif;
-  font-size: 12px;
-  transition: color 0.2s ease;
-}
-
-.profile-page .contact-link:hover {
-  color: #ff8ec4 !important;
 }
 
 
