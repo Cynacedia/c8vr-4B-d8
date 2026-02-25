@@ -208,7 +208,7 @@
     var(--holo-b),
     var(--holo-a)
   );
-  animation: color-shift 12s ease-in-out infinite;
+  animation: color-shift 8s ease-in-out infinite;
   /* Padding = border thickness */
   padding: 2px;
   padding-top: 0;
@@ -238,7 +238,8 @@
   z-index: 10;
   filter:
     drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3))
-    drop-shadow(0 0 20px rgba(248, 144, 184, 0.4))
+    drop-shadow(0 0 35px rgba(248, 144, 184, 0.65))
+    drop-shadow(0 0 70px rgba(248, 144, 184, 0.3))
     brightness(1.1);
 }
 
@@ -378,7 +379,7 @@
     var(--holo-b),
     var(--holo-a)
   );
-  animation: color-shift 12s ease-in-out infinite;
+  animation: color-shift 8s ease-in-out infinite;
   z-index: 0;
   filter: drop-shadow(0 0 12px rgba(248, 144, 184, 0.15))
           drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
@@ -387,7 +388,8 @@
 
 .profile-page .profile-main-card:hover:not(:has(.contact-link:hover))::before {
   filter:
-    drop-shadow(0 0 20px rgba(248, 144, 184, 0.4))
+    drop-shadow(0 0 35px rgba(248, 144, 184, 0.65))
+    drop-shadow(0 0 70px rgba(248, 144, 184, 0.3))
     drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
     brightness(1.15);
 }
