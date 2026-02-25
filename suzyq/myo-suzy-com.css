@@ -383,9 +383,7 @@
 
 /* Display name — replaced with logo image */
 .profile-page .profile-display-name {
-  background-image: url("https://cynacedia.github.io/c8vr-4B-d8/suzyq/sqlogo-edit.webm");
-  /* ↑ TEMPORARY: Replace with .gif/.apng/.webp version once converted —
-       CSS background-image does NOT support .webm video */
+  background-image: url("https://cynacedia.github.io/c8vr-4B-d8/suzyq/sqlogo-tr.gif");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
