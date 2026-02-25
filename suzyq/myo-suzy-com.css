@@ -381,21 +381,20 @@
   animation: border-shimmer 4s ease-in-out infinite;
 }
 
-/* Display name */
+/* Display name — replaced with logo image */
 .profile-page .profile-display-name {
-  color: #fff;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 1px;
-}
-
-/* Animated logo — sits below the display name inside the hex */
-.profile-page .profile-logo {
-  width: 120px;
-  max-height: 120px;
-  object-fit: contain;
-  margin: 8px auto;
+  background-image: url("https://cynacedia.github.io/c8vr-4B-d8/suzyq/sqlogo-edit.webm");
+  /* ↑ TEMPORARY: Replace with .gif/.apng/.webp version once converted —
+       CSS background-image does NOT support .webm video */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 160px;
+  height: 80px;
+  text-indent: -9999px;
+  overflow: hidden;
+  display: block;
+  margin: 4px auto;
   position: relative;
   z-index: 2;
   filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.3));
@@ -481,8 +480,8 @@
   font-size: 0 !important;
   text-indent: -9999px;
   /* Position: upper right, near 3 o'clock on the hex */
-  bottom: -10%;
-  right: 110px;
+  bottom: -12%;
+  right: 115px;
 }
 
 /* Friend hex — bezel border layer */
@@ -541,8 +540,8 @@
   font-size: 0 !important;
   text-indent: -9999px;
   /* Position: lower, tucked under boop */
-  bottom: 9%;
-  right: -15px;
+  bottom: 7%;
+  right: -16px;
 }
 
 /* Bezel border layer — outer hex */
@@ -615,8 +614,8 @@
   transition: all 0.3s ease !important;
   margin: 0 !important;
   /* Position: bottom-right, slightly higher than message */
-  bottom: -10%;
-  right: 20px;
+  bottom: -12%;
+  right: 22px;
   /* The outer bezel hex */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   background: linear-gradient(
