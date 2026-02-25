@@ -25,6 +25,12 @@
   80%      { transform: scale(0.97); }
 }
 
+/* Shimmer sweep across boop button inner hex */
+@keyframes shimmer-bg {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* Soft border shimmer — subtle brightness pulse on the card border gradient */
 @keyframes border-shimmer {
   0%, 100% { filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3)) brightness(1); }
@@ -190,29 +196,79 @@
    ============================================ */
 
 /*
-  The entire profile card is a large pointy-top hexagon.
-  Outer card = hex clip + gradient border bg.
-  Inner card-body = hex clip + dark glass bg.
-  Padding gap between them = the visible holographic border.
+  The hex shape is built with pseudo-elements instead of
+  clip-path on the card itself. This lets child elements
+  (boop, message buttons) escape the hex boundary.
+
+  ::before = outer gradient hex (the border)
+  ::after  = inner dark glass hex (the fill)
+  card-body = transparent, z-index above pseudos, content flows freely
+  contact-links = positioned absolutely outside the hex
 */
 
-/* Override the default cyber-panel shape for the main card */
+/* Override the default card styling completely */
 .profile-page .profile-main-card {
-  /* Thicker border for the big hex */
-  padding: 3px !important;
-  padding-top: 3px !important;
-  /* Pointy-top hexagon */
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
-  /* No shimmer animation on the hex — let it be bold and still */
+  background: transparent !important;
+  clip-path: none !important;
+  padding: 0 !important;
   animation: none !important;
-  /* A bit more glow */
-  filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.15))
-          drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+  filter: none !important;
+  overflow: visible !important;
+  position: relative;
+  /* Force proper hex proportions: width-to-height ~0.85 for a pointy-top hex */
+  aspect-ratio: 0.85 / 1;
+  max-width: 100%;
 }
 
-/* Hover: still does the tilt but toned down for a big element */
+/* Hover on the whole card area */
 .profile-page .profile-main-card:hover {
-  transform: perspective(1000px) rotateY(-1deg) scale(1.01);
+  transform: none;
+  filter: none !important;
+}
+
+/* Outer gradient hex border — ::before */
+.profile-page .profile-main-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 157, 0.7),
+    rgba(200, 109, 215, 0.55),
+    rgba(255, 255, 255, 0.55),
+    rgba(200, 109, 215, 0.55),
+    rgba(255, 107, 157, 0.7)
+  );
+  z-index: 0;
+  filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.15))
+          drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+  transition: all 0.3s ease;
+  animation: border-shimmer 4s ease-in-out infinite;
+}
+
+.profile-page .profile-main-card:hover::before {
+  filter:
+    drop-shadow(0 0 18px rgba(255, 107, 157, 0.3))
+    drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
+    brightness(1.15);
+  animation: none;
+}
+
+/* Inner dark glass hex fill — ::after */
+.profile-page .profile-main-card::after {
+  content: '';
+  position: absolute;
+  /* Inset by 3px = the border thickness */
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(18, 8, 35, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 0;
 }
 
 /* Hide the card-header — name is already in the body */
@@ -220,27 +276,32 @@
   display: none !important;
 }
 
-/* Card body — inner hexagon, dark glass */
+/* Card body — transparent, content sits above the hex pseudos */
 .profile-page .profile-main-card .card-body {
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  clip-path: none !important;
   position: relative;
-  overflow: visible;
-  /* Extra padding so content stays inside the usable hex area.
-     Top/bottom 25% of the hex are the narrow points. */
-  padding: 60px 40px 50px !important;
+  z-index: 1;
+  overflow: visible !important;
+  /* Generous padding to keep text inside the hex visual area.
+     The hex narrows at top 25% and bottom 25%. */
+  padding: 15% 15% 20% !important;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 420px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
-/* Avatar — hexagon, positioned in the upper area */
+/* Avatar — hexagon, in the upper area */
 .profile-page .profile-avatar {
-  width: 110px !important;
-  height: 110px !important;
+  width: 100px !important;
+  height: 100px !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   border-radius: 0 !important;
-  margin: 0 auto 8px;
+  margin: 0 auto 6px;
   position: relative;
   z-index: 2;
   object-fit: cover !important;
@@ -250,11 +311,11 @@
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
-  top: 56px;
+  top: calc(15% - 4px);
   left: 50%;
   transform: translateX(-50%);
-  width: 118px;
-  height: 118px;
+  width: 108px;
+  height: 108px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(
     135deg,
@@ -314,60 +375,56 @@
 
 
 /* ============================================
-   Contact Links — Hex Layout at Bottom
+   Contact Links — Positioned Outside the Hex
    ============================================ */
 
 /*
-  Layout from wireframe:
-  - "Unfriend"/"Add Friend" = centered pill button
-  - Boop + Send Message = small hex buttons at bottom-right
-  The contact-links div sits at the bottom of the hex card body.
+  Since the hex is pseudo-elements (not clip-path on the card),
+  the contact-links div can be positioned absolutely outside
+  the hex visual boundary. Boop + Message float at bottom-right.
 */
 
 .profile-page .profile-contact-links {
+  /* Position at the bottom-right of the card, outside the hex */
+  position: absolute;
+  bottom: 12%;
+  right: -8px;
+  z-index: 5;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  margin-top: auto;
-  padding-top: 8px;
-  position: relative;
-  width: 100%;
 }
 
 /* Default contact link — the "Unfriend" / "Add Friend" pill */
 .profile-page .contact-link {
   color: #d0b8e8 !important;
   font-family: 'Rajdhani', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   transition: all 0.2s ease;
-  background: rgba(55, 25, 95, 0.4);
-  border: 1px solid rgba(200, 109, 215, 0.25);
+  background: rgba(18, 8, 35, 0.9);
+  border: 1px solid rgba(200, 109, 215, 0.3);
   border-radius: 50px;
-  padding: 5px 16px;
+  padding: 4px 14px;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .profile-page .contact-link:hover {
   color: #ff8ec4 !important;
-  border-color: rgba(255, 107, 157, 0.4);
-  background: rgba(75, 35, 120, 0.5);
+  border-color: rgba(255, 107, 157, 0.5);
+  background: rgba(55, 25, 95, 0.8);
 }
 
-/* Send Message link — small hexagonal icon button */
+/* Send Message link — hexagonal icon with bezel border */
 .profile-page .contact-link[href*="messages"] {
-  width: 36px !important;
-  height: 36px !important;
+  width: 44px !important;
+  height: 44px !important;
   padding: 0 !important;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   border-radius: 0 !important;
   border: none !important;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 157, 0.6),
-    rgba(200, 109, 215, 0.5),
-    rgba(255, 255, 255, 0.4)
-  ) !important;
+  /* Outer = gradient bezel, inner = dark glass via nested shadows */
+  background: transparent !important;
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -376,83 +433,145 @@
   position: relative;
 }
 
-/* Mail icon via ::after */
+/* Bezel border layer — outer hex */
+.profile-page .contact-link[href*="messages"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 200, 230, 0.8),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 255, 255, 0.5),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 200, 230, 0.8)
+  );
+  z-index: 0;
+  filter:
+    drop-shadow(0 0 6px rgba(255, 107, 157, 0.3))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* Inner dark hex — the "glass" fill */
 .profile-page .contact-link[href*="messages"]::after {
   content: '\2709';
-  font-size: 14px;
-  text-indent: 0;
-  color: #fff;
   position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(18, 8, 35, 0.92);
+  z-index: 1;
+  font-size: 16px;
+  text-indent: 0;
+  color: #ff8ec4;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.profile-page .contact-link[href*="messages"]:hover::before {
+  filter:
+    drop-shadow(0 0 10px rgba(255, 107, 157, 0.5))
+    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5))
+    brightness(1.2);
+}
+
 
 /* ============================================
-   Boop Button — Hexagonal
+   Boop Button — Hexagonal with Bezel Border
    ============================================ */
+
+/*
+  Same gradient-bezel technique as the message button but bigger.
+  Outer hex = gradient border/bezel, inner hex = dark glass with text.
+  Uses the boop-link element for the outer hex,
+  and ::before for the inner fill + text repositioning.
+*/
 
 .profile-page .boop-link {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  /* Hexagonal shape */
+  /* Size */
   width: 80px !important;
   height: 80px !important;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  padding: 0 !important;
   border-radius: 0 !important;
-  /* On-theme gradient */
+  border: none !important;
+  text-decoration: none !important;
+  position: relative !important;
+  overflow: visible !important;
+  transition: all 0.3s ease !important;
+  margin: 0 !important;
+  /* The outer bezel hex */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   background: linear-gradient(
-    135deg,
-    #c0407a, #8a3aaf, #c0407a
+    160deg,
+    rgba(255, 200, 230, 0.8),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 255, 255, 0.5),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 200, 230, 0.8)
   ) !important;
-  animation: pulse-glow 3s ease infinite !important;
+  filter:
+    drop-shadow(0 0 8px rgba(255, 107, 157, 0.3))
+    drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+  /* Text styling (sits on top of the inner fill via z-index) */
   color: #fff !important;
   font-family: 'Orbitron', sans-serif !important;
   font-size: 10px !important;
   font-weight: 600 !important;
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
-  padding: 0 !important;
-  border: none !important;
-  text-decoration: none !important;
-  position: relative !important;
-  overflow: hidden !important;
-  transition: all 0.3s ease !important;
-  margin: 0 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+  animation: none !important;
 }
 
-/* Shimmer sweep still works inside the hex */
+/* Inner dark glass hex — the fill behind the text */
+.profile-page .boop-link::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(
+    135deg,
+    #8a2060, #602090, #8a2060
+  );
+  z-index: -1;
+}
+
+/* Shimmer sweep across the inner hex */
 .profile-page .boop-link::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
+  inset: 3px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(
     90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
+    transparent 30%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 70%
   );
-  transform: skewX(-20deg);
-  animation: shimmer 3s ease infinite;
+  background-size: 200% 100%;
+  animation: shimmer-bg 3s ease infinite;
+  z-index: 0;
   pointer-events: none;
 }
 
 .profile-page .boop-link:hover {
-  animation: boop-bounce 0.5s ease 1, pulse-glow 3s ease infinite !important;
-  filter: brightness(1.2);
+  filter:
+    drop-shadow(0 0 14px rgba(255, 107, 157, 0.5))
+    drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5))
+    brightness(1.15) !important;
+  animation: boop-bounce 0.5s ease 1 !important;
 }
 
-/* Boop stats — compact inside the hex */
+/* Boop stats — small text near the button */
 .profile-page .profile-boop-stats {
-  font-size: 10px;
+  font-size: 9px;
   color: #a890c8;
   font-family: 'Rajdhani', sans-serif;
+  text-align: center;
 }
 
 
