@@ -92,6 +92,9 @@
   grid-column: 1 / -1 !important;
   justify-self: center !important;
   width: 340px;
+  /* Extra bottom margin so buttons hanging below don't clip into the next row */
+  margin-bottom: 60px !important;
+  z-index: 2;
 }
 
 /* Other left-column cards: stay in column 1 */
@@ -387,27 +390,24 @@
   letter-spacing: 1px;
 }
 
-/* Username */
+/* Username — hidden inside hex card */
 .profile-page .profile-username {
-  color: #c0a8e0;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 13px;
+  display: none !important;
 }
 
-/* Tagline */
+/* Tagline — hidden inside hex card */
 .profile-page .profile-tagline {
-  color: #d8c0f0;
-  font-style: italic;
+  display: none !important;
 }
 
-/* Oshi mark */
+/* Oshi mark — hidden inside hex card */
 .profile-page .profile-oshi-mark {
-  color: #ff6b9d;
+  display: none !important;
 }
 
-/* Mood */
-.profile-page .profile-mood .mood-text {
-  color: #d0b8e8;
+/* Mood — hidden inside hex card */
+.profile-page .profile-mood {
+  display: none !important;
 }
 
 /* Online status */
@@ -434,15 +434,16 @@
 */
 
 .profile-page .profile-contact-links {
-  /* Position at the bottom-right of the card, OUTSIDE the hex */
+  /* Position outside the hex — buttons are individually placed */
   position: absolute;
-  bottom: 10%;
-  right: -40px;
+  inset: 0;
   z-index: 5;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 6px;
+  pointer-events: none;
+}
+
+.profile-page .profile-contact-links > * {
+  pointer-events: auto;
+  position: absolute !important;
 }
 
 /* Default contact link base — hide text, prep for hex icon override */
@@ -455,7 +456,7 @@
   color: #ff8ec4 !important;
 }
 
-/* Friend / Unfriend button — small hex with MSN-style smiley ☺ */
+/* Friend / Unfriend button — small hex with friend SVG icon */
 .profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]) {
   width: 44px !important;
   height: 44px !important;
@@ -468,8 +469,9 @@
   justify-content: center;
   font-size: 0 !important;
   text-indent: -9999px;
-  position: relative;
-  order: -1;
+  /* Position: upper right, near 3 o'clock on the hex */
+  bottom: -6%;
+  right: 90px;
 }
 
 /* Friend hex — bezel border layer */
@@ -521,14 +523,15 @@
   padding: 0 !important;
   border-radius: 0 !important;
   border: none !important;
-  /* Outer = gradient bezel, inner = dark glass via nested shadows */
   background: transparent !important;
   display: flex !important;
   align-items: center;
   justify-content: center;
   font-size: 0 !important;
   text-indent: -9999px;
-  position: relative;
+  /* Position: lower, tucked under boop */
+  bottom: 10%;
+  right: -15px;
 }
 
 /* Bezel border layer — outer hex */
@@ -597,10 +600,12 @@
   border-radius: 0 !important;
   border: none !important;
   text-decoration: none !important;
-  position: relative !important;
   overflow: visible !important;
   transition: all 0.3s ease !important;
   margin: 0 !important;
+  /* Position: bottom-right, slightly higher than message */
+  bottom: -8%;
+  right: 3px;
   /* The outer bezel hex */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   background: linear-gradient(
