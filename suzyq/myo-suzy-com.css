@@ -7,6 +7,11 @@
 /* --- Fonts --- */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
+/* --- Registered custom properties for color-shift animation --- */
+@property --holo-a { syntax: "<color>"; inherits: true; initial-value: rgba(255, 107, 157, 0.7); }
+@property --holo-b { syntax: "<color>"; inherits: true; initial-value: rgba(200, 109, 215, 0.55); }
+@property --holo-c { syntax: "<color>"; inherits: true; initial-value: rgba(255, 255, 255, 0.55); }
+
 /* --- Keyframes --- */
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 8px rgba(255, 107, 157, 0.4), 0 0 20px rgba(255, 107, 157, 0.1); }
@@ -45,10 +50,12 @@
   100% { background-position: 200% 0; opacity: 0; }
 }
 
-/* Scrolling holographic gradient on card borders */
-@keyframes gradient-scroll {
-  0%   { background-position: 0% 0%; }
-  100% { background-position: 300% 300%; }
+/* Color-shift — each band shifts to the next color in the cycle */
+@keyframes color-shift {
+  0%   { --holo-a: rgba(255, 107, 157, 0.7); --holo-b: rgba(200, 109, 215, 0.55); --holo-c: rgba(255, 255, 255, 0.55); }
+  33%  { --holo-a: rgba(200, 109, 215, 0.55); --holo-b: rgba(255, 255, 255, 0.55); --holo-c: rgba(255, 107, 157, 0.7); }
+  66%  { --holo-a: rgba(255, 255, 255, 0.55); --holo-b: rgba(255, 107, 157, 0.7); --holo-c: rgba(200, 109, 215, 0.55); }
+  100% { --holo-a: rgba(255, 107, 157, 0.7); --holo-b: rgba(200, 109, 215, 0.55); --holo-c: rgba(255, 255, 255, 0.55); }
 }
 
 /* Soft border shimmer — subtle brightness pulse on the card border gradient */
@@ -192,21 +199,16 @@
 
 .profile-page .card {
   position: relative;
-  /* The holographic gradient — pink → purple → white → purple → pink */
+  /* The holographic gradient — color-shifting bands */
   background: linear-gradient(
     135deg,
-    rgba(255, 107, 157, 0.7),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 255, 255, 0.55),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 107, 157, 0.7),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 255, 255, 0.55),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 107, 157, 0.7)
+    var(--holo-a),
+    var(--holo-b),
+    var(--holo-c),
+    var(--holo-b),
+    var(--holo-a)
   );
-  background-size: 300% 300%;
-  animation: gradient-scroll 16s linear infinite;
+  animation: color-shift 12s ease-in-out infinite;
   /* Padding = border thickness */
   padding: 2px;
   padding-top: 0;
@@ -214,7 +216,8 @@
   border-radius: 0;
   overflow: visible;
   transition: transform 0.3s ease, filter 0.3s ease;
-  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3))
+          drop-shadow(0 0 12px rgba(248, 144, 184, 0.15));
 
   /* The cyber panel shape */
   clip-path: polygon(
@@ -234,10 +237,9 @@
   transform: scale(1.03) skew(-1deg, -.75deg);
   z-index: 10;
   filter:
-    drop-shadow(0 0 14px rgba(255, 107, 157, 0.3))
-    drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
-    brightness(1.15)
-    drop-shadow(0 0 24px rgba(248, 144, 184, 0.7));
+    drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3))
+    drop-shadow(0 0 20px rgba(248, 144, 184, 0.4))
+    brightness(1.1);
 }
 
 /* Card body — the dark glass interior */
@@ -345,21 +347,20 @@
   clip-path: none !important;
   padding: 0 !important;
   animation: none !important;
-  filter: none !important;
+  filter: drop-shadow(0 0 12px rgba(248, 144, 184, 0.15)) !important;
   overflow: visible !important;
   position: relative;
   /* Regular pointy-top hex: width/height = √3/2 ≈ 0.866 */
   aspect-ratio: 0.866 / 1;
 }
 
-/* Hover on the whole card area — northwest skew + pop */
+/* Hover on the hex — only when NOT hovering a button */
 .profile-page .profile-main-card {
   transition: transform 0.3s ease;
 }
 
-.profile-page .profile-main-card:hover {
+.profile-page .profile-main-card:hover:not(:has(.contact-link:hover)) {
   transform: scale(1.04) skew(-1.5deg, -0.8deg);
-  filter: none !important;
   z-index: 10;
 }
 
@@ -371,30 +372,24 @@
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(
     135deg,
-    rgba(255, 107, 157, 0.7),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 255, 255, 0.55),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 107, 157, 0.7),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 255, 255, 0.55),
-    rgba(200, 109, 215, 0.55),
-    rgba(255, 107, 157, 0.7)
+    var(--holo-a),
+    var(--holo-b),
+    var(--holo-c),
+    var(--holo-b),
+    var(--holo-a)
   );
-  background-size: 300% 300%;
-  animation: gradient-scroll 16s linear infinite;
+  animation: color-shift 12s ease-in-out infinite;
   z-index: 0;
-  filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.15))
+  filter: drop-shadow(0 0 12px rgba(248, 144, 184, 0.15))
           drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
   transition: filter 0.3s ease;
 }
 
-.profile-page .profile-main-card:hover::before {
+.profile-page .profile-main-card:hover:not(:has(.contact-link:hover))::before {
   filter:
-    drop-shadow(0 0 18px rgba(255, 107, 157, 0.3))
+    drop-shadow(0 0 20px rgba(248, 144, 184, 0.4))
     drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
-    brightness(1.15)
-    drop-shadow(0 0 24px rgba(248, 144, 184, 0.7));
+    brightness(1.15);
 }
 
 /* Inner dark glass hex fill — ::after */
@@ -459,7 +454,7 @@
   transition: opacity 0.1s;
 }
 
-.profile-page .profile-main-card:hover .card-body::after {
+.profile-page .profile-main-card:hover:not(:has(.contact-link:hover)) .card-body::after {
   animation: shimmer-hex 0.6s ease-out forwards;
 }
 
@@ -505,20 +500,31 @@
   animation: border-shimmer 4s ease-in-out infinite;
 }
 
-/* Display name — replaced with logo image */
+/* Display name — hide text, logo goes in ::after */
 .profile-page .profile-display-name {
-  background-image: url("https://cynacedia.github.io/c8vr-4B-d8/suzyq/sqlogo-tr.gif");
+  font-size: 0;
+ 
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
-  width: 440px;
-  height: 220px;
+  width: 100%;
+  height: 200%;
   text-indent: -9999px;
   overflow: hidden;
   display: block;
   margin: 4px auto;
   position: relative;
   z-index: 2;
+}
+
+/* Logo image via ::after — can be any size independent of parent */
+.profile-page .profile-display-name::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 140px;
+  background: url("./sqlogo-tr.gif") center / contain no-repeat;
+  margin: -30px auto 0;
   filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.3));
 }
 
@@ -571,6 +577,7 @@
   inset: 0;
   z-index: 5;
   pointer-events: none;
+  transition: transform 0.3s ease;
 }
 
 .profile-page .profile-contact-links > * {
@@ -586,6 +593,7 @@
 
 .profile-page .contact-link:hover {
   color: #ff8ec4 !important;
+  transform: scale(1.15);
 }
 
 /* Friend / Unfriend button — small hex with friend SVG icon */
