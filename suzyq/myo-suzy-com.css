@@ -260,8 +260,8 @@
   filter: none !important;
   overflow: visible !important;
   position: relative;
-  /* Force proper hex proportions: width-to-height ~0.85 for a pointy-top hex */
-  aspect-ratio: 0.85 / 1;
+  /* Regular pointy-top hex: width/height = √3/2 ≈ 0.866 */
+  aspect-ratio: 0.866 / 1;
 }
 
 /* Hover on the whole card area */
@@ -342,7 +342,7 @@
 /* Avatar — hexagon, in the upper area */
 .profile-page .profile-avatar {
   width: 100px !important;
-  height: 100px !important;
+  height: 115px !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   border-radius: 0 !important;
   margin: 0 auto 6px;
@@ -366,7 +366,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 108px;
-  height: 108px;
+  height: 125px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(
     135deg,
@@ -388,6 +388,17 @@
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 1px;
+}
+
+/* Animated logo — sits below the display name inside the hex */
+.profile-page .profile-logo {
+  width: 120px;
+  max-height: 120px;
+  object-fit: contain;
+  margin: 8px auto;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.3));
 }
 
 /* Username — hidden inside hex card */
@@ -459,7 +470,7 @@
 /* Friend / Unfriend button — small hex with friend SVG icon */
 .profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]) {
   width: 44px !important;
-  height: 44px !important;
+  height: 51px !important;
   padding: 0 !important;
   border-radius: 0 !important;
   border: none !important;
@@ -470,8 +481,8 @@
   font-size: 0 !important;
   text-indent: -9999px;
   /* Position: upper right, near 3 o'clock on the hex */
-  bottom: -6%;
-  right: 90px;
+  bottom: -10%;
+  right: 110px;
 }
 
 /* Friend hex — bezel border layer */
@@ -519,7 +530,7 @@
 /* Send Message link — hexagonal icon with bezel border */
 .profile-page .contact-link[href*="messages"] {
   width: 44px !important;
-  height: 44px !important;
+  height: 51px !important;
   padding: 0 !important;
   border-radius: 0 !important;
   border: none !important;
@@ -530,7 +541,7 @@
   font-size: 0 !important;
   text-indent: -9999px;
   /* Position: lower, tucked under boop */
-  bottom: 10%;
+  bottom: 9%;
   right: -15px;
 }
 
@@ -595,7 +606,7 @@
   justify-content: center !important;
   /* Size */
   width: 80px !important;
-  height: 80px !important;
+  height: 92px !important;
   padding: 0 !important;
   border-radius: 0 !important;
   border: none !important;
@@ -604,8 +615,8 @@
   transition: all 0.3s ease !important;
   margin: 0 !important;
   /* Position: bottom-right, slightly higher than message */
-  bottom: -8%;
-  right: 3px;
+  bottom: -10%;
+  right: 20px;
   /* The outer bezel hex */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   background: linear-gradient(
@@ -728,7 +739,7 @@
 
 .profile-page .friends-grid .friend-avatar {
   width: 56px !important;
-  height: 56px !important;
+  height: 65px !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   border-radius: 0 !important;
   border: none !important;
@@ -800,7 +811,7 @@
 /* Group avatar: small hexagon instead of big square */
 .profile-page .profile-left > .card:nth-child(4) .card-body [style*="grid-template-columns"] > a > div:first-child {
   width: 32px !important;
-  height: 32px !important;
+  height: 37px !important;
   min-width: 32px !important;
   aspect-ratio: 1 !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
@@ -1077,7 +1088,7 @@
 /* Comment avatar — hexagon */
 .profile-page .profile-comment > a > .comment-avatar {
   width: 40px !important;
-  height: 40px !important;
+  height: 46px !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   border-radius: 0 !important;
   border: none !important;
