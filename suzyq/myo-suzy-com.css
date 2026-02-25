@@ -25,6 +25,12 @@
   80%      { transform: scale(0.97); }
 }
 
+/* Soft border shimmer — subtle brightness pulse on the card border gradient */
+@keyframes border-shimmer {
+  0%, 100% { filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3)) brightness(1); }
+  50%      { filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3)) brightness(1.25); }
+}
+
 /* --- Custom Cursor --- */
 /* Tech crosshair cursor via inline SVG */
 .profile-page {
@@ -79,13 +85,13 @@
 
 .profile-page .card {
   position: relative;
-  /* The holographic gradient — this IS the visible "border" */
+  /* The holographic gradient — pink → purple → white → purple → pink */
   background: linear-gradient(
     135deg,
     rgba(255, 107, 157, 0.7),
-    rgba(200, 109, 215, 0.6),
-    rgba(109, 200, 255, 0.5),
-    rgba(200, 109, 215, 0.6),
+    rgba(200, 109, 215, 0.55),
+    rgba(255, 255, 255, 0.55),
+    rgba(200, 109, 215, 0.55),
     rgba(255, 107, 157, 0.7)
   );
   /* Padding = border thickness */
@@ -94,8 +100,10 @@
   border: none;
   border-radius: 0;
   overflow: visible;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
   filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
+  /* Soft shimmer pulse */
+  animation: border-shimmer 4s ease-in-out infinite;
 
   /* The cyber panel shape */
   clip-path: polygon(
@@ -110,19 +118,14 @@
   );
 }
 
-/* Hover: brighter glow, slight lift */
+/* Hover: skew + pop + bright glow */
 .profile-page .card:hover {
+  transform: perspective(800px) rotateY(-1.5deg) scale(1.02);
   filter:
-    drop-shadow(0 0 12px rgba(255, 107, 157, 0.25))
-    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3));
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 157, 0.85),
-    rgba(200, 109, 215, 0.75),
-    rgba(109, 200, 255, 0.65),
-    rgba(200, 109, 215, 0.75),
-    rgba(255, 107, 157, 0.85)
-  );
+    drop-shadow(0 0 14px rgba(255, 107, 157, 0.3))
+    drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
+    brightness(1.15);
+  animation: none;
 }
 
 /* Card body — the dark glass interior */
@@ -186,11 +189,12 @@
    Profile Main Card
    ============================================ */
 
-/* Avatar — circular with holographic ring */
+/* Avatar — hexagon with holographic ring */
 .profile-page .profile-avatar {
   width: 110px !important;
   height: 110px !important;
-  border-radius: 50% !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  border-radius: 0 !important;
   margin: 16px auto;
   position: relative;
   z-index: 2;
@@ -204,19 +208,23 @@
   padding-top: 10px;
 }
 
-/* The avatar ring — static gradient that looks pearlescent, not cycling */
+/* The avatar ring — hexagon, static pearlescent gradient */
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
-  top: 23px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
   width: 118px;
   height: 118px;
-  border-radius: 50%;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(
     135deg,
-    #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #c86dd7, #ff6b9d
+    rgba(255, 107, 157, 0.8),
+    rgba(200, 109, 215, 0.7),
+    rgba(255, 255, 255, 0.6),
+    rgba(200, 109, 215, 0.7),
+    rgba(255, 107, 157, 0.8)
   );
   z-index: 1;
   filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.3));
@@ -277,9 +285,10 @@
 
 .profile-page .boop-link {
   display: inline-block !important;
+  /* On-theme gradient: pink → purple → pink, soft and readable */
   background: linear-gradient(
     135deg,
-    #ff6b9d, #c86dd7, #6dc8ff, #72ffd5, #ffd700, #ff6b9d
+    #c0407a, #8a3aaf, #c0407a
   ) !important;
   background-size: 100% 100% !important;
   animation: pulse-glow 3s ease infinite !important;
@@ -289,13 +298,14 @@
   font-weight: 600 !important;
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
   padding: 8px 24px !important;
   border-radius: 50px !important;
-  border: none !important;
+  border: 1px solid rgba(255, 142, 196, 0.4) !important;
   text-decoration: none !important;
   position: relative !important;
   overflow: hidden !important;
-  transition: transform 0.3s ease !important;
+  transition: all 0.3s ease !important;
   margin-top: 8px !important;
 }
 
@@ -310,7 +320,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
   transform: skewX(-20deg);
@@ -320,7 +330,8 @@
 
 .profile-page .boop-link:hover {
   animation: boop-bounce 0.5s ease 1, pulse-glow 3s ease infinite !important;
-  filter: brightness(1.15);
+  filter: brightness(1.2);
+  border-color: rgba(255, 142, 196, 0.7) !important;
 }
 
 /* Other contact links */
@@ -395,8 +406,9 @@
 .profile-page .friends-grid .friend-avatar {
   width: 56px !important;
   height: 56px !important;
-  border-radius: 50% !important;
-  border: 2px solid rgba(200, 109, 215, 0.4) !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  border-radius: 0 !important;
+  border: none !important;
   object-fit: cover !important;
 }
 
@@ -462,13 +474,14 @@
   left: 200%;
 }
 
-/* Group avatar: small circle instead of big square */
+/* Group avatar: small hexagon instead of big square */
 .profile-page .profile-left > .card:nth-child(4) .card-body [style*="grid-template-columns"] > a > div:first-child {
   width: 32px !important;
   height: 32px !important;
   min-width: 32px !important;
   aspect-ratio: 1 !important;
-  border-radius: 50% !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  border-radius: 0 !important;
   flex-shrink: 0 !important;
 }
 
@@ -738,12 +751,13 @@
   padding: 0 8px;
 }
 
-/* Comment avatar */
+/* Comment avatar — hexagon */
 .profile-page .profile-comment > a > .comment-avatar {
   width: 40px !important;
   height: 40px !important;
-  border-radius: 50% !important;
-  border: 2px solid rgba(200, 109, 215, 0.4) !important;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
 
 /* Comment meta */
