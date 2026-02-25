@@ -326,9 +326,9 @@
   position: relative;
   z-index: 1;
   overflow: visible !important;
-  /* Generous padding to keep text inside the hex visual area.
-     The hex narrows at top 25% and bottom 25%. */
-  padding: 15% 15% 20% !important;
+  /* Fixed px padding — avoids % mismatch between padding (resolves vs width)
+     and absolute positioning (resolves vs height). Card is 340px wide. */
+  padding: 50px 50px 80px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -358,8 +358,8 @@
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
-  /* Anchor to the avatar: card-body has padding-top: 15%, avatar is first child */
-  top: calc(15% - 4px);
+  /* Anchor to the avatar: card-body has padding-top: 50px, ring is 4px bigger each side */
+  top: 46px;
   left: 50%;
   transform: translateX(-50%);
   width: 108px;
@@ -436,8 +436,8 @@
 .profile-page .profile-contact-links {
   /* Position at the bottom-right of the card, OUTSIDE the hex */
   position: absolute;
-  bottom: 18%;
-  right: -30px;
+  bottom: 10%;
+  right: -40px;
   z-index: 5;
   display: flex;
   flex-direction: row;
@@ -445,34 +445,73 @@
   gap: 6px;
 }
 
-/* Default contact link — the "Unfriend" / "Add Friend" pill */
+/* Default contact link base — hide text, prep for hex icon override */
 .profile-page .contact-link {
-  color: #d0b8e8 !important;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 11px;
   transition: all 0.2s ease;
-  background: rgba(18, 8, 35, 0.9);
-  border: 1px solid rgba(200, 109, 215, 0.3);
-  border-radius: 50px;
-  padding: 4px 14px;
   text-decoration: none;
-  white-space: nowrap;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* Hide the "Add Friend" / "Unfriend" text link inside the hex card
-   — it doesn't fit the hex design; keep only boop + message */
-.profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]) {
-  position: absolute;
-  top: -40px;
-  right: 0;
 }
 
 .profile-page .contact-link:hover {
   color: #ff8ec4 !important;
-  border-color: rgba(255, 107, 157, 0.5);
-  background: rgba(55, 25, 95, 0.8);
+}
+
+/* Friend / Unfriend button — small hex with MSN-style smiley ☺ */
+.profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]) {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 0 !important;
+  text-indent: -9999px;
+  position: relative;
+  order: -1;
+}
+
+/* Friend hex — bezel border layer */
+.profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"])::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 200, 230, 0.8),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 255, 255, 0.5),
+    rgba(200, 109, 215, 0.6),
+    rgba(255, 200, 230, 0.8)
+  );
+  z-index: 0;
+  filter:
+    drop-shadow(0 0 6px rgba(255, 107, 157, 0.3))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* Friend hex — inner dark glass + friend SVG icon */
+.profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"])::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(18, 8, 35, 0.92);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg' stroke-width='3' stroke='%23ff8ec4' fill='none'%3E%3Ccircle cx='22.83' cy='22.57' r='7.51'/%3E%3Cpath d='M38,49.94a15.2,15.2,0,0,0-15.21-15.2h0a15.2,15.2,0,0,0-15.2,15.2Z'/%3E%3Ccircle cx='44.13' cy='27.22' r='6.05'/%3E%3Cpath d='M42.4,49.94h14A12.24,12.24,0,0,0,44.13,37.7h0a12.21,12.21,0,0,0-5.75,1.43'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 22px 22px;
+  z-index: 1;
+}
+
+/* Friend hex hover glow */
+.profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]):hover::before {
+  filter:
+    drop-shadow(0 0 10px rgba(255, 107, 157, 0.5))
+    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5))
+    brightness(1.2);
 }
 
 /* Send Message link — hexagonal icon with bezel border */
