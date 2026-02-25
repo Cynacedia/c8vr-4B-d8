@@ -31,10 +31,66 @@
   100% { background-position: -200% 0; }
 }
 
+/* Hot pink + white hover shimmer sweep */
+@keyframes hover-shimmer {
+  0%   { left: -120%; opacity: .2; }
+  60%  { left: 120%; opacity: .2; }
+  100% { left: 120%; opacity: 0; }
+}
+
+/* Shimmer sweep for hex cards (animates background-position, not left) */
+@keyframes shimmer-hex {
+  0%   { background-position: -100% 0; opacity: 1; }
+  60%  { background-position: 200% 0; opacity: 1; }
+  100% { background-position: 200% 0; opacity: 0; }
+}
+
+/* Scrolling holographic gradient on card borders */
+@keyframes gradient-scroll {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 300% 300%; }
+}
+
 /* Soft border shimmer — subtle brightness pulse on the card border gradient */
 @keyframes border-shimmer {
   0%, 100% { filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3)) brightness(1); }
   50%      { filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3)) brightness(1.25); }
+}
+
+/* Hot pink (#F890B8) outer glow pulsing to white (#F5EEF9) on hover — for cards */
+@keyframes hover-glow-card {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 14px rgba(255, 107, 157, 0.3))
+      drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
+      brightness(1.15)
+      drop-shadow(0 0 18px rgba(248, 144, 184, 0.5));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 14px rgba(255, 107, 157, 0.3))
+      drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
+      brightness(1.15)
+      drop-shadow(0 0 22px rgba(245, 238, 249, 0.55));
+  }
+}
+
+/* Same pulse — for hex border ::before */
+@keyframes hover-glow-hex {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 18px rgba(255, 107, 157, 0.3))
+      drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
+      brightness(1.15)
+      drop-shadow(0 0 20px rgba(248, 144, 184, 0.5));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 18px rgba(255, 107, 157, 0.3))
+      drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
+      brightness(1.15)
+      drop-shadow(0 0 26px rgba(245, 238, 249, 0.55));
+  }
 }
 
 /* --- Custom Cursor --- */
@@ -143,18 +199,22 @@
     rgba(200, 109, 215, 0.55),
     rgba(255, 255, 255, 0.55),
     rgba(200, 109, 215, 0.55),
+    rgba(255, 107, 157, 0.7),
+    rgba(200, 109, 215, 0.55),
+    rgba(255, 255, 255, 0.55),
+    rgba(200, 109, 215, 0.55),
     rgba(255, 107, 157, 0.7)
   );
+  background-size: 300% 300%;
+  animation: gradient-scroll 16s linear infinite;
   /* Padding = border thickness */
   padding: 2px;
   padding-top: 0;
   border: none;
   border-radius: 0;
   overflow: visible;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
   filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
-  /* Soft shimmer pulse */
-  animation: border-shimmer 4s ease-in-out infinite;
 
   /* The cyber panel shape */
   clip-path: polygon(
@@ -169,14 +229,15 @@
   );
 }
 
-/* Hover: skew + pop + bright glow */
+/* Hover: skew northwest + pop + outer glow */
 .profile-page .card:hover {
-  transform: perspective(800px) rotateY(-1.5deg) scale(1.02);
+  transform: scale(1.03) skew(-1deg, -.75deg);
+  z-index: 10;
   filter:
     drop-shadow(0 0 14px rgba(255, 107, 157, 0.3))
     drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
-    brightness(1.15);
-  animation: none;
+    brightness(1.15)
+    drop-shadow(0 0 24px rgba(248, 144, 184, 0.7));
 }
 
 /* Card body — the dark glass interior */
@@ -186,6 +247,33 @@
   background: rgba(18, 8, 35, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hot pink + white shimmer sweep on card hover */
+.profile-page .card:not(.profile-main-card) .card-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 45, 120, 0.07) 35%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 45, 120, 0.07) 65%,
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+}
+
+.profile-page .card:not(.profile-main-card):hover .card-body::after {
+  animation: hover-shimmer 0.6s ease-out forwards;
 }
 
 /* Card headers — sits inside the clip-path, slightly lighter glass */
@@ -264,13 +352,18 @@
   aspect-ratio: 0.866 / 1;
 }
 
-/* Hover on the whole card area */
-.profile-page .profile-main-card:hover {
-  transform: none;
-  filter: none !important;
+/* Hover on the whole card area — northwest skew + pop */
+.profile-page .profile-main-card {
+  transition: transform 0.3s ease;
 }
 
-/* Outer gradient hex border — ::before */
+.profile-page .profile-main-card:hover {
+  transform: scale(1.04) skew(-1.5deg, -0.8deg);
+  filter: none !important;
+  z-index: 10;
+}
+
+/* Outer gradient hex border — ::before (scrolling holographic) */
 .profile-page .profile-main-card::before {
   content: '';
   position: absolute;
@@ -282,21 +375,26 @@
     rgba(200, 109, 215, 0.55),
     rgba(255, 255, 255, 0.55),
     rgba(200, 109, 215, 0.55),
+    rgba(255, 107, 157, 0.7),
+    rgba(200, 109, 215, 0.55),
+    rgba(255, 255, 255, 0.55),
+    rgba(200, 109, 215, 0.55),
     rgba(255, 107, 157, 0.7)
   );
+  background-size: 300% 300%;
+  animation: gradient-scroll 16s linear infinite;
   z-index: 0;
   filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.15))
           drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
-  transition: all 0.3s ease;
-  animation: border-shimmer 4s ease-in-out infinite;
+  transition: filter 0.3s ease;
 }
 
 .profile-page .profile-main-card:hover::before {
   filter:
     drop-shadow(0 0 18px rgba(255, 107, 157, 0.3))
     drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
-    brightness(1.15);
-  animation: none;
+    brightness(1.15)
+    drop-shadow(0 0 24px rgba(248, 144, 184, 0.7));
 }
 
 /* Inner dark glass hex fill — ::after */
@@ -328,7 +426,7 @@
   clip-path: none !important;
   position: relative;
   z-index: 1;
-  overflow: visible !important;
+  overflow: visible !important; /* buttons need to escape */
   /* Fixed px padding — avoids % mismatch between padding (resolves vs width)
      and absolute positioning (resolves vs height). Card is 340px wide. */
   padding: 50px 50px 80px !important;
@@ -339,10 +437,36 @@
   box-sizing: border-box;
 }
 
+/* Hot pink + white shimmer sweep on main hex hover */
+.profile-page .profile-main-card .card-body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 45, 120, 0.07) 42%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 45, 120, 0.07) 58%,
+    transparent 70%
+  );
+  background-size: 300% 100%;
+  background-position: -100% 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.profile-page .profile-main-card:hover .card-body::after {
+  animation: shimmer-hex 0.6s ease-out forwards;
+}
+
 /* Avatar — hexagon, in the upper area */
 .profile-page .profile-avatar {
-  width: 100px !important;
-  height: 115px !important;
+  width: 130px !important;
+  height: 150px !important;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   border-radius: 0 !important;
   margin: 0 auto 6px;
@@ -365,8 +489,8 @@
   top: 46px;
   left: 50%;
   transform: translateX(-50%);
-  width: 108px;
-  height: 125px;
+  width: 138px;
+  height: 159px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background: linear-gradient(
     135deg,
