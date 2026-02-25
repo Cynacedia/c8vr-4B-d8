@@ -13,6 +13,11 @@
 @property --holo-c { syntax: "<color>"; inherits: true; initial-value: rgba(255, 255, 255, 0.55); }
 
 /* --- Keyframes --- */
+@keyframes slow-rotate {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 8px rgba(255, 107, 157, 0.4), 0 0 20px rgba(255, 107, 157, 0.1); }
   50%      { box-shadow: 0 0 12px rgba(255, 107, 157, 0.6), 0 0 30px rgba(200, 109, 215, 0.2); }
@@ -38,8 +43,8 @@
 
 /* Hot pink + white hover shimmer sweep */
 @keyframes hover-shimmer {
-  0%   { left: -120%; opacity: .2; }
-  60%  { left: 120%; opacity: .2; }
+  0%   { left: -120%; opacity: .4; }
+  60%  { left: 120%; opacity: .4; }
   100% { left: 120%; opacity: 0; }
 }
 
@@ -238,8 +243,8 @@
   z-index: 10;
   filter:
     drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3))
-    drop-shadow(0 0 35px rgba(248, 144, 184, 0.65))
-    drop-shadow(0 0 70px rgba(248, 144, 184, 0.3))
+    drop-shadow(0 0 35px rgba(248, 144, 184, 0.75))
+    drop-shadow(0 0 70px rgba(248, 144, 184, 0.45))
     brightness(1.1);
 }
 
@@ -254,6 +259,23 @@
   overflow: hidden;
 }
 
+/* Rotating dots overlay on card interiors */
+.profile-page .card:not(.profile-main-card) .card-body::before {
+  content: '';
+  position: absolute;
+  /* Oversized so corners don't peek during rotation */
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: url("./dots.gif") center / cover no-repeat;
+  filter: grayscale(1) blur(2px);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+  animation: slow-rotate 90s linear infinite;
+}
+
 /* Hot pink + white shimmer sweep on card hover */
 .profile-page .card:not(.profile-main-card) .card-body::after {
   content: '';
@@ -265,9 +287,9 @@
   background: linear-gradient(
     105deg,
     transparent 20%,
-    rgba(255, 45, 120, 0.07) 35%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 45, 120, 0.07) 65%,
+    rgba(255, 45, 120, 0.12) 35%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 45, 120, 0.12) 65%,
     transparent 80%
   );
   pointer-events: none;
@@ -388,8 +410,8 @@
 
 .profile-page .profile-main-card:hover:not(:has(.contact-link:hover))::before {
   filter:
-    drop-shadow(0 0 35px rgba(248, 144, 184, 0.65))
-    drop-shadow(0 0 70px rgba(248, 144, 184, 0.3))
+    drop-shadow(0 0 35px rgba(248, 144, 184, 0.75))
+    drop-shadow(0 0 70px rgba(248, 144, 184, 0.45))
     drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
     brightness(1.15);
 }
@@ -547,6 +569,15 @@
 
 /* Mood — hidden inside hex card */
 .profile-page .profile-mood {
+  display: none !important;
+}
+
+/* Hidden sections — Avatar Info, Details, Top Friends */
+.profile-page .profile-left > .card:has(.friends-grid) {
+  display: none !important;
+}
+
+.profile-page .card:has(.card-header + .card-body > .stats-table) {
   display: none !important;
 }
 
