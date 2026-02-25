@@ -65,6 +65,48 @@
 
 
 /* ============================================
+   Layout — Center the Hex Card
+   ============================================ */
+
+/*
+  Override the platform two-column layout:
+  - Single column flow so the main card can be centered
+  - profile-left children use display:contents to break out
+  - The main card spans full width, centered
+  - Remaining left + right cards re-form a two-column grid below
+*/
+
+.profile-page .profile-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 20px !important;
+}
+
+/* Break profile-left out so its children participate in the parent grid */
+.profile-page .profile-left {
+  display: contents !important;
+}
+
+/* Main card: span both columns, centered */
+.profile-page .profile-main-card {
+  grid-column: 1 / -1 !important;
+  justify-self: center !important;
+  width: 340px;
+}
+
+/* Other left-column cards: stay in column 1 */
+.profile-page .profile-left > .card:not(.profile-main-card) {
+  grid-column: 1 !important;
+}
+
+/* Right column: stays in column 2 */
+.profile-page .profile-right {
+  grid-column: 2 !important;
+  grid-row: 2 / span 20 !important;
+}
+
+
+/* ============================================
    Card Base Styling — Cyber Panel with Clip-Path
    ============================================ */
 
@@ -217,7 +259,6 @@
   position: relative;
   /* Force proper hex proportions: width-to-height ~0.85 for a pointy-top hex */
   aspect-ratio: 0.85 / 1;
-  max-width: 100%;
 }
 
 /* Hover on the whole card area */
@@ -307,10 +348,17 @@
   object-fit: cover !important;
 }
 
+/* Avatar wrapper — make it a positioning anchor for the ring */
+.profile-page .profile-main-card .profile-avatar {
+  position: relative;
+  z-index: 2;
+}
+
 /* Avatar ring — hexagonal border behind avatar */
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
+  /* Anchor to the avatar: card-body has padding-top: 15%, avatar is first child */
   top: calc(15% - 4px);
   left: 50%;
   transform: translateX(-50%);
@@ -327,6 +375,7 @@
   );
   z-index: 1;
   filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.3));
+  animation: border-shimmer 4s ease-in-out infinite;
 }
 
 /* Display name */
@@ -385,15 +434,15 @@
 */
 
 .profile-page .profile-contact-links {
-  /* Position at the bottom-right of the card, outside the hex */
+  /* Position at the bottom-right of the card, OUTSIDE the hex */
   position: absolute;
-  bottom: 12%;
-  right: -8px;
+  bottom: 18%;
+  right: -30px;
   z-index: 5;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 6px;
 }
 
 /* Default contact link — the "Unfriend" / "Add Friend" pill */
@@ -408,6 +457,16 @@
   padding: 4px 14px;
   text-decoration: none;
   white-space: nowrap;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Hide the "Add Friend" / "Unfriend" text link inside the hex card
+   — it doesn't fit the hex design; keep only boop + message */
+.profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]) {
+  position: absolute;
+  top: -40px;
+  right: 0;
 }
 
 .profile-page .contact-link:hover {
