@@ -592,6 +592,12 @@
   pointer-events: none;
   z-index: 0;
 }
+/* Strip PFP frame wrappers — display:contents makes the div invisible,
+   so the img inside acts as a direct child of .friend-item */
+.profile-page.profile-custom-css .friends-grid .friend-item > div {
+  display: contents !important;
+}
+
 .profile-page.profile-custom-css .friends-grid .friend-avatar,
 .profile-page.profile-custom-css .friends-grid .user-avatar {
   width: 48px !important;
@@ -855,6 +861,11 @@
   clip-path: var(--hex);
   z-index: -1;
 }
+/* Strip PFP frame wrappers in left-column friends too */
+.profile-page.profile-custom-css .profile-left .friends-grid .friend-item > div {
+  display: contents !important;
+}
+
 /* Avatar */
 .profile-page.profile-custom-css .profile-left .friends-grid .friend-avatar,
 .profile-page.profile-custom-css .profile-left .friends-grid .user-avatar {
