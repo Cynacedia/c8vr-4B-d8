@@ -138,14 +138,6 @@
    Layout — Center the Hex Card
    ============================================ */
 
-/*
-  Override the platform two-column layout:
-  - Single column flow so the main card can be centered
-  - profile-left children use display:contents to break out
-  - The main card spans full width, centered
-  - Remaining left + right cards re-form a two-column grid below
-*/
-
 .profile-page .container {
   overflow: visible !important;
 }
@@ -190,15 +182,6 @@
    ============================================ */
 
 /*
-  Technique: The card background IS the border color.
-  clip-path cuts the outer shape, padding creates the gap,
-  and card-body/card-header fill the interior with dark glass.
-  The "border" is just the card background showing through.
-
-  Shape: Angled cuts at TL + BR corners, with a small
-  decorative step/notch near top-right — like a data chip
-  or sci-fi HUD panel. Distinct from Acalepsia's folder-tab.
-
   clip-path points (clockwise from top-left):
     TL: diagonal cut (0,14 → 14,0)
     Top edge to notch near right: straight across
@@ -502,9 +485,7 @@
   clip-path: none !important;
   position: relative;
   z-index: 1;
-  overflow: visible !important; /* buttons need to escape */
-  /* Fixed px padding — avoids % mismatch between padding (resolves vs width)
-     and absolute positioning (resolves vs height). Card is 340px wide. */
+  overflow: visible !important; 
   padding: 50px 50px 80px !important;
   display: flex;
   flex-direction: column;
@@ -561,7 +542,6 @@
 .profile-page .profile-main-card .card-body::before {
   content: '';
   position: absolute;
-  /* Anchor to the avatar: card-body has padding-top: 50px, ring is 4px bigger each side */
   top: 46px;
   left: 50%;
   transform: translateX(-50%);
@@ -651,14 +631,7 @@
    Contact Links — Positioned Outside the Hex
    ============================================ */
 
-/*
-  Since the hex is pseudo-elements (not clip-path on the card),
-  the contact-links div can be positioned absolutely outside
-  the hex visual boundary. Boop + Message float at bottom-right.
-*/
-
 .profile-page .profile-contact-links {
-  /* Position outside the hex — buttons are individually placed */
   position: absolute;
   inset: 0;
   z-index: 5;
@@ -682,7 +655,7 @@
   transform: scale(1.15);
 }
 
-/* Friend / Unfriend button — small hex with friend SVG icon */
+/* Friend / Unfriend button */
 .profile-page .profile-contact-links > .contact-link:not(.boop-link):not([href*="messages"]) {
   width: 44px !important;
   height: 51px !important;
@@ -695,7 +668,6 @@
   justify-content: center;
   font-size: 0 !important;
   text-indent: -9999px;
-  /* Position: upper right, near 3 o'clock on the hex */
   bottom: -12.5%;
   right: 115px;
 }
@@ -755,7 +727,6 @@
   justify-content: center;
   font-size: 0 !important;
   text-indent: -9999px;
-  /* Position: lower, tucked under boop */
   bottom: 7%;
   right: -16px;
 }
@@ -808,18 +779,10 @@
    Boop Button — Hexagonal with Bezel Border
    ============================================ */
 
-/*
-  Same gradient-bezel technique as the message button but bigger.
-  Outer hex = gradient border/bezel, inner hex = dark glass with text.
-  Uses the boop-link element for the outer hex,
-  and ::before for the inner fill + text repositioning.
-*/
-
 .profile-page .boop-link {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  /* Size */
   width: 80px !important;
   height: 92px !important;
   padding: 0 !important;
@@ -829,10 +792,8 @@
   overflow: visible !important;
   transition: all 0.3s ease !important;
   margin: 0 !important;
-  /* Position: bottom-right, slightly higher than message */
   bottom: -12%;
   right: 22px;
-  /* The outer bezel hex */
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%) !important;
   background: linear-gradient(
     160deg,
@@ -845,7 +806,6 @@
   filter:
     drop-shadow(0 0 8px rgba(255, 107, 157, 0.3))
     drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
-  /* Text styling (sits on top of the inner fill via z-index) */
   color: #fff !important;
   font-family: 'Orbitron', sans-serif !important;
   font-size: 10px !important;
