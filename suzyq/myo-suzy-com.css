@@ -123,9 +123,11 @@
    Base Theme
    ============================================ */
 
-/* Page background — self-contained gradient, no image needed */
+/* Page background — gif over purple gradient */
 .profile-page {
-  background: linear-gradient(160deg, #1a0a2e 0%, #0d0618 40%, #1a0a2e 70%, #120828 100%) !important;
+  background:
+    url("./suzyqBg.gif") center / cover no-repeat fixed,
+    linear-gradient(160deg, #1a0a2e 0%, #0d0618 40%, #1a0a2e 70%, #120828 100%) !important;
   background-attachment: fixed !important;
   font-family: 'Rajdhani', sans-serif;
   color: #e8daf5;
@@ -423,7 +425,7 @@
   filter: drop-shadow(0 0 12px rgba(248, 144, 184, 0.15)) !important;
   overflow: visible !important;
   position: relative;
-  /* Regular pointy-top hex: width/height = √3/2 ≈ 0.866 */
+
   aspect-ratio: 0.866 / 1;
 }
 
@@ -476,9 +478,9 @@
   right: 3px;
   bottom: 3px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: rgba(18, 8, 35, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(18, 8, 35, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 0;
 }
 
@@ -591,7 +593,7 @@
   width: 100%;
   height: 140px;
   background: url("./sqlogo-tr.gif") center / contain no-repeat;
-  margin: -25px auto 0;
+  margin: -35px auto 0;
   filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.3));
   position: relative;
   z-index: 10;
@@ -604,13 +606,14 @@
 
 /* Tagline — hidden inside hex card */
 .profile-page .profile-tagline {
-  display: none !important;
-}
+  /*display: none !important; */
+  margin: -30px auto 0;
+} 
 
 /* Oshi mark — hidden inside hex card */
 .profile-page .profile-oshi-mark {
   display: none !important;
-}
+} 
 
 /* Mood — hidden inside hex card */
 .profile-page .profile-mood {
@@ -621,7 +624,6 @@
 .profile-page .profile-left > .card:has(.friends-grid) {
   display: none !important;
 }
-
 .profile-page .card:has(.card-header + .card-body > .stats-table) {
   display: none !important;
 }
@@ -631,6 +633,7 @@
   color: #a890c8;
   font-size: 11px;
   margin-top: 4px;
+  margin: 2px auto 0;
 }
 
 /* URL box — hide inside hex to save space, or make compact */
