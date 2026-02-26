@@ -401,6 +401,11 @@
 }
 
 
+/* Top Bar — hidden */
+.profile-page .profile-top-bar {
+  display: none !important;
+}
+
 /* ============================================
    Profile Main Card — Large Hexagon
    ============================================ */
