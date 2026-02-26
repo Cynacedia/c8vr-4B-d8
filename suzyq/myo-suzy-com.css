@@ -264,7 +264,7 @@
   left: 2px;
   right: 2px;
   bottom: 2px;
-  background: rgba(18, 8, 35, 0.835);
+  background: rgba(18, 8, 35, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   clip-path: polygon(
@@ -460,13 +460,13 @@
 .profile-page .profile-main-card::after {
   content: '';
   position: absolute;
-  /* Inset by 3px = the border thickness */
-  top: 3px;
-  left: 3px;
-  right: 3px;
-  bottom: 3px;
+  /* Inset by 5px = thicker visible gradient border */
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: rgba(18, 8, 35, 0.85);
+  background: rgba(18, 8, 35, 0.75);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 0;
@@ -1030,28 +1030,144 @@
 
 
 /* ============================================
-   Photos Grid
+   Photos — Folder Icons with Hover Art Reveal
    ============================================ */
 
+/* Strip the card shell — no cyber-panel border/fill on Photos card */
+.profile-page .profile-left > .card:nth-child(3)::before,
+.profile-page .profile-left > .card:nth-child(3)::after {
+  display: none !important;
+}
+
+.profile-page .profile-left > .card:nth-child(3) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Kill dots + shimmer on Photos card body */
+.profile-page .profile-left > .card:nth-child(3) .card-body::before,
+.profile-page .profile-left > .card:nth-child(3) .card-body::after {
+  display: none !important;
+}
+
+/* No hover transform on the Photos card itself */
+.profile-page .profile-left > .card:nth-child(3):hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Hide the card header */
+.profile-page .profile-left > .card:nth-child(3) .card-header {
+  display: none !important;
+}
+
+/* Grid — compact row of small folder icons */
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] {
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+/* Each album item — folder icon
+   The folder shape is built with ::before (body) + ::after (tab) so the
+   album art can overflow above without being clipped. */
 .profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a {
-  border-radius: 10px !important;
-  overflow: hidden !important;
-  border-color: rgba(200, 109, 215, 0.2) !important;
-  background: rgba(55, 25, 95, 0.3) !important;
-  transition: all 0.3s ease !important;
+  position: relative !important;
+  width: 90px !important;
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
+  transition: filter 0.3s ease !important;
+  padding: 14px 0 0 !important;
+  /* Space above for the pop-up art */
+  margin-top: 80px !important;
 }
 
+/* Folder body — the main rectangle */
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 10px !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(35, 15, 65, 0.6) !important;
+  border: 1px solid rgba(200, 109, 215, 0.3) !important;
+  border-radius: 0 6px 6px 6px !important;
+  z-index: -1 !important;
+  transition: border-color 0.3s ease !important;
+}
+
+/* Folder tab — the little tab sticking up top-left */
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 38% !important;
+  height: 14px !important;
+  background: linear-gradient(90deg, rgba(255, 107, 157, 0.5), rgba(200, 109, 215, 0.45)) !important;
+  border-radius: 4px 4px 0 0 !important;
+  border: 1px solid rgba(200, 109, 215, 0.3) !important;
+  border-bottom: none !important;
+  z-index: -1 !important;
+}
+
+/* Album art — hidden by default, pops up on hover */
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a div[style*="aspect-ratio"] {
+  position: absolute !important;
+  bottom: 85% !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(15px) scale(0.85) !important;
+  width: 75px !important;
+  height: 75px !important;
+  border-radius: 8px !important;
+  border: 2px solid rgba(200, 109, 215, 0.5) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition:
+    opacity 0.25s ease,
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  z-index: 10 !important;
+}
+
+/* Hover — pop art up with bounce */
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a:hover div[style*="aspect-ratio"] {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) scale(1) !important;
+}
+
+/* Hover — folder glow */
 .profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a:hover {
-  border-color: rgba(255, 107, 157, 0.4) !important;
-  transform: scale(1.02);
+  filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.3));
 }
 
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a:hover::before {
+  border-color: rgba(255, 107, 157, 0.6) !important;
+}
+
+/* Album name text area */
 .profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a div[style*="padding"] {
+  text-align: center !important;
+  padding: 4px 2px !important;
   color: #e0d0f5 !important;
 }
 
+/* Album name */
+.profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a div[style*="font-size:10px"] {
+  color: #f0e6ff !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 8px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+/* Photo count */
 .profile-page .profile-left > .card:nth-child(3) .card-body [style*="grid-template-columns"] > a div[style*="font-size:9px"] {
   color: #b098d0 !important;
+  font-size: 8px !important;
 }
 
 
