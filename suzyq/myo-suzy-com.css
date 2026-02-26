@@ -144,10 +144,15 @@
   - Remaining left + right cards re-form a two-column grid below
 */
 
+.profile-page .container {
+  overflow: visible !important;
+}
+
 .profile-page .profile-layout {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 20px !important;
+  overflow: visible !important;
 }
 
 /* Break profile-left out so its children participate in the parent grid */
@@ -174,6 +179,7 @@
 .profile-page .profile-right {
   grid-column: 2 !important;
   grid-row: 2 / span 20 !important;
+  overflow: visible !important;
 }
 
 
@@ -204,7 +210,35 @@
 
 .profile-page .card {
   position: relative;
-  /* The holographic gradient — color-shifting bands */
+  background: transparent !important;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  padding: 0 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Passive + hover glow — only on non-hex cards */
+.profile-page .card:not(.profile-main-card) {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(248, 144, 184, 0.2);
+}
+
+.profile-page .card:not(.profile-main-card):hover {
+  transform: scale(1.03) skew(-1deg, -.75deg);
+  z-index: 10;
+  box-shadow:
+    0 0 35px rgba(248, 144, 184, 0.7),
+    0 0 80px rgba(248, 144, 184, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Cyber-panel gradient border — ::before */
+.profile-page .card:not(.profile-main-card)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     135deg,
     var(--holo-a),
@@ -214,49 +248,51 @@
     var(--holo-a)
   );
   animation: color-shift 8s ease-in-out infinite;
-  /* Padding = border thickness */
-  padding: 2px;
-  padding-top: 0;
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3))
-          drop-shadow(0 0 12px rgba(248, 144, 184, 0.15));
-
-  /* The cyber panel shape */
   clip-path: polygon(
-    0 14px,                          /* TL: start below cut */
-    14px 0,                          /* TL: diagonal cut corner */
-    calc(75% - 6px) 0,               /* top edge → notch start */
-    75% 6px,                         /* notch: step down */
-    100% 6px,                        /* notch across to right edge */
-    100% calc(100% - 14px),          /* right side down to BR cut */
-    calc(100% - 14px) 100%,          /* BR: diagonal cut corner */
-    0 100%                           /* bottom-left: square */
+    0 14px,
+    14px 0,
+    calc(75% - 6px) 0,
+    75% 6px,
+    100% 6px,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%
   );
+  z-index: 0;
 }
 
-/* Hover: skew northwest + pop + outer glow */
-.profile-page .card:hover {
-  transform: scale(1.03) skew(-1deg, -.75deg);
-  z-index: 10;
-  filter:
-    drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3))
-    drop-shadow(0 0 35px rgba(248, 144, 184, 0.75))
-    drop-shadow(0 0 70px rgba(248, 144, 184, 0.45))
-    brightness(1.1);
+/* Cyber-panel dark interior — ::after */
+.profile-page .card:not(.profile-main-card)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: rgba(18, 8, 35, 0.835);
+  backdrop-filter: blur(px);
+  -webkit-backdrop-filter: blur(14px);
+  clip-path: polygon(
+    0 14px,
+    14px 0,
+    calc(75% - 6px) 0,
+    75% 6px,
+    100% 6px,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%
+  );
+  z-index: 0;
 }
 
-/* Card body — the dark glass interior */
+/* Card body — sits above the pseudo-elements */
 .profile-page .card .card-body {
   padding: 20px;
   color: #e8daf5;
-  background: rgba(18, 8, 35, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: transparent;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 
 /* Rotating dots overlay on card interiors */
@@ -269,10 +305,10 @@
   width: 200%;
   height: 200%;
   background: url("./dots.gif") center / cover no-repeat;
-  filter: grayscale(1) blur(2px);
-  opacity: 0.08;
+  filter: grayscale(1) blur(10px);
+  opacity: 0.25;
   pointer-events: none;
-  z-index: 0;
+  z-index: -2;
   animation: slow-rotate 90s linear infinite;
 }
 
@@ -301,7 +337,7 @@
   animation: hover-shimmer 0.6s ease-out forwards;
 }
 
-/* Card headers — sits inside the clip-path, slightly lighter glass */
+/* Card headers — above pseudo-elements */
 .profile-page .card .card-header {
   background: rgba(35, 15, 65, 0.92);
   border-bottom: 1px solid rgba(200, 109, 215, 0.15);
@@ -312,6 +348,8 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   padding-top: 14px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Starred header accent */
@@ -527,14 +565,7 @@
 /* Display name — hide text, logo goes in ::after */
 .profile-page .profile-display-name {
   font-size: 0;
- 
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
   width: 100%;
-  height: 200%;
-  text-indent: -9999px;
-  overflow: hidden;
   display: block;
   margin: 4px auto;
   position: relative;
@@ -548,7 +579,7 @@
   width: 100%;
   height: 140px;
   background: url("./sqlogo-tr.gif") center / contain no-repeat;
-  margin: -30px auto 0;
+  margin: -10px auto 0;
   filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.3));
 }
 
