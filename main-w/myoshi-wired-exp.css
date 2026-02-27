@@ -1,9 +1,6 @@
 /* Feel free to learn and take inspiration from my page, but please don't steal it. If you would like help with your page, please reach out via Mail. */
 /* myoshi.co/wired */
 
-/* blocked */ /* @import url("https://cynacedia.github.io/c8vr-4B-d8/main-w/myoshi-wired-exp.css"); */
-
-/* ===== Page Base ===== */
 .profile-page.profile-custom-css {
   --ink: #f2f2f2;
   --ink-muted: #b8b8b8;
@@ -44,12 +41,6 @@
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
 }
 
-
-/* ============================================
-   Site Header — white on black
-   ============================================ */
-
-/* Top bar backgrounds */
 .header,
 .header-top,
 .header-inner {
@@ -57,28 +48,23 @@
   color: #fff !important;
   font-family: 'Courier New', Courier, monospace !important;
 }
-
-/* Nav bar strip */
 .header-nav-bar {
   background: #111 !important;
   border-color: #333 !important;
   font-family: 'Courier New', Courier, monospace !important;
 }
 
-/* Logo */
 .logo,
 .header-top .logo,
 .header-inner .logo {
   color: #fff !important;
 }
 
-/* Welcome text */
 .header-user,
 .header-user span {
   color: #fff !important;
 }
 
-/* All links in the top bar */
 .header-top a,
 .header-inner a,
 .header-user a {
@@ -91,12 +77,9 @@
   color: #ccc !important;
 }
 
-/* Hide logout button */
 .header-user button {
   display: none !important;
 }
-
-/* Redact username — ░ mask that auto-sizes to name length */
 .header-user span a {
   position: relative;
   color: transparent !important;
@@ -113,13 +96,11 @@
   pointer-events: none;
 }
 
-/* Notification bell */
 .notification-dropdown-trigger {
   color: #fff !important;
   background: none !important;
 }
 
-/* Nav links */
 .header-nav a {
   color: #fff !important;
   background: none !important;
@@ -132,18 +113,12 @@
   background: none !important;
 }
 
-/* "New!" tags */
 .header-nav .new-tag,
 .new-tag {
   color: #fff !important;
   background: #333 !important;
   border-color: #555 !important;
 }
-
-
-/* ============================================
-   Site Footer — white on black
-   ============================================ */
 
 .site-footer {
   background: #000 !important;
@@ -170,8 +145,6 @@
   font-family: 'Courier New', Courier, monospace !important;
 }
 
-
-/* Static + soft fog overlay (rotated 180) */
 .profile-page.profile-custom-css::before {
   content: "";
   position: fixed;
@@ -192,7 +165,6 @@
   z-index: 0;
 }
 
-/* Scanlines + analog drift */
 .profile-page.profile-custom-css::after {
   content: "";
   position: fixed;
@@ -231,7 +203,6 @@
   z-index: 1;
 }
 
-/* ===== Links ===== */
 .profile-page.profile-custom-css a {
   color: var(--accent);
   text-decoration: underline;
@@ -244,13 +215,6 @@
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
 }
 
-/* ===== Cards ===== */
-/*
- * Chamfer border technique: clip-path clips box-shadow/border,
- * so the element bg IS the border color. ::before fills the interior
- * (with backdrop-blur), ::after overlays the static texture.
- * Both pseudos use z-index:-1 so content stays on top.
- */
 .profile-page.profile-custom-css .card {
   background: var(--card-border);
   border: none;
@@ -263,7 +227,6 @@
   -webkit-backdrop-filter: blur(6px);
   transition: transform 0.2s ease, filter 0.2s ease;
 }
-/* Inner fill — creates the visible border gap */
 .profile-page.profile-custom-css .card::before {
   content: "";
   position: absolute;
@@ -273,7 +236,6 @@
   clip-path: var(--chamfer-shape);
   z-index: -1;
 }
-/* Static texture overlay */
 .profile-page.profile-custom-css .card::after {
   content: "";
   position: absolute;
@@ -357,7 +319,6 @@
   --chamfer: var(--chamfer-sm);
 }
 
-/* Remove default header gradients */
 .profile-page.profile-custom-css .card-header,
 .profile-page.profile-custom-css .card-header::before,
 .profile-page.profile-custom-css .card-header::after {
@@ -365,7 +326,6 @@
   background: none !important;
 }
 
-/* Card headers */
 .profile-page.profile-custom-css .card-header {
   text-align: center;
   border: none;
@@ -376,12 +336,10 @@
   padding-bottom: 6px;
   text-transform: uppercase;
 }
-/* Hide the redundant name in the main profile card header */
 .profile-page.profile-custom-css .profile-main-card .card-header span {
   display: none !important;
 }
 
-/* ===== Profile bits ===== */
 .profile-page.profile-custom-css .profile-display-name {
   font-size: 1.35rem;
   letter-spacing: 1.6px;
@@ -479,8 +437,6 @@
   position: relative;
   z-index: 1;
 }
-
-/* All avatars → hexagonal */
 .profile-page.profile-custom-css .user-avatar:not(.profile-avatar),
 .profile-page.profile-custom-css .friend-avatar,
 .profile-page.profile-custom-css .comment-avatar {
@@ -507,19 +463,9 @@
   z-index: -1;
 }
 
-/* ===== Top bar ===== */
-/* Remove the white profile top bar entirely */
 .profile-page.profile-custom-css .profile-top-bar {
   display: none !important;
 }
-/* If you want it visible but transparent, use this instead:
-.profile-page.profile-custom-css .profile-top-bar {
-  display: block !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-*/
 
 @keyframes vt-name-flicker {
   0% {
@@ -558,7 +504,6 @@
   }
 }
 
-/* ===== Friends ===== */
 .profile-page.profile-custom-css .friends-grid .friend-item {
   background: transparent;
   border: none;
@@ -594,8 +539,6 @@
   pointer-events: none;
   z-index: 0;
 }
-/* Strip PFP frame wrappers — display:contents makes the div invisible,
-   so the img inside acts as a direct child of .friend-item */
 .profile-page.profile-custom-css .friends-grid .friend-item > div {
   display: contents !important;
 }
@@ -621,7 +564,6 @@
   z-index: 1;
 }
 
-/* ===== Centered single-column layout ===== */
 .profile-page.profile-custom-css .profile-layout {
   display: flex !important;
   flex-direction: column !important;
@@ -645,21 +587,6 @@
   --si-header-h: 92px;     /* height of Signal Intercept header card — adjust if text reflows */
 }
 
-/* ▸ Signal Intercept — split header (centered) + body (left-aligned) ▸ */
-/*
- * ::before = header card  (centered: ▓ bars, title, ref, ▓ bars)
- * ::after  = body card    (left-aligned: URSE-01 report text)
- *
- * Each card is a single element using the gradient border trick:
- *   background: card-color (padding-box), border-color (border-box)
- *   border: transparent → gap between boxes = visible border
- *
- * Header has chamfer on top corners only (straight bottom edge).
- * Body has chamfer on bottom corners only (straight top edge).
- * They butt flush at the seam (header border-bottom: 0, body border-top: 0).
- * --si-header-h on .profile-right controls the body's top offset.
- */
-/* Header card — centered */
 .profile-page.profile-custom-css .profile-right::before {
   content:
     "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"
@@ -751,8 +678,6 @@
     drop-shadow(0 0 1px rgba(255, 255, 255, 0.35));
 }
 
-/* ===== Top Friends: hex satellites flanking main card ===== */
-/* Neutralize the Top Friends card chrome */
 .profile-page.profile-custom-css .profile-left .card:has(.friends-grid),
 .profile-page.profile-custom-css .profile-left .card:nth-of-type(2) {
   all: unset !important;
@@ -926,12 +851,10 @@
   border-bottom: 1px dotted rgba(255, 255, 255, 0.18);
 }
 
-/* ===== Blurbs ===== */
-/* Hide card headers in right column (blurbs + profile song) */
 .profile-page.profile-custom-css .profile-right > .card > .card-header {
   display: none !important;
 }
-/* Allow breakout positioning for status bubble (stays inside card bounds) */
+
 .profile-page.profile-custom-css .profile-right .card:has(.blurb-content) {
   overflow: visible !important;
 }
@@ -964,18 +887,15 @@
     0 1px 0 rgba(255, 255, 255, 0.2),
     0 -1px 0 rgba(255, 255, 255, 0.2);
 }
-/* Log Report wrapper — positioning context for breakout panels */
+
 .profile-page.profile-custom-css .blurb-content .log-report {
   position: relative;
 }
 
-/* ▸ Log Report header — now lives on repurposed .section-links (see below) ▸ */
-/* .log-report-header in HTML is hidden; CSS-only version uses section-links card */
 .profile-page.profile-custom-css .blurb-content .log-report-header {
   display: none !important;
 }
 
-/* ▸ Status readout — bubble on top-left of blurb section ▸ */
 .profile-page.profile-custom-css .blurb-content .log-report-status {
   position: absolute !important;
   top: -18px;
@@ -994,7 +914,6 @@
   padding: 0;
   margin: 0.5em 0;
 }
-/* Blurb ticker — seamless scrolling text */
 @keyframes blurb-ticker-left {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -1003,8 +922,6 @@
   from { transform: translateX(-50%); }
   to { transform: translateX(0); }
 }
-/* Blurb glyph drift — bouncing diamonds with irregular pacing */
-/* Each pattern has slight reversals mid-path for stutter effect */
 @keyframes blurb-drift-a {
   0%   { transform: translateX(-110px); }
   18%  { transform: translateX(-25px); }

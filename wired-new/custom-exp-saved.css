@@ -1,0 +1,356 @@
+/* =============================================
+   CUSTOM CSS — paste into MyOshi CSS editor
+   (prefixer adds .profile-page.profile-custom-css
+   to every selector automatically)
+   ============================================= */
+
+
+/* --- HIDE PAGE CONTENT --- */
+
+.profile-top-bar {
+  display: none !important;
+}
+
+.profile-right > .card {
+  display: none !important;
+}
+
+
+/* --- PROFILE-LEFT: keep alive but invisible --- */
+/* (so we can steal the real contact-link buttons) */
+
+.profile-left {
+  position: absolute !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: visible !important;
+}
+
+.profile-left > .card {
+  display: none !important;
+}
+
+.profile-left > .card.profile-main-card {
+  display: block !important;
+  visibility: hidden;
+  position: absolute;
+  overflow: visible;
+}
+
+.profile-main-card > .card-header {
+  display: none !important;
+}
+
+.profile-main-card > .card-body {
+  visibility: hidden;
+  position: absolute;
+  overflow: visible;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.profile-main-card .card-body > *:not(.profile-contact-links) {
+  display: none !important;
+}
+
+
+/* --- CONTACT LINKS (real platform buttons) --- */
+
+.profile-contact-links {
+  visibility: hidden;
+  position: fixed;
+  top: calc(50% + 110px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  z-index: 1001;
+  display: flex !important;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+}
+
+.profile-layout:has(.card:hover) .profile-contact-links {
+  visibility: visible !important;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.profile-contact-links .contact-link,
+.profile-contact-links .boop-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 16px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  border-radius: 6px !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.profile-contact-links .contact-link:hover,
+.profile-contact-links .boop-link:hover {
+  background: rgba(0, 0, 0, 0.9) !important;
+  transform: translateY(-1px);
+}
+
+
+/* --- BACKGROUND OVERLAYS --- */
+
+.profile-layout::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  transition: opacity 0.5s ease;
+}
+
+.profile-layout::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("https://i.imgur.com/PiQqhGH.gif") repeat;
+  background-size: 240px;
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.profile-layout:has(.card:hover)::before {
+  opacity: 0;
+}
+
+.profile-layout:has(.card:hover)::after {
+  opacity: 1;
+}
+
+
+/* --- LAYOUT RESET --- */
+
+.container {
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-layout {
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-right {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+/* --- THE POP-UP CARD --- */
+
+.card:has(.profile-custom-html) {
+  display: block !important;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 90vw;
+  max-width: 480px;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  transition:
+    background 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    border-radius 0.4s ease,
+    backdrop-filter 0.4s ease;
+}
+
+
+/* --- CARD INTERNALS CLEANUP --- */
+
+.blurb-section:has(.blurb-title) {
+  display: none !important;
+}
+
+.section-links {
+  display: none !important;
+}
+
+.profile-custom-html {
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  position: relative;
+}
+
+
+/* --- CARD HEADER (Notice / Welcome) --- */
+
+.card:has(.profile-custom-html) > .card-header {
+  position: relative;
+  z-index: 1;
+  font-size: 0;
+  visibility: hidden;
+  transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.card:has(.profile-custom-html) > .card-body {
+  position: relative;
+  z-index: 1;
+}
+
+.card:has(.profile-custom-html) > .card-header::before {
+  display: none !important;
+}
+
+.card:has(.profile-custom-html) > .card-header::after {
+  content: "Notice";
+  visibility: visible;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 15px 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, font-family 0.3s ease;
+}
+
+
+/* --- ERROR STATE (default) --- */
+
+.err {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  text-align: center;
+  padding: 12px 0;
+}
+
+
+/* --- REVEALED STATE (hidden by default) --- */
+
+.rev {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  font-family: "Courier New", "Consolas", "Lucida Console", "Menlo", "Monaco", "Liberation Mono", "DejaVu Sans Mono", monospace;
+}
+
+
+/* --- CHAMFER BORDER INNER FILL (hidden by default, shown on hover) --- */
+
+.card:has(.profile-custom-html)::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: rgba(8, 8, 8, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  -webkit-clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+
+/* --- STATIC TEXTURE ON CARD (hidden by default, shown on hover) --- */
+
+.card:has(.profile-custom-html)::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: url("https://media1.tenor.com/m/0xOmj3rR_0wAAAAd/static.gif") repeat;
+  background-size: 200px;
+  -webkit-clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
+
+/* =============================================
+   HOVER STATE — card transforms to wired style
+   ============================================= */
+
+.card:has(.profile-custom-html):hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none;
+  -webkit-clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.65));
+}
+
+.card:has(.profile-custom-html):hover::before {
+  opacity: 1;
+}
+
+.card:has(.profile-custom-html):hover::after {
+  opacity: 0.12;
+}
+
+.card:has(.profile-custom-html):hover > .card-header {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.card:has(.profile-custom-html):hover > .card-header::after {
+  content: "« ..Signal Lost.. »";
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Courier New", "Consolas", "Lucida Console", "Menlo", "Monaco", "Liberation Mono", "DejaVu Sans Mono", monospace;
+}
+
+.card:has(.profile-custom-html):hover > .card-body {
+  background: transparent !important;
+}
+
+.card:has(.profile-custom-html):hover .err {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+}
+
+.card:has(.profile-custom-html):hover .rev {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* --- REVEAL BUTTON (chamfer shape + monochrome) --- */
+
+.rev a {
+  -webkit-clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px) !important;
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px) !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+}
