@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" style="color-scheme:dark">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Profile Template | MyOshi</title>
+   <style>
+      /* ============================================================
+         MyOshi Platform Base Styles — extracted from live site
+         These replicate the platform's own CSS so profile.html
+         previews accurately in VS Code ShowPreview.
+         ============================================================ */
+
+      /* --- CSS Variables: Light (base) --- */
+      :root {
+         --text-xs: 9px;
+         --text-sm: 10px;
+         --text-base: 11px;
+         --text-md: 12px;
+         --text-lg: 13px;
+         --space-1: 4px;
+         --space-2: 8px;
+         --space-3: 12px;
+         --space-4: 16px;
+         --radius-full: 50%;
+
+         --vs-blue-dark: #036;
+         --vs-blue: #369;
+         --vs-blue-light: #47a;
+         --vs-orange: #f60;
+         --vs-orange-light: #f93;
+         --vs-text-dark: #333;
+         --vs-text-medium: #666;
+         --vs-text-light: #707070;
+         --vs-border: #ccc;
+         --vs-border-light: #ddd;
+         --vs-border-lighter: #eee;
+         --vs-success: #2d7d2d;
+         --vs-error: #c33;
+         --vs-warning: #a86200;
+         --vs-bg-light: #e8e8e8;
+         --vs-bg-white: #fff;
+         --vs-bg-muted: #f5f5f5;
+         --vs-bg-subtle: #f9f9f9;
+         --vs-bg-dim: #e0e0e0;
+         --vs-input-bg: #fff;
+         --vs-link: #369;
+         --vs-link-hover: #036;
+         --vs-link-bg: #369;
+         --vs-highlight-strong: #ffc;
+         --vs-highlight-border: #cc9;
+         --vs-btn-danger-bg: #b82020;
+         --vs-btn-danger-hover: #991a1a;
+         --vs-success-bg: #f0fdf4;
+         --vs-error-bg: #fef2f2;
+         --vs-warning-bg: #fffbeb;
+         --vs-info-bg: #e8f4fc;
+
+         --glow-pink: #f6a;
+         --glow-cyan: #6df;
+         --glow-purple: #a8f;
+         --soft-pink: #fff0f3;
+         --soft-pink-mid: #ffe0e8;
+         --soft-pink-border: #f0c0cc;
+         --soft-pink-text: #8b5c5c;
+         --soft-gold: #fff8e8;
+         --soft-gold-border: #e8d8a0;
+      }
+
+      /* --- CSS Variables: Dark theme overrides --- */
+      .theme-dark {
+         --vs-blue-dark: #1a1a2e;
+         --vs-blue: #16213e;
+         --vs-blue-light: #0f3460;
+         --vs-orange: #e94560;
+         --vs-orange-light: #f87171;
+         --vs-bg-light: #0f0f1a;
+         --vs-bg-white: #1a1a2e;
+         --vs-bg-muted: #1f1f35;
+         --vs-bg-subtle: #1a1a30;
+         --vs-bg-dim: #2a2a4a;
+         --vs-text-dark: #e8e8e8;
+         --vs-text-medium: #b0b0b0;
+         --vs-text-light: #8a8a8a;
+         --vs-success: #4ade80;
+         --vs-error: #f87171;
+         --vs-warning: #fbbf24;
+         --vs-border: #2a2a4a;
+         --vs-border-light: #2a2a4a;
+         --vs-border-lighter: #1f1f3a;
+         --vs-link: #6bf;
+         --vs-link-hover: #9df;
+         --vs-link-bg: #27b;
+         --vs-highlight-strong: #3a3a1a;
+         --vs-highlight-border: #4a4a2a;
+         --vs-input-bg: #0f0f1a;
+         --vs-btn-danger-bg: #dc3545;
+         --vs-btn-danger-hover: #c82333;
+         --glow-cyan: #00d4ff;
+         --glow-pink: #f6a;
+         --glow-purple: #b9f;
+         --soft-pink: #2a1a2e;
+         --soft-pink-border: #4a3a4e;
+         --soft-pink-mid: #3a2a3e;
+         --soft-pink-text: #d8a8b8;
+         --soft-gold: #2a2a1a;
+         --soft-gold-border: #4a4a2a;
+      }
+
+      /* --- Body --- */
+      body {
+         font-family: Verdana, Geneva, sans-serif;
+         font-size: var(--text-base);
+         color: var(--vs-text-dark);
+         background: var(--vs-bg-light);
+         line-height: 1.4;
+         margin: 0;
+         min-height: 100vh;
+      }
+
+      /* --- Links --- */
+      a { color: var(--vs-link); text-decoration: none; }
+      a:hover { color: var(--vs-link-hover); text-decoration: underline; }
+
+      /* --- Profile Page --- */
+      .profile-page { min-height: 100vh; }
+      .profile-page.profile-custom-css { isolation: isolate; }
+
+      /* --- Container --- */
+      .container {
+         max-width: 960px;
+         padding: 2.5px 2rem;
+         margin: 0 auto;
+      }
+
+      /* --- Layout --- */
+      .profile-layout { display: flex; gap: 2rem; }
+      .profile-left { flex-shrink: 0; width: 300px; }
+      .profile-right { flex: 1; min-width: 0; }
+
+      /* --- Cards --- */
+      .card {
+         background: var(--vs-bg-white);
+         border: 1px solid var(--vs-border);
+         margin-bottom: 10px;
+         position: relative;
+         overflow: hidden;
+      }
+      .card-header {
+         background: linear-gradient(to bottom, var(--vs-blue), var(--vs-blue-dark));
+         color: #fff;
+         padding: 6px 10px;
+         font-size: 11px;
+         font-weight: 600;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+      }
+      .card-header a { color: #fff; font-weight: 400; }
+      .card-body { padding: 10px; overflow: hidden; }
+
+      /* Star / Heart icons on card headers */
+      .starred::before {
+         content: "";
+         display: inline-block;
+         width: 12px; height: 12px;
+         margin-right: 6px;
+         background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300d4ff'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z'/%3E%3C/svg%3E") center/contain no-repeat;
+      }
+      .hearted::before {
+         content: "";
+         display: inline-block;
+         width: 12px; height: 12px;
+         margin-right: 6px;
+         background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff66aa'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") center/contain no-repeat;
+      }
+
+      /* --- Top Bar --- */
+      .profile-top-bar {
+         background: var(--vs-bg-white);
+         border: 1px solid var(--vs-border);
+         padding: 10px 16px;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 8px;
+      }
+      .profile-breadcrumb { color: var(--vs-text-medium); font-size: 11px; }
+      .profile-breadcrumb a { color: var(--vs-link); }
+      .profile-top-actions { display: flex; gap: 16px; font-size: 11px; }
+
+      /* --- Profile Main Card --- */
+      .profile-avatar {
+         border: 2px solid var(--vs-border-light);
+         width: 100px; height: 100px;
+         display: flex; justify-content: center; align-items: center;
+         margin: 0 auto 12px;
+         flex-shrink: 0;
+         overflow: hidden;
+         object-fit: cover;
+      }
+      .profile-display-name {
+         font-size: 18px;
+         color: var(--vs-link);
+         font-weight: 700;
+         margin-bottom: 4px;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         overflow: hidden;
+      }
+      .profile-username {
+         font-size: 11px;
+         color: var(--vs-text-medium);
+         margin-bottom: 8px;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         overflow: hidden;
+      }
+      .profile-tagline {
+         color: var(--vs-text-medium);
+         margin-bottom: 12px;
+         font-style: italic;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         overflow: hidden;
+      }
+      .profile-oshi-mark { font-size: 24px; margin-bottom: 12px; }
+      .profile-mood {
+         padding: 8px 12px;
+         background: var(--soft-gold);
+         border: 1px solid var(--soft-gold-border);
+         border-radius: 4px;
+         margin-bottom: 12px;
+      }
+      .mood-text { color: var(--vs-text-dark); font-weight: 600; }
+      .profile-online-status {
+         font-size: 12px;
+         color: var(--vs-success);
+         margin-bottom: 12px;
+      }
+      .profile-contact-links {
+         display: flex;
+         gap: 8px;
+         flex-wrap: wrap;
+         justify-content: center;
+         margin-bottom: 12px;
+      }
+      .contact-link {
+         display: inline-flex;
+         align-items: center;
+         gap: 6px;
+         padding: 6px 12px;
+         background: var(--vs-bg-light);
+         border: 1px solid var(--vs-border);
+         border-radius: 4px;
+         color: var(--vs-text-dark);
+         font-size: 11px;
+         text-decoration: none;
+         transition: all 0.2s;
+      }
+      .profile-boop-stats {
+         font-size: 10px;
+         color: var(--vs-text-medium);
+         margin-bottom: 8px;
+      }
+      .profile-url-box {
+         background: var(--vs-highlight-strong);
+         border: 1px solid var(--vs-highlight-border);
+         padding: 8px;
+         font-size: 11px;
+         text-align: center;
+         margin-top: 12px;
+      }
+      .profile-url-box code { color: var(--vs-text-medium); font-family: monospace; }
+
+      /* --- Friends Grid --- */
+      .friends-grid {
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         gap: 8px;
+      }
+      .friend-item {
+         display: block;
+         color: var(--vs-text-dark);
+         text-align: center;
+      }
+      .friend-avatar { width: 48px; height: 48px; }
+      .friend-name { font-size: var(--text-sm); }
+
+      /* --- Blurbs --- */
+      .blurb-section { margin-bottom: 16px; }
+      .blurb-title {
+         color: var(--vs-orange);
+         font-weight: 700;
+         font-size: var(--text-md);
+         border-bottom: 1px solid var(--vs-border-lighter);
+         margin-bottom: 6px;
+         padding-bottom: 4px;
+      }
+      .blurb-content {
+         font-size: 12px;
+         line-height: 1.6;
+         overflow-wrap: break-word;
+         word-break: break-word;
+         overflow: hidden;
+      }
+      .profile-custom-html {
+         overflow-wrap: break-word;
+         word-break: break-word;
+         overflow: hidden;
+      }
+      .section-links {
+         display: flex;
+         gap: 16px;
+         padding: 8px 12px;
+         background: var(--vs-bg-muted);
+         border-top: 1px solid var(--vs-border-lighter);
+         font-size: 11px;
+      }
+
+      /* --- Interests --- */
+      .interest-section { margin-bottom: 12px; }
+      .interest-title { color: var(--vs-link); font-weight: 700; margin-bottom: 4px; }
+
+      /* --- Comments --- */
+      .profile-comment {
+         display: flex;
+         gap: 10px;
+         padding: 10px;
+         border-bottom: 1px solid var(--vs-border-lighter);
+      }
+      .comment-avatar {
+         width: 50px; height: 50px;
+         flex-shrink: 0;
+         display: flex; justify-content: center; align-items: center;
+         border: 1px solid var(--vs-border-light);
+         object-fit: cover;
+      }
+      .comment-content { flex: 1; min-width: 0; }
+      .comment-meta { margin-bottom: 4px; }
+      .comment-author-name { font-weight: 600; }
+      .comment-time { color: var(--vs-text-light); }
+      .comment-body { line-height: 1.5; }
+      .comment-actions { font-size: var(--text-sm); margin-top: 4px; }
+
+      .add-comment {
+         padding: 12px;
+         background: var(--vs-bg-subtle);
+         border-bottom: 1px solid var(--vs-border-lighter);
+      }
+      .add-comment-box {
+         width: 100%;
+         padding: 8px;
+         border: 1px solid var(--vs-border);
+         background: var(--vs-input-bg);
+         color: var(--vs-text-dark);
+         font-family: inherit;
+         font-size: 11px;
+         resize: vertical;
+         min-height: 60px;
+         margin-bottom: 8px;
+         box-sizing: border-box;
+      }
+
+      /* --- Buttons --- */
+      .action-btn {
+         background: linear-gradient(to bottom, var(--vs-bg-muted), var(--vs-bg-dim));
+         border: 1px solid var(--vs-border);
+         padding: 6px 12px;
+         font-size: 11px;
+         cursor: pointer;
+         color: var(--vs-text-dark);
+         border-radius: 3px;
+         text-decoration: none;
+         display: inline-block;
+         transition: all 0.2s;
+      }
+      .action-btn.primary {
+         background: linear-gradient(135deg, var(--vs-orange-light) 0%, var(--vs-orange) 100%);
+         border-color: var(--vs-orange);
+         color: #fff;
+         box-shadow: inset 0 1px rgba(255, 255, 255, 0.2);
+      }
+
+      /* --- Modal --- */
+      .modal-overlay {
+         position: fixed;
+         inset: 0;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         background: rgba(0, 0, 0, 0.5);
+         z-index: 1000;
+         padding: 20px;
+      }
+      .modal-content {
+         background: var(--vs-bg-white);
+         border: 1px solid var(--vs-border);
+         padding: 20px;
+         width: 100%;
+         max-width: 500px;
+         max-height: 90vh;
+         overflow-y: auto;
+      }
+
+      /* --- Stats Table --- */
+      .stats-table { width: 100%; font-size: var(--text-base); border-collapse: collapse; }
+      .stats-table td { padding: var(--space-1) 0; }
+
+      /* --- Social Links --- */
+      .social-links-list { display: flex; flex-direction: column; gap: 4px; }
+      .social-link-item {
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         padding: 6px 8px;
+         border: 1px solid var(--vs-border-lighter);
+         border-radius: 4px;
+         font-size: 11px;
+         color: var(--vs-text-dark);
+         text-decoration: none;
+         transition: all 0.2s;
+      }
+      .social-link-item:hover { background: var(--vs-bg-muted); text-decoration: none; }
+      .social-link-platform {
+         font-size: 9px;
+         font-weight: 600;
+         text-transform: uppercase;
+         color: var(--vs-text-light);
+         min-width: 60px;
+      }
+      .social-link-name { color: var(--vs-link); }
+   </style>
+</head>
+<body>
+   <main>
+      <div class="profile-page profile-custom-css theme-dark is-desktop">
+         <style>@import url("./custom.css");</style>
+         <div class="container">
+
+            <!-- ============================================================
+                 PROFILE TOP BAR
+                 ============================================================ -->
+            <div class="profile-top-bar">
+               <div class="profile-breadcrumb"><a href="/">Home</a> &gt; <a href="/browse">Browse</a> &gt; <strong>Username</strong></div>
+               <!-- GUEST ONLY: Report/Block actions -->
+               <div class="profile-top-actions"><a href="#">Report User</a><a href="#">Block User</a></div>
+            </div>
+
+            <div class="profile-layout">
+
+               <!-- ============================================================
+                    PROFILE LEFT COLUMN
+                    ============================================================ -->
+               <div class="profile-left">
+
+                  <!-- ==================== Main Card ==================== -->
+                  <div class="card profile-main-card">
+                     <div class="card-header starred">
+                        <span>Username</span>
+                        <!-- HOST ONLY: Edit link -->
+                        <a href="/settings/profile">Edit</a>
+                     </div>
+                     <div class="card-body" style="text-align:center">
+                        <img alt="Username" class="user-avatar profile-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23334' width='100' height='100'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23aaa' font-size='14'%3EAvatar%3C/text%3E%3C/svg%3E" style="width:100px;height:100px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;object-fit:cover">
+                        <div class="profile-display-name">Display Name</div>
+                        <div class="profile-username">@username</div>
+                        <div class="profile-tagline">"Headline"</div>
+                        <div class="profile-oshi-mark">X</div>
+                        <div class="profile-mood">
+                           <div class="mood-text">Mood</div>
+                        </div>
+                        <div class="profile-online-status">Last online just now</div>
+                        <!-- GUEST ONLY: Contact links (friend/message/boop) -->
+                        <div class="profile-contact-links">
+                           <a href="#" class="contact-link" style="opacity:1">Unfriend</a>
+                           <a class="contact-link" href="/messages/new?to=username">Send Message</a>
+                           <a href="#" class="contact-link boop-link" style="opacity:1;cursor:pointer">Boop!</a>
+                        </div>
+                        <div class="profile-boop-stats">
+                           <span>14 boops received</span>
+                           <!-- GUEST ONLY: Viewer boop count -->
+                           <span class="viewer-boops"> · You've booped 9x</span>
+                        </div>
+                        <div class="profile-url-box"><code>myoshi.co/username</code></div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Top 8 Friends ==================== -->
+                  <div class="card">
+                     <div class="card-header starred" style="display:flex;justify-content:space-between">
+                        <span>Username's Top 8</span>
+                        <a href="/username/friends">View All</a>
+                     </div>
+                     <div class="card-body">
+                        <div class="friends-grid">
+                           <a class="friend-item" href="/friend1">
+                              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect fill='%23446' width='48' height='48'/%3E%3C/svg%3E" alt="Friend1" class="user-avatar friend-avatar" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;object-fit:cover">
+                              <span class="friend-name">Friend1</span>
+                           </a>
+                           <a class="friend-item" href="/friend2">
+                              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect fill='%23464' width='48' height='48'/%3E%3C/svg%3E" alt="Friend2" class="user-avatar friend-avatar" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;object-fit:cover">
+                              <span class="friend-name">Friend2</span>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Photos ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted" style="display:flex;justify-content:space-between">
+                        <span>Username's Photos</span>
+                        <a href="/username/photos">View All</a>
+                     </div>
+                     <div class="card-body">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                           <a style="display:block;border:1px solid var(--vs-border);background:var(--vs-bg-white);transition:all 0.2s" href="/username/photos/album1">
+                              <div style="aspect-ratio:1;background:var(--vs-bg-dim);display:flex;align-items:center;justify-content:center;color:var(--vs-text-light);font-size:9px">Photo</div>
+                              <div style="padding:4px 6px">
+                                 <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Album Title</div>
+                                 <div style="font-size:9px;color:var(--vs-text-light)">3 photos</div>
+                              </div>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Groups ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted" style="display:flex;justify-content:space-between">
+                        <span>Username's Groups</span>
+                        <a href="/username/groups">View All</a>
+                     </div>
+                     <div class="card-body">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                           <a style="display:flex;flex-direction:column;aspect-ratio:1;overflow:hidden;border:1px solid var(--vs-border);background:var(--vs-bg-white);transition:all 0.2s" href="/groups/example-group">
+                              <div style="flex:1;min-height:0;background:var(--vs-bg-dim);display:flex;align-items:center;justify-content:center;color:var(--vs-text-light);font-size:9px">Group</div>
+                              <div style="padding:4px 6px;flex-shrink:0">
+                                 <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Example Group</div>
+                                 <div style="font-size:9px;color:var(--vs-text-light)">100 members</div>
+                              </div>
+                           </a>
+                           <a style="display:flex;flex-direction:column;aspect-ratio:1;overflow:hidden;border:1px solid var(--vs-border);background:var(--vs-bg-white);transition:all 0.2s" href="/groups/another-group">
+                              <div style="flex:1;min-height:0;background:var(--vs-bg-dim);display:flex;align-items:center;justify-content:center;color:var(--vs-text-light);font-size:9px">Group</div>
+                              <div style="padding:4px 6px;flex-shrink:0">
+                                 <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Another Group</div>
+                                 <div style="font-size:9px;color:var(--vs-text-light)">50 members</div>
+                              </div>
+                           </a>
+                        </div>
+                        <!-- HOST ONLY: Edit Top Groups link -->
+                        <div style="text-align:center;margin-top:6px"><a href="/groups/top" style="font-size:9px;color:var(--vs-text-medium)">Edit Top Groups</a></div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Collab Schedule ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted" style="display:flex;justify-content:space-between">
+                        <span>Collab Schedule</span>
+                        <a href="/schedules">Find Collabs</a>
+                     </div>
+                     <div class="card-body">
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+                           <span style="width:8px;height:8px;border-radius:50%;background:#4caf50;display:inline-block"></span>
+                           <span style="font-size:11px;color:var(--vs-text-medium)">Looking for collabs</span>
+                        </div>
+                        <div style="font-size:11px;margin-bottom:8px;color:var(--vs-text)">
+                           <p style="margin:0;font-size:12px;line-height:1.6;color:var(--vs-text-dark)">Collab description here</p>
+                        </div>
+                        <div style="margin-bottom:8px">
+                           <table style="width:100%;border-collapse:collapse;font-size:9px">
+                              <thead>
+                                 <tr>
+                                    <th style="width:24px"></th>
+                                    <th style="padding:0;width:4px;text-align:center">12a</th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center">6a</th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center">12p</th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center">6p</th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                    <th style="padding:0;width:4px;text-align:center"></th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">MO</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">TU</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">WE</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">TH</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">FR</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-blue);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">SA</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-size:8px;font-weight:bold;padding:0 2px">SU</td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                    <td style="width:4px;height:8px;padding:0;background:var(--vs-bg-muted);border:1px solid var(--vs-border-lighter)"></td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                        <div style="display:flex;flex-wrap:wrap;gap:3px">
+                           <span style="padding:1px 6px;background:var(--vs-bg-muted);border-radius:3px;font-size:9px">GAMING</span>
+                           <span style="padding:1px 6px;background:var(--vs-bg-muted);border-radius:3px;font-size:9px">VRCHAT</span>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Badges ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted" style="display:flex;justify-content:space-between">
+                        <span>Username's Badges</span>
+                        <!-- HOST ONLY: Manage link -->
+                        <a href="/settings/badges">Manage</a>
+                     </div>
+                     <div class="card-body">
+                        <div style="display:flex;flex-wrap:wrap;gap:8px">
+                           <div style="text-align:center">
+                              <div style="width:48px;height:48px;background:var(--vs-bg-dim);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px">Badge</div>
+                              <div style="font-size:9px;margin-top:2px;color:var(--vs-text-light)">Early Bird</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Details ==================== -->
+                  <div class="card">
+                     <div class="card-header starred">Username's Details</div>
+                     <div class="card-body">
+                        <table class="stats-table">
+                           <tbody>
+                              <tr>
+                                 <td>Generation:</td>
+                                 <td title="N invites from founding">Gen 1</td>
+                              </tr>
+                              <tr>
+                                 <td>Friends:</td>
+                                 <td><a href="/username/friends">0</a></td>
+                              </tr>
+                              <tr>
+                                 <td>Comments:</td>
+                                 <td><a href="#comments">0</a></td>
+                              </tr>
+                              <tr>
+                                 <td>Affiliation:</td>
+                                 <td>Affiliation</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Social Links ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted">Username's Links</div>
+                     <div class="card-body">
+                        <div class="social-links-list">
+                           <a href="#" target="_blank" rel="noopener noreferrer" class="social-link-item"><span class="social-link-platform">twitter</span><span class="social-link-name">Twitter</span></a>
+                           <a href="#" target="_blank" rel="noopener noreferrer" class="social-link-item"><span class="social-link-platform">twitch</span><span class="social-link-name">Twitch</span></a>
+                           <a href="#" target="_blank" rel="noopener noreferrer" class="social-link-item"><span class="social-link-platform">discord</span><span class="social-link-name">Discord</span></a>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Avatar Info ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted">Avatar Info</div>
+                     <div class="card-body">
+                        <table class="stats-table">
+                           <tbody>
+                              <tr>
+                                 <td>Model:</td>
+                                 <td>3d</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+
+               </div><!-- /profile-left -->
+
+               <!-- ============================================================
+                    PROFILE RIGHT COLUMN
+                    ============================================================ -->
+               <div class="profile-right">
+
+                  <!-- ==================== Lore ==================== -->
+                  <div class="card">
+                     <div class="card-header starred"><span>Username's Lore</span></div>
+                     <div class="card-body">
+                        <div class="blurb-content">
+                           <p style="margin:0;font-size:12px;line-height:1.6;color:var(--vs-text-dark)">Lore content goes here.</p>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Blurbs ==================== -->
+                  <div class="card">
+                     <div class="card-header hearted"><span>Username's Blurbs</span></div>
+                     <div class="card-body">
+                        <div class="blurb-section">
+                           <div class="blurb-title">About Me:</div>
+                           <div class="blurb-content">
+                              <p style="margin:0;font-size:12px;line-height:1.6;color:var(--vs-text-dark)">About me text goes here.</p>
+                           </div>
+                        </div>
+                        <div class="blurb-section">
+                           <div class="blurb-title">Who I'd Like to Meet:</div>
+                           <div class="blurb-content">
+                              <p style="margin:0;font-size:12px;line-height:1.6;color:var(--vs-text-dark)">Who I'd like to meet text goes here.</p>
+                           </div>
+                        </div>
+                        <div class="blurb-section">
+                           <div class="blurb-content profile-custom-html">customhtml</div>
+                        </div>
+                     </div>
+                     <div class="section-links">
+                        <a href="/username/journals">View Journals</a>
+                        <a href="/username/photos">View Photos</a>
+                        <a href="/username/groups">View Groups</a>
+                        <a href="/username/places">View Places</a>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Interests ==================== -->
+                  <div class="card">
+                     <div class="card-header starred"><span>Username's Interests</span></div>
+                     <div class="card-body">
+                        <div class="interest-section">
+                           <div class="interest-title">Music</div>
+                           <div style="font-size:11px;color:var(--vs-text-dark)">Genre, Artist, Album</div>
+                        </div>
+                        <div class="interest-section">
+                           <div class="interest-title">Movies</div>
+                           <div style="font-size:11px;color:var(--vs-text-dark)">Movie1, Movie2</div>
+                        </div>
+                        <div class="interest-section">
+                           <div class="interest-title">Shows</div>
+                           <div style="font-size:11px;color:var(--vs-text-dark)">Show1, Show2</div>
+                        </div>
+                        <div class="interest-section">
+                           <div class="interest-title">Books</div>
+                           <div style="font-size:11px;color:var(--vs-text-dark)">Book1, Book2</div>
+                        </div>
+                        <div class="interest-section">
+                           <div class="interest-title">Games</div>
+                           <div style="font-size:11px;color:var(--vs-text-dark)">Game1, Game2</div>
+                        </div>
+                        <div class="interest-section">
+                           <div class="interest-title">Heroes</div>
+                           <div style="font-size:11px;color:var(--vs-text-dark)">Hero1, Hero2</div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Profile Song ==================== -->
+                  <div class="card">
+                     <div class="card-header starred"><span>Username's Profile Song</span></div>
+                     <div class="card-body">
+                        <audio controls style="width:100%" src="about:blank">Your browser does not support audio.</audio>
+                     </div>
+                  </div>
+
+                  <!-- ==================== Friend Comments ==================== -->
+                  <div class="card" id="comments">
+                     <div class="card-header hearted" style="display:flex;justify-content:space-between">
+                        <span>Username's Friend Comments</span>
+                        <a href="/username/comments">View All (3)</a>
+                     </div>
+                     <div class="card-body" style="padding:0">
+                        <div class="add-comment">
+                           <textarea class="add-comment-box" placeholder="Leave a comment for Username..."></textarea>
+                           <button class="action-btn primary" disabled>Post Comment</button>
+                        </div>
+
+                        <!-- Comment 1: with reply -->
+                        <div class="profile-comment">
+                           <img class="user-avatar comment-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%23446' width='50' height='50'/%3E%3C/svg%3E" alt="Friend1" style="width:50px;height:50px;object-fit:cover">
+                           <div class="comment-content">
+                              <div class="comment-meta">
+                                 <a class="comment-author-name" href="/friend1">Friend1</a>
+                                 <span class="comment-time"> · 2d ago</span>
+                              </div>
+                              <div class="comment-body">This is a sample comment on the profile.</div>
+                              <!-- Reply block -->
+                              <div style="margin-top:8px;margin-left:10px;padding:8px;background:var(--vs-bg-muted);border-left:2px solid var(--vs-border)">
+                                 <div style="font-size:10px;margin-bottom:4px">
+                                    <a href="/username" style="font-weight:600">Username</a>
+                                    <span style="color:var(--vs-text-light)"> · 1d ago</span>
+                                 </div>
+                                 <div style="font-size:11px">Thanks for the comment!</div>
+                              </div>
+                              <!-- HOST ONLY: Comment actions (Reply/Delete) -->
+                              <div class="comment-actions">
+                                 <a href="#" style="color:var(--vs-error)">Delete</a>
+                              </div>
+                           </div>
+                        </div>
+
+                        <!-- Comment 2: without reply -->
+                        <div class="profile-comment">
+                           <img class="user-avatar comment-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%23464' width='50' height='50'/%3E%3C/svg%3E" alt="Friend2" style="width:50px;height:50px;object-fit:cover">
+                           <div class="comment-content">
+                              <div class="comment-meta">
+                                 <a class="comment-author-name" href="/friend2">Friend2</a>
+                                 <span class="comment-time"> · 5d ago</span>
+                              </div>
+                              <div class="comment-body">Another comment here. Nice profile!</div>
+                              <!-- HOST ONLY: Comment actions (Reply/Delete) -->
+                              <div class="comment-actions">
+                                 <a href="/username/comments?reply=cmt_example">Reply</a> · <a href="#" style="color:var(--vs-error)">Delete</a>
+                              </div>
+                           </div>
+                        </div>
+
+                        <!-- Comment 3: own comment with reply -->
+                        <div class="profile-comment">
+                           <img class="user-avatar comment-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect fill='%23334' width='50' height='50'/%3E%3C/svg%3E" alt="Username" style="width:50px;height:50px;object-fit:cover">
+                           <div class="comment-content">
+                              <div class="comment-meta">
+                                 <a class="comment-author-name" href="/username">Username</a>
+                                 <span class="comment-time"> · 1w ago</span>
+                              </div>
+                              <div class="comment-body">Self-comment for testing styling.</div>
+                              <div style="margin-top:8px;margin-left:10px;padding:8px;background:var(--vs-bg-muted);border-left:2px solid var(--vs-border)">
+                                 <div style="font-size:10px;margin-bottom:4px">
+                                    <a href="/friend1" style="font-weight:600">Friend1</a>
+                                    <span style="color:var(--vs-text-light)"> · 6d ago</span>
+                                 </div>
+                                 <div style="font-size:11px">Reply from a friend!</div>
+                              </div>
+                              <!-- HOST ONLY: Comment actions -->
+                              <div class="comment-actions">
+                                 <a href="#" style="color:var(--vs-error)">Delete</a>
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+
+               </div><!-- /profile-right -->
+
+            </div><!-- /profile-layout -->
+         </div><!-- /container -->
+
+         <!-- Modal overlay — uncomment to preview modal styling:
+         <div class="modal-overlay">
+            <div class="modal-content" style="width:320px">
+               <p style="margin:0 0 16px;color:var(--vs-text-dark)">Are you sure you want to unfriend Username?</p>
+               <div style="display:flex;gap:8px;justify-content:flex-end">
+                  <button class="action-btn">Cancel</button>
+                  <button class="action-btn primary">Confirm</button>
+               </div>
+            </div>
+         </div>
+         -->
+
+      </div><!-- /profile-page -->
+   </main>
+</body>
+</html>
