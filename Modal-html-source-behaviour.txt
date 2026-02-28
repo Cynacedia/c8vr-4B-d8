@@ -1,0 +1,111 @@
+Modal Overlay Behaviour Analysis
+=================================
+Source: 5 full HTML dumps from MyOshi profile pages (SakuyoiVT & LaceSpades)
+Purpose: Understand what causes scroll lock when modals open
+
+
+KEY FINDING
+===========
+Platform JS sets `overflow: hidden` on <body> whenever a .modal-overlay exists in the DOM.
+This is a 1:1 correlation — modal present = scroll locked, modal absent = scroll free.
+Cannot be overridden from custom CSS because body is an ANCESTOR of .profile-page.profile-custom-css.
+
+
+DOM STRUCTURE (consistent across all scenarios)
+===============================================
+<body style="...">
+  <header class="header">...</header>
+  <main>
+    <div class="profile-page profile-custom-css theme-dark is-desktop">
+      <style>...custom CSS...</style>
+      <div class="container">...profile content...</div>
+      <div class="modal-overlay">...modal...</div>      <!-- only when modal is open -->
+    </div>
+  </main>
+  <footer>...</footer>
+  <nav class="mobile-nav">...</nav>
+  <section aria-label="Notifications alt+T">...</section>  <!-- sonner toast portal, always empty -->
+  <next-route-announcer>...</next-route-announcer>
+  <protonpass-root-XXXX>...</protonpass-root-XXXX>         <!-- browser extension, irrelevant -->
+
+
+SCENARIO COMPARISON
+===================
+
+1. Friend Request Sent (SakuyoiVT)
+   <body style="overflow: hidden;">
+   .modal-overlay PRESENT:
+     <div class="modal-overlay">
+       <div class="modal-content card" style="max-width: 320px;">
+         <div class="card-header starred">Success</div>
+         <div class="card-body">
+           <svg>checkmark</svg>
+           <p>Friend request sent!</p>
+           <button class="action-btn primary">OK</button>
+         </div>
+       </div>
+     </div>
+
+2. Friend Request Already Sent (SakuyoiVT)
+   <body style="">
+   .modal-overlay ABSENT — no modal rendered at all
+   (platform likely showed a toast notification instead, but the sonner <section> was empty at capture time)
+
+3. Boop Sent (SakuyoiVT)
+   <body style="overflow: hidden;">
+   .modal-overlay PRESENT:
+     <div class="modal-overlay">
+       <div class="modal-content card" style="max-width: 320px;">
+         <div class="card-header starred">Success</div>
+         <div class="card-body">
+           <svg>checkmark</svg>
+           <p>Boop! You've booped SakuyoiVT 1 time!</p>
+           <button class="action-btn primary">OK</button>
+         </div>
+       </div>
+     </div>
+
+4. Unfriend Dialogue (LaceSpades)
+   <body style="overflow: hidden;">
+   .modal-overlay PRESENT:
+     <div class="modal-overlay">
+       <div class="modal-content card" style="max-width: 320px;">
+         <div class="card-header starred">Unfriend</div>
+         <div class="card-body">
+           <p>Are you sure you want to unfriend LaceSpades? You will need to send a new friend request to reconnect.</p>
+           <button class="action-btn">Cancel</button>
+           <button class="action-btn primary" style="background: var(--vs-error); border-color: var(--vs-error); color: white;">Unfriend</button>
+         </div>
+       </div>
+     </div>
+
+5. No Modal Open (LaceSpades)
+   <body style="">
+   .modal-overlay ABSENT
+
+
+CONSISTENT PATTERNS
+===================
+- .modal-overlay is always a SIBLING of .container, both inside .profile-page
+- .modal-content always has style="max-width: 320px;"
+- .modal-content always has class="card" with .card-header and .card-body
+- No modals render in a portal <section> outside .profile-page (the sonner section is always empty)
+- The sonner toast <section aria-label="Notifications alt+T"> exists in all scenarios but is always empty
+
+
+IMPLICATIONS FOR CUSTOM CSS
+============================
+1. body { overflow: auto !important; } — CANNOT WORK
+   Gets prefixed to: .profile-page.profile-custom-css body { ... }
+   body is not a descendant of .profile-page, so this selector matches nothing.
+
+2. .container:has(~ .modal-overlay) — WORKS for detecting modal open state from within profile CSS
+   Both .container and .modal-overlay are children of .profile-page
+
+3. .modal-content[style*="320"] — WORKS for targeting the dialog box itself
+
+4. The scroll lock is platform JS behavior, not CSS. It cannot be overridden from custom CSS scope.
+   Would require either:
+   - Platform to not lock scroll for these small confirmation dialogs
+   - A userscript/extension to remove overflow:hidden from body
+   - Accepting the scroll lock as unavoidable

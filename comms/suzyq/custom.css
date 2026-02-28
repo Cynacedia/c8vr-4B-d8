@@ -1605,10 +1605,6 @@
 }
 
 
-/* ============================================
-   Breadcrumb / Top Bar
-   ============================================ */
-
 .profile-page .profile-breadcrumb {
   color: #a890c8;
   font-family: 'Rajdhani', sans-serif;
@@ -1629,71 +1625,4 @@
   color: #a890c8;
   font-family: 'Rajdhani', sans-serif;
   font-size: 12px;
-}
-
-
-/* ============================================
-   Site Header — Dark to Match
-   ============================================ */
-
-.header,
-.header-top,
-.header-inner {
-  background: #0d0618 !important;
-  color: #e8daf5 !important;
-  font-family: 'Rajdhani', sans-serif !important;
-}
-
-.header-nav-bar {
-  background: #150b28 !important;
-  border-color: rgba(200, 109, 215, 0.2) !important;
-  font-family: 'Rajdhani', sans-serif !important;
-}
-
-.logo,
-.header-top .logo,
-.header-inner .logo {
-  color: #ff8ec4 !important;
-}
-
-.header-user,
-.header-user span {
-  color: #e8daf5 !important;
-}
-
-.header-top a,
-.header-inner a,
-.header-user a {
-  color: #e8daf5 !important;
-}
-
-.header-top a:hover,
-.header-inner a:hover,
-.header-user a:hover {
-  color: #ff8ec4 !important;
-}
-
-.header-user button {
-  color: #e8daf5 !important;
-  background: none !important;
-}
-
-.notification-dropdown-trigger {
-  color: #e8daf5 !important;
-  background: none !important;
-}
-
-.header-nav a {
-  color: #e8daf5 !important;
-}
-
-.header-nav a:hover {
-  color: #ff8ec4 !important;
-}
-
-.header-nav .new-tag,
-.new-tag {
-  color: #fff !important;
-  background: rgba(255, 107, 157, 0.3) !important;
-  border-color: rgba(255, 107, 157, 0.5) !important;
 }
