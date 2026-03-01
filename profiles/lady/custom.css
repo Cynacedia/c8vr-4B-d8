@@ -1,0 +1,442 @@
+/* Lady — Lace & Tech
+   Monochrome + soft electric blue · Pixel fonts · Scalloped lace borders · Curtain veil
+   Selectors are BARE — platform auto-prefixes with .profile-page.profile-custom-css
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=Silkscreen:wght@400;700&display=swap');
+
+/* ===== Page Base ===== */
+.profile-page.profile-custom-css {
+  --ink: #e8e8ec;
+  --ink-muted: #9a9aa8;
+  --accent: #88c8e8;
+  --accent-2: #b0ddf0;
+  --card: rgba(18, 18, 22, 0.65);
+  --card-border: rgba(136, 200, 232, 0.18);
+  --glow: rgba(136, 200, 232, 0.22);
+
+  color: var(--ink);
+  font-family: "Pixelify Sans", "Trebuchet MS", sans-serif;
+  letter-spacing: 0.3px;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Subtle glow overlay — mostly neutral, hint of blue */
+.profile-page.profile-custom-css::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(50% 35% at 25% 15%, rgba(136, 200, 232, 0.06), transparent 60%),
+    radial-gradient(35% 25% at 75% 25%, rgba(136, 200, 232, 0.04), transparent 60%),
+    linear-gradient(180deg, rgba(12, 12, 14, 0.4), rgba(12, 12, 14, 0.6));
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Lace dot-lattice texture */
+.profile-page.profile-custom-css::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 1px at 6px 6px, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    radial-gradient(circle 1px at 18px 18px, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+
+/* ===== Lace Veil — lifted like fabric ===== */
+.container::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  display: block;
+  width: calc(100% + 80px);
+  height: 100vh;
+  margin-left: -40px;
+  margin-bottom: -100vh; /* collapse so it doesn't push content down */
+  /* Edge scallops — outward-facing loops on left, right, bottom */
+  /* Then body dot pattern, then base tint */
+  background:
+    radial-gradient(circle 9px at -2px 9px, transparent 7px, rgba(255,255,255,0.08) 7.5px, rgba(255,255,255,0.22) 8.5px, transparent 9px),
+    radial-gradient(circle 9px at calc(100% + 2px) 9px, transparent 7px, rgba(255,255,255,0.08) 7.5px, rgba(255,255,255,0.22) 8.5px, transparent 9px),
+    radial-gradient(circle 9px at 9px calc(100% + 2px), transparent 7px, rgba(255,255,255,0.08) 7.5px, rgba(255,255,255,0.22) 8.5px, transparent 9px),
+    radial-gradient(circle 1.5px at 4px 4px, rgba(255,255,255,0.22) 1.5px, transparent 1.5px),
+    radial-gradient(circle 1px at 16px 10px, rgba(255,255,255,0.16) 1px, transparent 1px),
+    radial-gradient(circle 2px at 10px 18px, rgba(255,255,255,0.13) 2px, transparent 2px),
+    radial-gradient(circle 0.5px at 20px 6px, rgba(255,255,255,0.20) 0.5px, transparent 0.5px),
+    radial-gradient(circle 1px at 2px 14px, rgba(255,255,255,0.15) 1px, transparent 1px),
+    rgba(14, 14, 16, 0.45);
+  background-size:
+    18px 18px, 18px 18px,
+    18px 18px,
+    24px 22px, 24px 22px, 24px 22px, 24px 22px, 24px 22px,
+    100% 100%;
+  background-position:
+    left top, right top,
+    left bottom,
+    0 0, 0 0, 0 0, 0 0, 0 0,
+    0 0;
+  background-repeat:
+    repeat-y, repeat-y,
+    repeat-x,
+    repeat, repeat, repeat, repeat, repeat,
+    no-repeat;
+  pointer-events: none;
+  z-index: 10;
+  /* Resting: gentle drape — center of bottom hangs lowest */
+  clip-path: polygon(
+    0% 0%, 100% 0%,
+    100% 96%, 85% 98%, 70% 99%, 55% 100%, 50% 100%,
+    45% 100%, 30% 99%, 15% 98%, 0% 96%
+  );
+  /* Return: opacity snaps back fast so shape is visible, then clip-path rolls down */
+  transition:
+    opacity 0.3s ease,
+    transform 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+    clip-path 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+/* On hover: center-bottom splits up, sides droop — inside-out peel */
+.container:hover::before {
+  opacity: 0;
+  transform: translateY(-80px);
+  clip-path: polygon(
+    0% 0%, 100% 0%,
+    100% 75%, 85% 88%, 70% 55%, 55% 22%, 50% 10%,
+    45% 22%, 30% 55%, 15% 88%, 0% 75%
+  );
+  /* Lift: opacity fades late so you see the morph, clip-path runs immediately */
+  transition:
+    opacity 1.8s ease 0.4s,
+    transform 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+    clip-path 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Blur content behind veil, clear on hover */
+.container > * {
+  transition: filter 0.3s ease;
+  filter: blur(3px);
+}
+.container:hover > * {
+  filter: blur(0px);
+}
+
+/* ===== Links ===== */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+a:hover {
+  color: var(--accent-2);
+  text-shadow: 0 0 8px rgba(136, 200, 232, 0.35);
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow:
+    0 6px 20px rgba(2, 4, 8, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* Scalloped lace edges — both layers full-height, intersect cuts both edges */
+  -webkit-mask-image:
+    radial-gradient(circle 5px at 5px 0, transparent 4.5px, #000 5px),
+    radial-gradient(circle 5px at 5px 100%, transparent 4.5px, #000 5px);
+  mask-image:
+    radial-gradient(circle 5px at 5px 0, transparent 4.5px, #000 5px),
+    radial-gradient(circle 5px at 5px 100%, transparent 4.5px, #000 5px);
+  -webkit-mask-size: 10px 100%;
+  mask-size: 10px 100%;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 28px rgba(2, 4, 8, 0.55),
+    0 0 12px var(--glow);
+}
+
+/* Remove default header gradients */
+.card-header,
+.card-header::before,
+.card-header::after {
+  background-image: none !important;
+  background: none !important;
+}
+
+/* Card headers */
+.card-header {
+  text-align: center;
+  border: none;
+  font-family: "Silkscreen", monospace;
+  font-weight: 700;
+  font-size: 0.95em;
+  color: var(--accent);
+  letter-spacing: 1px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--card-border);
+}
+.card-header.starred {
+  color: var(--accent);
+}
+.card-header.hearted {
+  color: var(--accent-2);
+}
+
+/* ===== Profile bits ===== */
+.profile-display-name {
+  font-family: "Silkscreen", monospace;
+  font-size: 1.3rem;
+  letter-spacing: 1.5px;
+  color: var(--ink);
+}
+.profile-username {
+  color: var(--ink-muted);
+  font-family: "Pixelify Sans", sans-serif;
+}
+.profile-online-status {
+  color: #a8e6b8;
+}
+.profile-url-box {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.profile-url-box code {
+  background: rgba(14, 14, 16, 0.85);
+  color: var(--ink);
+  border: 1px solid rgba(136, 200, 232, 0.3);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-weight: 700;
+  font-family: "Silkscreen", monospace;
+  font-size: 0.85em;
+}
+.profile-avatar {
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.04),
+    0 8px 18px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(136, 200, 232, 0.15);
+}
+.profile-breadcrumb {
+  background: rgba(14, 14, 16, 0.55);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 5px 12px;
+  display: inline-block;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+/* ===== Friends ===== */
+.friends-grid .friend-item {
+  background: rgba(16, 16, 20, 0.55);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 5px 7px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.friends-grid .friend-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+.friend-name {
+  color: var(--ink);
+  font-size: 0.85em;
+  text-align: center;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+/* ===== Stats ===== */
+.stats-table td {
+  padding: 5px 7px;
+  border-bottom: 1px dashed rgba(136, 200, 232, 0.15);
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+/* ===== Blurbs ===== */
+.blurb-section .blurb-title {
+  color: var(--accent) !important;
+  font-family: "Silkscreen", monospace;
+  letter-spacing: 0.5px;
+}
+.blurb-section .blurb-content {
+  color: var(--ink) !important;
+  font-family: "Pixelify Sans", sans-serif;
+  line-height: 1.6;
+}
+
+/* ===== Section links ===== */
+.section-links {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--ink) !important;
+  border-radius: 10px;
+  border: none;
+  padding: 5px 10px;
+  font-size: 0.88em;
+  text-align: center;
+  font-family: "Pixelify Sans", sans-serif;
+}
+.section-links a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.section-links a:hover {
+  color: var(--accent-2) !important;
+}
+
+/* ===== Contact buttons ===== */
+.profile-contact-links .contact-link,
+.profile-contact-links .boop-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(14, 14, 16, 0.85) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(136, 200, 232, 0.35) !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+  font-weight: 700 !important;
+  font-family: "Silkscreen", monospace !important;
+  font-size: 0.85em !important;
+  letter-spacing: 0.3px !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.profile-contact-links .contact-link:hover,
+.profile-contact-links .boop-link:hover {
+  background: rgba(20, 20, 24, 0.95) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px var(--glow);
+  transform: translateY(-2px);
+}
+
+/* ===== Comments ===== */
+#comments .card-body {
+  padding: 12px !important;
+}
+#comments .profile-comment {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  margin: 6px 0;
+  background: rgba(16, 16, 20, 0.55);
+  border: 1px solid rgba(136, 200, 232, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+#comments .comment-avatar,
+#comments .profile-comment .user-avatar {
+  border-radius: 10px !important;
+  border: 2px solid rgba(136, 200, 232, 0.25);
+  box-shadow: 0 0 8px rgba(136, 200, 232, 0.15);
+}
+#comments .comment-content {
+  flex: 1;
+}
+#comments .comment-meta {
+  font-size: 0.85em;
+  color: var(--ink-muted);
+  font-family: "Pixelify Sans", sans-serif;
+}
+#comments .comment-author-name {
+  color: var(--accent);
+  font-weight: 700;
+}
+#comments .comment-time {
+  color: rgba(154, 154, 168, 0.7);
+}
+#comments .comment-body {
+  color: var(--ink);
+  line-height: 1.5;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+/* Reply block */
+#comments .comment-content > div[style*="margin-top"] {
+  margin-left: 10px !important;
+  margin-top: 8px !important;
+  padding: 8px 10px !important;
+  background: rgba(136, 200, 232, 0.06) !important;
+  border-left: 3px solid rgba(176, 221, 240, 0.4) !important;
+  border-radius: 8px !important;
+}
+#comments .comment-content > div[style*="margin-top"] a {
+  color: var(--accent-2) !important;
+  font-weight: 700;
+}
+#comments .comment-content > div[style*="margin-top"] span {
+  color: rgba(154, 154, 168, 0.7) !important;
+  font-size: 0.8em !important;
+}
+#comments .comment-content > div[style*="margin-top"] img {
+  border-radius: 8px !important;
+  border: 2px solid rgba(176, 221, 240, 0.25) !important;
+}
+
+/* ===== Comment posting box ===== */
+#comments .add-comment {
+  background: rgba(16, 16, 20, 0.55);
+  border: 1px solid rgba(136, 200, 232, 0.15);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+#comments .add-comment textarea {
+  width: 100%;
+  min-height: 100px;
+  background: rgba(14, 14, 16, 0.7) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(136, 200, 232, 0.25);
+  border-radius: 10px;
+  padding: 8px 10px;
+  outline: none;
+  font-family: "Pixelify Sans", sans-serif;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+#comments .add-comment textarea::placeholder {
+  color: rgba(154, 154, 168, 0.55);
+}
+#comments .add-comment textarea:focus {
+  border-color: rgba(136, 200, 232, 0.5);
+  box-shadow: 0 0 0 2px rgba(136, 200, 232, 0.15);
+}
+#comments .add-comment button,
+#comments .add-comment .action-btn {
+  margin-top: 6px;
+  background: linear-gradient(90deg, #88c8e8, #b0ddf0) !important;
+  color: #0e0e10 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 7px 14px;
+  font-weight: 700;
+  font-family: "Silkscreen", monospace;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#comments .add-comment button:hover,
+#comments .add-comment .action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}

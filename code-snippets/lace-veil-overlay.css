@@ -1,0 +1,115 @@
+/* ============================================
+   Lace Veil Overlay — Standalone Snippet
+   ============================================
+   A semi-transparent lace overlay that covers the profile
+   and peels away on hover like fabric being lifted from
+   the center-bottom outward (inside-out peel).
+
+   Platform: MyOshi (myoshi.co)
+   - Selectors are BARE — platform auto-prefixes with
+     .profile-page.profile-custom-css
+   - position:fixed is sanitized to absolute; use sticky
+   - Transitions (not @keyframes) for boop-timer resilience
+
+   Dependencies:
+   - .container must exist (MyOshi profile layout)
+   - Works standalone — just needs a positioned parent
+
+   Usage: paste into custom.css, or @import this file
+   ============================================ */
+
+/* Container must be positioned for the pseudo-element */
+.container {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+
+/* ===== Lace Veil — lifted like fabric ===== */
+.container::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  display: block;
+  width: calc(100% + 80px);
+  height: 100vh;
+  margin-left: -40px;
+  margin-bottom: -100vh; /* collapse so it doesn't push content down */
+
+  /* Edge scallops — outward-facing loops on left, right, bottom */
+  /* Then body dot pattern, then base tint */
+  background:
+    /* Left edge scallops */
+    radial-gradient(circle 9px at -2px 9px, transparent 7px, rgba(255,255,255,0.08) 7.5px, rgba(255,255,255,0.22) 8.5px, transparent 9px),
+    /* Right edge scallops */
+    radial-gradient(circle 9px at calc(100% + 2px) 9px, transparent 7px, rgba(255,255,255,0.08) 7.5px, rgba(255,255,255,0.22) 8.5px, transparent 9px),
+    /* Bottom edge scallops */
+    radial-gradient(circle 9px at 9px calc(100% + 2px), transparent 7px, rgba(255,255,255,0.08) 7.5px, rgba(255,255,255,0.22) 8.5px, transparent 9px),
+    /* Dot pattern — mixed sizes for organic lace feel */
+    radial-gradient(circle 1.5px at 4px 4px, rgba(255,255,255,0.12) 1.5px, transparent 1.5px),
+    radial-gradient(circle 1px at 16px 10px, rgba(255,255,255,0.09) 1px, transparent 1px),
+    radial-gradient(circle 2px at 10px 18px, rgba(255,255,255,0.07) 2px, transparent 2px),
+    radial-gradient(circle 0.5px at 20px 6px, rgba(255,255,255,0.13) 0.5px, transparent 0.5px),
+    radial-gradient(circle 1px at 2px 14px, rgba(255,255,255,0.08) 1px, transparent 1px),
+    /* Base tint */
+    rgba(14, 14, 16, 0.25);
+  background-size:
+    18px 18px, 18px 18px,
+    18px 18px,
+    24px 22px, 24px 22px, 24px 22px, 24px 22px, 24px 22px,
+    100% 100%;
+  background-position:
+    left top, right top,
+    left bottom,
+    0 0, 0 0, 0 0, 0 0, 0 0,
+    0 0;
+  background-repeat:
+    repeat-y, repeat-y,
+    repeat-x,
+    repeat, repeat, repeat, repeat, repeat,
+    no-repeat;
+
+  pointer-events: none;
+  z-index: 10;
+
+  /* Resting: gentle drape — center of bottom hangs lowest */
+  clip-path: polygon(
+    0% 0%, 100% 0%,
+    100% 96%, 85% 98%, 70% 99%, 55% 100%, 50% 100%,
+    45% 100%, 30% 99%, 15% 98%, 0% 96%
+  );
+
+  /* Return transition: opacity snaps back fast so shape is visible,
+     then clip-path rolls down */
+  transition:
+    opacity 0.3s ease,
+    transform 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+    clip-path 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+/* On hover: center-bottom splits up, sides droop — inside-out peel */
+.container:hover::before {
+  opacity: 0;
+  transform: translateY(-80px);
+  clip-path: polygon(
+    0% 0%, 100% 0%,
+    100% 75%, 85% 88%, 70% 55%, 55% 22%, 50% 10%,
+    45% 22%, 30% 55%, 15% 88%, 0% 75%
+  );
+
+  /* Lift transition: opacity fades late so you see the morph,
+     clip-path runs immediately */
+  transition:
+    opacity 1.8s ease 0.4s,
+    transform 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+    clip-path 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Blur content behind veil, clear on hover */
+.container > * {
+  transition: filter 0.3s ease;
+  filter: blur(3px);
+}
+.container:hover > * {
+  filter: blur(0px);
+}

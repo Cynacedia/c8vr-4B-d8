@@ -1,0 +1,40 @@
+/* ===================================================
+   Friends Grid Fix — Name Overflow / Spacing
+   ===================================================
+   Problem:  Long friend names push other items sideways,
+             squeezing them off-screen in the fixed-width card.
+   Solution: Hide names by default. On hover, pop the name
+             out centered beneath the avatar as a tooltip.
+
+   Universal: no hardcoded colors, fonts, or sizes.
+   Works with default site theme and custom CSS alike.
+   ================================================== */
+
+/* Hide all friend names by default */
+.profile-page .friends-grid .friend-name {
+  display: none !important;
+}
+
+/* Ensure each friend item is a positioning anchor,
+   and reserve space below the avatar for the name */
+.profile-page .friends-grid .friend-item {
+  position: relative;
+  padding-bottom: 1.2em;
+}
+
+/* On hover: lift the whole item above its siblings
+   so the name isn't covered by the next row */
+.profile-page .friends-grid .friend-item:hover {
+  z-index: 10;
+}
+
+/* On hover: show name centered beneath the avatar */
+.profile-page .friends-grid .friend-item:hover .friend-name {
+  display: block !important;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}

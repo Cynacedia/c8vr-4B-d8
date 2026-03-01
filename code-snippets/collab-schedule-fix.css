@@ -1,0 +1,23 @@
+/* ===================================================
+   Collab Schedule Grid Fix — Column Spacing
+   ===================================================
+   Problem:  Header text ("12a", "6a", "12p", "6p") is wider
+             than the 4px time-slot columns, forcing them to
+             expand and breaking the grid proportions.
+   Solution: Lock column widths with table-layout:fixed and
+             let header text overflow visually.
+
+   Universal: targets the schedule table by its unique
+   inline styles, not by nth-child position.
+   ================================================== */
+
+/* Lock column widths so 4px cells stay 4px */
+.profile-page .card table:has(th[style*="width: 4px"]) {
+  table-layout: fixed !important;
+}
+
+/* Let header text overflow without pushing columns wider */
+.profile-page .card table th[style*="width: 4px"] {
+  overflow: visible !important;
+  white-space: nowrap !important;
+}

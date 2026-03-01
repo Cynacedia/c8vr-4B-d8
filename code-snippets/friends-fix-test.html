@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Friends Grid Fix — Test</title>
+  <style>
+    /* ---- Minimal site defaults (simulates MyOshi base) ---- */
+    :root {
+      --vs-border: #1a2a4a;
+      --vs-bg-card: rgba(10, 20, 50, 0.6);
+    }
+    body {
+      background: #0c1a30;
+      color: #d8e4f8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    h2 { margin: 0 0 8px; font-size: 15px; color: #8098c0; }
+
+    .card {
+      background: var(--vs-bg-card);
+      border: 1px solid var(--vs-border);
+      border-radius: 8px;
+      width: 700px;
+    }
+    .card-header {
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 13px;
+      border-bottom: 1px solid var(--vs-border);
+      display: flex;
+      justify-content: space-between;
+    }
+    .card-body { padding: 6px 20px; }
+
+    /* ---- Default friends-grid (site baseline) ---- */
+    .friends-grid {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      flex-wrap: nowrap;
+      padding: 0;
+    }
+    .friend-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 14px;
+      background: none;
+      border: none;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      overflow: visible;
+      flex: 0 0 auto;
+    }
+    .friend-item:hover { transform: scale(1.15); }
+    .friend-avatar {
+      border-radius: 50%;
+      object-fit: cover;
+      background: #1a2a4a;
+    }
+    .friend-name {
+      font-size: 10px;
+      margin-top: 4px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* ============================================
+       SCENARIO OVERRIDES — each section simulates
+       a different user's custom CSS
+       ============================================ */
+
+    /* Scenario 1: Default round avatars, 48px (site default) */
+    #default .friend-avatar {
+      width: 48px;
+      height: 48px;
+    }
+
+    /* Scenario 2: Large diamond avatars (like yours) */
+    #diamonds .friend-item::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 76px;
+      height: 76px;
+      background: linear-gradient(135deg, #f0d060, #e8c040, #f0d060);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      z-index: 0;
+    }
+    #diamonds .friend-avatar {
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      border-radius: 0;
+      width: 72px;
+      height: 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Scenario 3: Small avatars, different font/color */
+    #custom {
+      font-family: "Courier New", monospace;
+      color: #f0b0d0;
+      --vs-bg-card: rgba(40, 10, 30, 0.7);
+      --vs-border: #4a1a3a;
+    }
+    #custom .friend-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+    }
+  </style>
+
+  <!-- The universal fix being tested -->
+  <link rel="stylesheet" href="friends-fix.css">
+</head>
+<body>
+
+  <!-- SCENARIO 1: Default site look -->
+  <div>
+    <h2>Scenario 1 — Default (48px round avatars)</h2>
+    <div class="profile-page" id="default">
+      <div class="card">
+        <div class="card-header"><span>Top 8</span></div>
+        <div class="card-body">
+          <div class="friends-grid">
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">(っ◔◡◔)っ ♥orlando♥</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Fyro - FrozenBox</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Auxie!</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">xXx_DarkShadowWolf_2007_xXx</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Quality</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">LynxJinx</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">SuperLongNameThatKeepsGoing</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Sp</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO 2: Diamond avatars (your theme) -->
+  <div>
+    <h2>Scenario 2 — Diamond avatars (72px, custom theme)</h2>
+    <div class="profile-page" id="diamonds">
+      <div class="card">
+        <div class="card-header"><span>Top 8</span></div>
+        <div class="card-body">
+          <div class="friends-grid">
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">(っ◔◡◔)っ ♥orlando♥</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Fyro - FrozenBox</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Auxie!</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">xXx_DarkShadowWolf_2007_xXx</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Quality</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">LynxJinx</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">SuperLongNameThatKeepsGoing</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Sp</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO 3: Different font, colors, small square avatars -->
+  <div>
+    <h2>Scenario 3 — Monospace font, pink theme, 40px square avatars</h2>
+    <div class="profile-page" id="custom">
+      <div class="card">
+        <div class="card-header"><span>Top 8</span></div>
+        <div class="card-body">
+          <div class="friends-grid">
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">(っ◔◡◔)っ ♥orlando♥</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Fyro - FrozenBox</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Auxie!</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">xXx_DarkShadowWolf_2007_xXx</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Quality</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">LynxJinx</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">SuperLongNameThatKeepsGoing</span></a>
+            <a class="friend-item" href="#"><img src="" class="friend-avatar"><span class="friend-name">Sp</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

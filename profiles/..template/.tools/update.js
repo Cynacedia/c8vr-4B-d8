@@ -1,7 +1,18 @@
 /**
+ * MyOshi Profile Update Script
+ *
  * Usage:
- *   1. Paste page source HTML between the markers at the bottom of this file
- *   2. Run: node update.js
+ *   1. Paste DevTools outerHTML into source.html in the profile folder
+ *   2. Run: node .tools/update.js
+ *   3. profile.html will be updated with extracted profile data + downloaded images
+ *
+ *   Alt: node .tools/update.js <path-to-source.html>
+ *
+ * IMPORTANT: Use DevTools copy, NOT View Page Source!
+ *   View Source gives raw HTML before React hydration — text content (comments,
+ *   interests, lore, about me) will be empty because Lexical renders client-side.
+ *   Instead: F12 → Elements → right-click <html> → Copy → Copy outerHTML → paste
+ *   into source.html.
  *
  * Also inlines ./custom.html into the blurb section if the file exists.
  */
@@ -12,16 +23,8 @@ const crypto = require('crypto');
 const DIR = path.resolve(__dirname, '..'); // profile folder (parent of .tools)
 const PROFILE_PATH = path.join(DIR, 'profile.html');
 const CUSTOM_HTML_PATH = path.join(DIR, 'custom.html');
+const SOURCE_PATH = path.join(__dirname, 'source.html');
 const IMAGES_DIR = path.join(DIR, 'images');
-
-/* ============================================================
-   PASTE PAGE SOURCE BELOW THIS LINE
-   (Right-click page → View Page Source → Select All → Copy → Paste here)
-   ============================================================ */
-
-const SOURCE = `
-PASTE_HERE
-`;
 
 
 
@@ -36,6 +39,21 @@ PASTE_HERE
 
 function stripComments(s) {
    return s.replace(/<!--\s*-->/g, '').trim();
+}
+
+/** Extract rich text content from HTML fragment.
+ *  Tries Lexical spans first (DevTools copy), falls back to stripping tags (any source). */
+function extractRichText(html) {
+   if (!html) return '';
+   // Try Lexical spans (present in DevTools-copied HTML)
+   const lexMatches = html.match(/data-lexical-text="true">([^<]*)/gi);
+   if (lexMatches && lexMatches.length > 0) {
+      return lexMatches.map(m => m.replace(/^data-lexical-text="true">/, '')).join(' ').trim();
+   }
+   // Fallback: strip all tags and get visible text
+   const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+   // Filter out noise (empty or just whitespace)
+   return text.length > 1 ? stripComments(text) : '';
 }
 
 function extractText(html, classOrPattern) {
@@ -64,8 +82,13 @@ function findCard(html, headerPattern) {
    const headerRe = /class="card-header[^"]*"[^>]*>/gi;
    let hm;
    while ((hm = headerRe.exec(html)) !== null) {
-      const afterHeader = html.substring(hm.index, Math.min(hm.index + 500, html.length));
-      const textContent = afterHeader.replace(/<[^>]+>/g, '').replace(/<!--\s*-->/g, '').trim();
+      // Extract only the card-header div content (up to its closing </div>)
+      const headerStart = hm.index + hm[0].length;
+      const headerEnd = html.indexOf('</div>', headerStart);
+      const headerContent = headerEnd > 0
+         ? html.substring(hm.index, headerEnd)
+         : html.substring(hm.index, Math.min(hm.index + 200, html.length));
+      const textContent = headerContent.replace(/<[^>]+>/g, '').replace(/<!--\s*-->/g, '').trim();
       if (!new RegExp(headerPattern, 'i').test(textContent)) continue;
       let cardStart = -1;
       let searchIdx = hm.index;
@@ -102,13 +125,15 @@ function urlToFilename(url) {
    return hash + ext;
 }
 async function downloadImage(url) {
-   const filename = urlToFilename(url);
+   // Decode HTML entities in URLs (DevTools copy uses &amp; etc.)
+   const cleanUrl = url.replace(/&amp;/g, '&');
+   const filename = urlToFilename(cleanUrl);
    const localPath = path.join(IMAGES_DIR, filename);
    const relativePath = './images/' + filename;
    if (fs.existsSync(localPath)) return relativePath;
 
    try {
-      const res = await fetch(url);
+      const res = await fetch(cleanUrl);
       if (!res.ok) {
          console.warn(`  WARN: ${res.status} fetching ${url.substring(0, 80)}`);
          return null;
@@ -145,11 +170,18 @@ async function downloadAllImages(data) {
       const batch = httpUrls.slice(i, i + 5);
       const results = await Promise.all(batch.map(u => downloadImage(u)));
       batch.forEach((u, idx) => {
-         if (results[idx]) urlMap[u] = results[idx];
+         if (results[idx]) {
+            urlMap[u] = results[idx];
+            // Also map the &amp; variant so localizeImages catches both forms
+            const decoded = u.replace(/&amp;/g, '&');
+            const encoded = u.replace(/&(?!amp;)/g, '&amp;');
+            if (decoded !== u) urlMap[decoded] = results[idx];
+            if (encoded !== u) urlMap[encoded] = results[idx];
+         }
       });
    }
 
-   const downloaded = Object.keys(urlMap).length;
+   const downloaded = Object.values(urlMap).filter((v, i, a) => a.indexOf(v) === i).length;
    console.log(`  Downloaded: ${downloaded}/${httpUrls.length} images`);
    return urlMap;
 }
@@ -180,8 +212,9 @@ function extractProfileData(source) {
    data.oshiMark = omMatch ? stripComments(omMatch[1]) : 'X';
    const moodMatch = source.match(/class="mood-text"[^>]*>([\s\S]*?)<\/div>/i);
    data.mood = moodMatch ? stripComments(moodMatch[1]) : 'Mood';
-   const avatarMatch = source.match(/class="user-avatar\s+profile-avatar"\s+src="([^"]+)"/i)
-      || source.match(/class="user-avatar profile-avatar"[^>]*src="([^"]+)"/i);
+   // Avatar: src may come before or after class in the <img> tag
+   const avatarMatch = source.match(/class="user-avatar\s+profile-avatar"[^>]*src="([^"]+)"/i)
+      || source.match(/src="([^"]+)"[^>]*class="user-avatar\s+profile-avatar"/i);
    data.avatarUrl = avatarMatch ? avatarMatch[1] : '';
    const osMatch = source.match(/class="profile-online-status"[^>]*>([\s\S]*?)<\/div>/i);
    data.onlineStatus = osMatch ? stripComments(osMatch[1]) : 'Last online recently';
@@ -200,7 +233,13 @@ function extractProfileData(source) {
    const friendsCard = findCard(source, "Top 8");
    data.friends = [];
    if (friendsCard) {
-      const friendItems = matchAll(friendsCard, /<a\s+class="friend-item"\s+href="([^"]+)">([\s\S]*?)<\/a>/gi);
+      // Match friend-item links regardless of attribute order
+      const friendItems = matchAll(friendsCard, /<a\s[^>]*class="friend-item"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi);
+      if (friendItems.length === 0) {
+         // Try href-before-class variant
+         const fi2 = matchAll(friendsCard, /<a\s[^>]*href="([^"]+)"[^>]*class="friend-item"[^>]*>([\s\S]*?)<\/a>/gi);
+         for (const f of fi2) friendItems.push(f);
+      }
       for (const fi of friendItems) {
          const href = fi[1];
          const inner = fi[2];
@@ -267,7 +306,9 @@ function extractProfileData(source) {
       }
       const tagMatches = matchAll(collabCard, /border-radius:\s*3px[^>]*>([^<]+)</gi);
       data.collabTags = tagMatches.map(t => t[1].trim());
-      const descMatch = collabCard.match(/data-lexical-text="true">([^<]+)/i);
+      // Collab description — try Lexical first, fallback to any text in the description area
+      const descArea = collabCard.match(/collab-description|card-body[\s\S]*?<\/table>([\s\S]*?)$/i);
+      const descMatch = descArea ? { 1: extractRichText(descArea[1]) } : collabCard.match(/data-lexical-text="true">([^<]+)/i);
       data.collabDescription = descMatch ? descMatch[1] : '';
    }
    const detailsCard = findCard(source, "Details");
@@ -302,17 +343,25 @@ function extractProfileData(source) {
    data.socialLinks = [];
    const linksCard = findCard(source, "Links");
    if (linksCard) {
-      const linkMatches = matchAll(linksCard, /<a\s[^>]*class="social-link-item"[^>]*href="([^"]*)"[^>]*>[^<]*<span class="social-link-platform">([^<]+)<\/span>[^<]*<span class="social-link-name">([^<]+)<\/span>/gi);
-      if (linkMatches.length === 0) {
-         const linkMatches2 = matchAll(linksCard, /<a\s[^>]*href="([^"]*)"[^>]*class="social-link-item"[^>]*>[^<]*<span class="social-link-platform">([^<]+)<\/span>[^<]*<span class="social-link-name">([^<]+)<\/span>/gi);
-         for (const lm of linkMatches2) linkMatches.push(lm);
+      // Find each social-link-item <a> and extract href, platform, name
+      const linkAnchors = matchAll(linksCard, /<a\s[^>]*class="social-link-item"[^>]*>([\s\S]*?)<\/a>/gi);
+      if (linkAnchors.length === 0) {
+         // Try finding by class in different position
+         const la2 = matchAll(linksCard, /<a\s[^>]*social-link-item[^>]*>([\s\S]*?)<\/a>/gi);
+         for (const a of la2) linkAnchors.push(a);
       }
-      for (const lm of linkMatches) {
-         data.socialLinks.push({
-            href: lm[1],
-            platform: lm[2],
-            name: lm[3],
-         });
+      for (const la of linkAnchors) {
+         const tag = la[0]; // full <a ...>...</a>
+         const hrefMatch = tag.match(/href="([^"]*)"/i);
+         const platMatch = tag.match(/class="social-link-platform"[^>]*>([^<]+)/i);
+         const nameMatch = tag.match(/class="social-link-name"[^>]*>([^<]+)/i);
+         if (hrefMatch && platMatch) {
+            data.socialLinks.push({
+               href: hrefMatch[1],
+               platform: platMatch[1].trim(),
+               name: nameMatch ? nameMatch[1].trim() : platMatch[1].trim(),
+            });
+         }
       }
    }
 
@@ -326,9 +375,8 @@ function extractProfileData(source) {
    const loreCard = findCard(source, "Lore");
    data.lore = '';
    if (loreCard) {
-      // Extract all Lexical text spans
-      const textSpans = matchAll(loreCard, /data-lexical-text="true">([^<]*)</gi);
-      data.lore = textSpans.map(t => t[1]).join('\n') || '';
+      const bodyMatch = loreCard.match(/class="card-body"[^>]*>([\s\S]*)/i);
+      data.lore = bodyMatch ? extractRichText(bodyMatch[1]) : '';
    }
 
    data.aboutMe = '';
@@ -336,15 +384,9 @@ function extractProfileData(source) {
    const blurbsCard = findCard(source, "Blurbs");
    if (blurbsCard) {
       const aboutSection = blurbsCard.match(/About Me[\s\S]*?<div class="blurb-content">([\s\S]*?)<\/div>/i);
-      if (aboutSection) {
-         const texts = matchAll(aboutSection[1], /data-lexical-text="true">([^<]*)</gi);
-         data.aboutMe = texts.map(t => t[1]).join('\n') || '';
-      }
+      if (aboutSection) data.aboutMe = extractRichText(aboutSection[1]);
       const meetSection = blurbsCard.match(/Who I[^<]*Like to Meet[\s\S]*?<div class="blurb-content">([\s\S]*?)<\/div>/i);
-      if (meetSection) {
-         const texts = matchAll(meetSection[1], /data-lexical-text="true">([^<]*)</gi);
-         data.whoToMeet = texts.map(t => t[1]).join('\n') || '';
-      }
+      if (meetSection) data.whoToMeet = extractRichText(meetSection[1]);
    }
 
    data.interests = {};
@@ -352,16 +394,16 @@ function extractProfileData(source) {
    if (interestsCard) {
       const categories = ['Music', 'Movies', 'Shows', 'Books', 'Games', 'Heroes'];
       for (const cat of categories) {
-         const catRe = new RegExp(cat + ':[\\s\\S]*?<div class="[^"]*interest-content[^"]*"[^>]*>([\\s\\S]*?)</div>', 'i');
-         const catMatch = interestsCard.match(catRe);
-         if (catMatch) {
-            const texts = matchAll(catMatch[1], /data-lexical-text="true">([^<]*)/gi);
-            data.interests[cat] = texts.map(t => t[1]).join(', ');
-         } else {
-            const simpleRe = new RegExp(cat + '[\\s\\S]*?<div[^>]*>([^<]+)</div>', 'i');
-            const simpleMatch = interestsCard.match(simpleRe);
-            data.interests[cat] = simpleMatch ? simpleMatch[1].trim() : '';
-         }
+         // Find category label, then extract the interest-content div after it
+         const catIdx = interestsCard.indexOf(cat + ':');
+         if (catIdx === -1) continue;
+         const contentIdx = interestsCard.indexOf('interest-content', catIdx);
+         if (contentIdx === -1) continue;
+         // Limit chunk to this section (stop at next interest-section or end)
+         const nextSection = interestsCard.indexOf('interest-section', contentIdx + 16);
+         const chunkEnd = nextSection > -1 ? nextSection : Math.min(contentIdx + 1500, interestsCard.length);
+         const chunk = interestsCard.substring(contentIdx, chunkEnd);
+         data.interests[cat] = extractRichText(chunk);
       }
    }
 
@@ -397,10 +439,9 @@ function extractProfileData(source) {
          const avatarMatch = inner.match(/comment-avatar"[^>]*src="([^"]+)"/i)
             || inner.match(/src="([^"]+)"[^>]*class="[^"]*comment-avatar/i);
          const timeMatch = inner.match(/class="comment-time"[^>]*>([^<]*(?:<!--\s*-->)?[^<]*)</i);
-         // Extract body text — search for lexical text spans within the comment
-         let bodyText = '';
-         const lexTexts = matchAll(inner, /data-lexical-text="true">([^<]*)/gi);
-         bodyText = lexTexts.map(t => t[1]).join(' ');
+         // Extract body text from comment-body div
+         const bodyDiv = inner.match(/class="comment-body"[^>]*>([\s\S]*?)(?=<div class="comment-actions"|$)/i);
+         let bodyText = bodyDiv ? extractRichText(bodyDiv[1]) : '';
 
          // Check for reply
          let reply = null;
@@ -409,13 +450,12 @@ function extractProfileData(source) {
             const rAuthor = replyBlock[1].match(/font-weight:\s*600[^>]*href="([^"]+)"[^>]*>([^<]+)/i);
             const rAvatar = replyBlock[1].match(/src="([^"]+)"/i);
             const rTime = replyBlock[1].match(/font-size:\s*9px[^>]*>([^<]*(?:<!--\s*-->)?[^<]*)/i);
-            const rText = matchAll(replyBlock[1], /data-lexical-text="true">([^<]*)/gi);
             reply = {
                authorHref: rAuthor ? rAuthor[1] : '',
                authorName: rAuthor ? rAuthor[2] : '',
                avatarUrl: rAvatar ? rAvatar[1] : '',
                time: rTime ? stripComments(rTime[1]) : '',
-               text: rText.map(t => t[1]).join(' '),
+               text: extractRichText(replyBlock[1]),
             };
          }
 
@@ -733,19 +773,20 @@ async function updateProfile(data) {
    }
 
    // --- Interests ---
-   const categories = ['Music', 'Movies', 'Shows', 'Books', 'Games', 'Heroes'];
-   for (const cat of categories) {
-      const val = data.interests[cat] || `${cat}`;
-      const placeholder = `${cat}1, ${cat}2`;
-      html = html.replace(
-         new RegExp(`>${placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}<`),
-         `>${val}<`
-      );
-      // Also try singular placeholder
-      html = html.replace(
-         new RegExp(`>Genre, Artist, Album<`),
-         `>${data.interests['Music'] || 'Genre, Artist, Album'}<`
-      );
+   // Template placeholders: Music="Genre, Artist, Album", others="Book1, Book2" etc. (singular)
+   const interestPlaceholders = {
+      Music: 'Genre, Artist, Album',
+      Movies: 'Movie1, Movie2',
+      Shows: 'Show1, Show2',
+      Books: 'Book1, Book2',
+      Games: 'Game1, Game2',
+      Heroes: 'Hero1, Hero2',
+   };
+   for (const [cat, placeholder] of Object.entries(interestPlaceholders)) {
+      const val = data.interests[cat];
+      if (val) {
+         html = html.replace(`>${placeholder}<`, `>${val}<`);
+      }
    }
 
    // --- Profile song ---
@@ -796,23 +837,20 @@ async function updateProfile(data) {
    if (fs.existsSync(CUSTOM_HTML_PATH)) console.log(`  custom.html: inlined`);
 }
 
+// Resolve source file: CLI argument > source.html in profile folder
 const fileArg = process.argv[2];
-let source = SOURCE;
-if (fileArg) {
-   const filePath = path.resolve(DIR, fileArg);
-   if (fs.existsSync(filePath)) {
-      source = fs.readFileSync(filePath, 'utf8');
-      console.log(`Reading source from: ${filePath}`);
-   } else {
-      console.error(`File not found: ${filePath}`);
-      process.exit(1);
-   }
+const sourcePath = fileArg ? path.resolve(DIR, fileArg) : SOURCE_PATH;
+let source = '';
+if (fs.existsSync(sourcePath)) {
+   source = fs.readFileSync(sourcePath, 'utf8');
+   console.log(`Reading source from: ${sourcePath}`);
 }
 
-if (source.trim() === 'PASTE_HERE' || source.trim() === '') {
+if (source.trim() === '') {
    console.log('No source HTML found.');
-   console.log('  Option 1: Paste page source into the SOURCE constant at the top of this file');
-   console.log('  Option 2: Run: node update.js <source-file.html>');
+   console.log('  1. Paste DevTools outerHTML into source.html in the profile folder');
+   console.log('  2. Run: node .tools/update.js');
+   console.log('  Alt: node .tools/update.js <path-to-source.html>');
 
    if (fs.existsSync(CUSTOM_HTML_PATH) && fs.existsSync(PROFILE_PATH)) {
       const customHtml = fs.readFileSync(CUSTOM_HTML_PATH, 'utf8');
